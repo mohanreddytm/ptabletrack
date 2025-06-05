@@ -22,7 +22,6 @@ const Header = () => {
         <a>FAQs</a>
       </nav>
       <div className='header-login-cont'>
-        <MdLightMode className='color-theme-home' />
         <button className='home-header-login-button'>Login</button>
         <button className='home-header-get-started-button'>Get Started</button>
       </div>
