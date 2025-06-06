@@ -15,7 +15,7 @@ import { TfiStatsUp } from "react-icons/tfi";
 import { TiTick } from "react-icons/ti";
 import { GoDash } from "react-icons/go";
 import { FaRegCopyright } from "react-icons/fa6";
-import { FaArrowUp } from "react-icons/fa";
+import { FaArrowUp } from "react-icons/fa";import { IoCloseOutline } from "react-icons/io5";
 
 import resimage from '../../../images/restaurantmainimage.jpg'
 import qrcodephoto from '../../../images/qrcodephoto.png'
@@ -129,7 +129,168 @@ const featuresList  = [
 
 const Home = () => {
 
-      const [on, setOn] = useState(false);
+    const [on, setOn] = useState(false);
+
+    const [showQrDetail, setShowQrDetail] = useState(false);
+    const [showMenuDetail, setShowMenuDetail] = useState(false);
+    const [showOrderDetail, setShowOrderDetail] = useState(false);
+
+    const onClickQrClose = () => {
+        setShowQrDetail(false);
+        setShowMenuDetail(false)
+        setShowOrderDetail(false)
+        document.body.style.overflow = 'auto';
+    }
+
+    const onClickViewDetailsQrCode = () => {
+        setShowQrDetail(true);
+        document.body.style.overflow = 'hidden';
+    }
+
+    const onClickMenuOne = () => {
+        setShowMenuDetail(true);
+        document.body.style.overflow = 'hidden';
+    }
+
+    const onClickOrderOne = () =>{
+        setShowOrderDetail(true);
+        document.body.style.overflow = 'hidden';
+    }
+
+        const orderDetails = () => {
+        return (
+            <div className={`home-detailed-infor-cont ${showOrderDetail ? "show-qr-details" : "hide-qr-details"}`}>
+
+            <div className='home-detailed-inner-cont'>
+                <IoCloseOutline onClick={onClickQrClose} className='home-detailed-inner-into' />
+                <h1 className='home-detailed-infor-main-head'><span>Statistics & Orders</span> – Track, Analyze, and Grow Smarter</h1>
+                <p className='home-detailed-infor-desc'>Get complete visibility over your restaurant’s performance and customer behavior — all in one place.</p>
+                <h1 className='home-detailed-infor-head'>Benefits</h1>
+                <ul className='home-detailed-infor-first-list'>
+                    <li>
+                        Make data-driven decisions
+                    </li>
+                    <li>
+                        Improve kitchen and staff performance
+                    </li>
+                    <li>
+                        Spot trends early and adjust strategy
+                    </li>
+                    <li>
+                        Maximize customer satisfaction and profits
+                    </li>
+                </ul>
+                <div>
+                    <div>
+                        <h1 className='home-detailed-infor-head'>Order Management</h1>
+                        <ul className='home-detailed-infor-second-list'>
+                            <li><p><span >Live Order Tracking</span> <GoDash className='go-dash-detailed' /> Monitor every order from placement to delivery – dine-in, takeout, or delivery.</p></li>
+                            <li><p><span >Order History & Reordering</span> <GoDash className='go-dash-detailed' /> Access detailed order logs with timestamps, table numbers, and item breakdowns.</p></li>
+                            <li><p><span >Status Control</span> <GoDash className='go-dash-detailed' /> Update order statuses (e.g., Preparing, Ready to Serve, Completed) in real-time for better coordination between kitchen and staff.</p></li>
+                            <li><p><span >Automatic Bill Generation</span> <GoDash className='go-dash-detailed' /> Orders are automatically calculated and billed – ready for instant payment or splitting.</p></li>
+                        </ul>
+                    </div>   
+                    <div>
+                        <h1 className='home-detailed-infor-head'>Advanced Statistics</h1>
+                        <ul className='home-detailed-infor-second-list'>
+                            <li><p><span >Sales Dashboard</span> <GoDash className='go-dash-detailed' /> Visualize daily, weekly, and monthly sales trends at a glance.</p></li>
+                            <li><p><span >Top-Selling Items</span> <GoDash className='go-dash-detailed' /> Identify your most popular dishes to plan inventory and marketing.</p></li>
+                            <li><p><span >Table Turnover Rates</span> <GoDash className='go-dash-detailed' /> Identify your most popular dishes to plan inventory and marketing.</p></li>
+                            <li><p><span >Peak Hours Insight</span> <GoDash className='go-dash-detailed' /> Know your busiest hours and days to prepare staffing and kitchen flow.</p></li>
+                        </ul>
+                    </div>       
+
+
+
+
+                </div>
+                  <div className='home-detailed-infor-button-cont'>
+                    <button className='home-detailed-get-started-button'>Get Started</button>
+                </div>
+
+            </div>
+            </div>
+        )
+    }
+
+    const menuDetails = () => {
+        return (
+            <div className={`home-detailed-infor-cont ${showMenuDetail ? "show-qr-details" : "hide-qr-details"}`}>
+
+            <div className='home-detailed-inner-cont'>
+                <IoCloseOutline onClick={onClickQrClose} className='home-detailed-inner-into' />
+                <h1 className='home-detailed-infor-main-head'><span>Menu Management</span> – Control Your Menu with Ease</h1>
+                <p className='home-detailed-infor-desc'>Simplify and streamline how you manage your restaurant’s menu, all from one dashboard.</p>
+                <h1 className='home-detailed-infor-head'>Benefits</h1>
+                <ul className='home-detailed-infor-first-list'>
+                    <li>
+                        Save time with centralized control
+                    </li>
+                    <li>
+                        Reduce order errors and confusion
+                    </li>
+                    <li>
+                        Improve customer experience with clean, visual menus
+                    </li>
+                    <li>
+                        React instantly to stock changes or specials
+                    </li>
+                </ul>
+                <h1 className='home-detailed-infor-head'>Key Features</h1>
+                <ul className='home-detailed-infor-second-list'>
+                    <li><p><span className='menu-special-home-detail'>Real-Time Menu Updates</span> <GoDash className='go-dash-detailed' /> Add, remove, or edit dishes instantly — changes reflect across all customer devices in real-time.</p></li>
+                    <li><p><span className='menu-special-home-detail'>Category-wise Organization</span> <GoDash className='go-dash-detailed' /> Organize items by category (starters, mains, desserts, beverages) for a smooth browsing experience.</p></li>
+                    <li><p><span className='menu-special-home-detail'>Dynamic Availability</span> <GoDash className='go-dash-detailed' /> Mark items as available, unavailable, or out of stock anytime — no need to inform staff manually.</p></li>
+                    <li><p><span className='menu-special-home-detail'>Custom Pricing & Variants</span> <GoDash className='go-dash-detailed' /> Set different prices for portion sizes, add-ons, or meal combos with ease.</p></li>
+                    <li><p><span className='menu-special-home-detail'>Photos & Descriptions</span> <GoDash className='go-dash-detailed' /> Add high-quality images and descriptions to help customers choose better and faster.</p></li>
+                </ul>
+                  <div className='home-detailed-infor-button-cont'>
+                    <button className='home-detailed-get-started-button'>Get Started</button>
+                </div>
+
+            </div>
+            </div>
+        )
+    }
+
+    const qrcodeDetails = () => {
+        return (
+            <div className={`home-detailed-infor-cont ${showQrDetail ? "show-qr-details" : "hide-qr-details"}`}>
+
+            <div className='home-detailed-inner-cont'>
+                <IoCloseOutline onClick={onClickQrClose} className='home-detailed-inner-into' />
+                <h1 className='home-detailed-infor-main-head'><span>QR Code Table</span> Scanning – Fast, Contactless, and Smart</h1>
+                <p className='home-detailed-infor-desc'>Upgrade your dining experience with the power of QR technology. Our app enables instant interactions between customers and tables through seamless scanning.</p>
+                <h1 className='home-detailed-infor-head'>How It Works</h1>
+                <ul className='home-detailed-infor-first-list'>
+                    <li>
+                        Each table has a unique QR code linked to its ID in the system.
+                    </li>
+                    <li>
+                        Customers or staff simply scan the code using the in-app scanner or phone camera.
+                    </li>
+                    <li>
+                        The app instantly pulls up the table’s details — status, orders, service requests, and more.
+                    </li>
+                </ul>
+                <h1 className='home-detailed-infor-head'>Key Benefits</h1>
+                <ul className='home-detailed-infor-second-list'>
+                    <li><p><span>Contactless Interaction</span> <GoDash className='go-dash-detailed' /> No need to touch shared menus or devices.</p></li>
+                    <li><p><span>Instant Access</span> <GoDash className='go-dash-detailed' /> View menu, order food, request service, or pay bills directly from your phone.</p></li>
+                    <li><p><span>Smart Assignment</span> <GoDash className='go-dash-detailed' /> Staff can quickly identify and manage specific tables without confusion.</p></li>
+                    <li><p><span>Speed & Accuracy</span> <GoDash className='go-dash-detailed' /> No manual input; reduces errors and saves time.</p></li>
+                    <li><p><span>Hygienic and Modern</span> <GoDash className='go-dash-detailed' /> Perfect for post-COVID expectations and tech-savvy customers.</p></li>
+                </ul>
+                <h1 className='home-detailed-infor-head'>Secure & Unique:</h1>
+                <p className='home-detailed-infor-last-desc'>Each QR code is securely mapped to its respective table. Codes are tamper-proof and can be reissued anytime.</p>
+                <div className='home-detailed-infor-button-cont'>
+                    <button className='home-detailed-get-started-button'>Get Started</button>
+                </div>
+
+            </div>
+            </div>
+        )
+    }
 
   return (
     <div className='home-initial-cont'>
@@ -163,15 +324,18 @@ const Home = () => {
             <div className='home-main-content-cont-details'>
                 <h1 className='home-main-content-cont-details-head'>QR Code Table Scanning – Fast, Contactless, and Smart</h1>
                 <p className='home-main-content-cont-details-para'>Upgrade your dining experience with the power of QR technology. Our app enables instant interactions between customers and tables through seamless scanning.</p>
-                <button className='home-main-content-cont-details-button'>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
+                <button className='home-main-content-cont-details-button' onClick={onClickViewDetailsQrCode}>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
             </div>
         </div>
+        {qrcodeDetails()}
+        {menuDetails()}
+        {orderDetails()}
         <div className='home-main-content-cont'>
             <img src={menuphoto} alt='qr code one' className='qrcode-photo menu-manage-order' />
             <div className='home-main-content-cont-details'>
                 <h1 className='home-main-content-cont-details-head'>Menu Management – Control Your Menu with Ease</h1>
                 <p className='home-main-content-cont-details-para'>Simplify and streamline how you manage your restaurant’s menu, all from one dashboard.Add, remove, or edit dishes instantly — changes reflect across all customer devices in real-time.</p>
-                <button className='home-main-content-cont-details-button home-main-content-cont-details-button-right-side '>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
+                <button className='home-main-content-cont-details-button home-main-content-cont-details-button-right-side' onClick={onClickMenuOne}>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
             </div>
         </div>
         <div className='home-main-content-cont'>
@@ -179,7 +343,7 @@ const Home = () => {
             <div className='home-main-content-cont-details'>
                 <h1 className='home-main-content-cont-details-head'>Statistics & Orders – Track, Analyze, and Grow Smarter</h1>
                 <p className='home-main-content-cont-details-para'>Get complete visibility over your restaurant’s performance and customer behavior — all in one place Monitor every order from placement to delivery – dine-in, takeout, or delivery.</p>
-                <button className='home-main-content-cont-details-button'>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
+                <button className='home-main-content-cont-details-button' onClick={onClickOrderOne}>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
             </div>
         </div>
         <h1 className='home-main-power-heading'>Powerful Features Built to Elevate Your Restaurant Operations</h1>
