@@ -5,6 +5,7 @@ import './index.css'
 
 
 const Header = () => {
+  const [currentOne, setCurrentOne] = React.useState(0);
   return (
     <div className='header-initial-cont'>
       <div className='header-logo-cont'>
@@ -16,10 +17,26 @@ const Header = () => {
         <p className='header-logo-text'>TableTrack</p>
       </div>
       <nav>
-        <a className='home-nav-one'>Home</a>
-        <a>Features</a>
-        <a>Pricing</a>
-        <a>FAQs</a>
+        <a 
+         className={'home-nav-two' + (currentOne === "home" ? " home-nav-active" : "")}
+         href='#home'  onClick={(e) => {
+
+            e.preventDefault();
+            setCurrentOne("home")
+              document.getElementById("home")?.scrollIntoView({ behavior: "smooth"});
+            }}
+        >Home</a>
+        <a className={'home-nav-two' + (currentOne === "powerfulFeatures" ? " home-nav-active" : "")} href='#powerfulFeatures' onClick={(e) => {
+            e.preventDefault();
+            setCurrentOne("powerfulFeatures")
+              document.getElementById("powerfulFeatures")?.scrollIntoView({ behavior: "smooth"});
+            }}>Features</a>
+         <a className={'home-nav-two' + (currentOne === "pricing" ? " home-nav-active" : "")} href='#pricing' onClick={(e) => {
+            e.preventDefault();
+            setCurrentOne("pricing")
+              document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth"});
+            }}>Pricing</a>
+
       </nav>
       <div className='header-login-cont'>
         <button className='home-header-login-button'>Login</button>

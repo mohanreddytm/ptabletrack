@@ -157,11 +157,11 @@ const Home = () => {
         document.body.style.overflow = 'hidden';
     }
 
-        const orderDetails = () => {
+    const orderDetails = () => {
         return (
             <div className={`home-detailed-infor-cont ${showOrderDetail ? "show-qr-details" : "hide-qr-details"}`}>
 
-            <div className='home-detailed-inner-cont'>
+            <div className='home-detailed-inner-cont home-order-detailed-one'>
                 <IoCloseOutline onClick={onClickQrClose} className='home-detailed-inner-into' />
                 <h1 className='home-detailed-infor-main-head'><span>Statistics & Orders</span> – Track, Analyze, and Grow Smarter</h1>
                 <p className='home-detailed-infor-desc'>Get complete visibility over your restaurant’s performance and customer behavior — all in one place.</p>
@@ -180,7 +180,7 @@ const Home = () => {
                         Maximize customer satisfaction and profits
                     </li>
                 </ul>
-                <div>
+                <div className='home-detailed-infor-cont-one'>
                     <div>
                         <h1 className='home-detailed-infor-head'>Order Management</h1>
                         <ul className='home-detailed-infor-second-list'>
@@ -191,7 +191,7 @@ const Home = () => {
                         </ul>
                     </div>   
                     <div>
-                        <h1 className='home-detailed-infor-head'>Advanced Statistics</h1>
+                        <h1 className='home-detailed-infor-head advanced-statistics'>Advanced Statistics</h1>
                         <ul className='home-detailed-infor-second-list'>
                             <li><p><span >Sales Dashboard</span> <GoDash className='go-dash-detailed' /> Visualize daily, weekly, and monthly sales trends at a glance.</p></li>
                             <li><p><span >Top-Selling Items</span> <GoDash className='go-dash-detailed' /> Identify your most popular dishes to plan inventory and marketing.</p></li>
@@ -204,7 +204,7 @@ const Home = () => {
 
 
                 </div>
-                  <div className='home-detailed-infor-button-cont'>
+                    <div className='home-detailed-infor-button-cont'>
                     <button className='home-detailed-get-started-button'>Get Started</button>
                 </div>
 
@@ -212,6 +212,7 @@ const Home = () => {
             </div>
         )
     }
+
 
     const menuDetails = () => {
         return (
@@ -296,7 +297,7 @@ const Home = () => {
     <div className='home-initial-cont'>
       <Header />
       <div className='home-main-cont'>
-        <h1 className='home-main-head'>Smart Dining Starts Here – Track Your Table,<br/> Enjoy the Experience</h1>
+        <h1 id="home" className='home-main-head'>Smart Dining Starts Here – Track Your Table,<br/> Enjoy the Experience</h1>
         <p className='home-main-text'>Easily manage orders, menus, and tables in one place. Save time, reduce errors, and grow your business <br/> faster</p>
         <button className='start-trail-button'>Start 30 Days Trail <FaArrowRight className='home-right-arrow' /></button>
         <div className='home-res-cont'>
@@ -346,7 +347,7 @@ const Home = () => {
                 <button className='home-main-content-cont-details-button' onClick={onClickOrderOne}>View Details <FaArrowRight className='home-right-arrow-rest'/></button>
             </div>
         </div>
-        <h1 className='home-main-power-heading'>Powerful Features Built to Elevate Your Restaurant Operations</h1>
+        <h1 id='powerfulFeatures' className='home-main-power-heading'>Powerful Features Built to Elevate Your Restaurant Operations</h1>
         <ul className='home-main-features-cont'>
             {featuresList.map(each => (
                 <li className='home-main-features-item'>
@@ -356,7 +357,7 @@ const Home = () => {
                 </li>
             ))}
         </ul>
-        <h1 className="home-main-power-heading">Choose a Plan That Fits Your Restaurant</h1>
+        <h1 id='pricing' className="home-main-power-heading">Choose a Plan That Fits Your Restaurant</h1>
         <p className='home-main-power-desc'>Get everything you need to manage your restaurant with one affordable plan.</p>
         <div className='monthly-annual-plan-cont'> 
             <p className='monthly-text'>Pay Monthly</p>
@@ -372,8 +373,8 @@ const Home = () => {
             <div className='price-cont-item-one'>
                 <h1 className='price-cont-item-one-head'>Subscription Package</h1>
                 <div className='price-cont-item-one-div'>
-                    <h1 className='price-cont-item-one-price'>₹200</h1>
-                    <p className='price-cont-item-one-pay-month'>Pay Monthly</p>
+                    <h1 className='price-cont-item-one-price'>{on ? "₹ 2000" : "₹ 200"}</h1>
+                    <p className='price-cont-item-one-pay-month'>Pay {on ? "Annually" : "Monthly"}</p>
                 </div>
                 <button className='home-header-get-started-button home-header-get-started-button-home'>Get Started</button>
             </div>
@@ -411,7 +412,7 @@ const Home = () => {
         </div>
         <div className='copy-right-home'>
             <h1><FaRegCopyright className='copy-right-one' /> 2025 TableTrack. All Rights Reserved.</h1>
-            <FaArrowUp className='copy-right-up-arrow' />
+            <FaArrowUp className='copy-right-up-arrow' onClick={() => document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })} />
         </div>
       </div>
       

@@ -642,3 +642,27 @@ input:checked + .slider:before {
     display: flex;
     
 }
+
+.home-detailed-infor-cont-one{
+    display: flex;
+
+}
+.home-detailed-infor-cont-one div{
+    width: 50%;
+    
+}
+
+.advanced-statistics{
+    margin-left: 20px;
+}
+
+.home-order-detailed-one{
+    height: 70%;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+#powerfulFeatures, #pricing, #home{
+      scroll-margin-top: 100px;
+}

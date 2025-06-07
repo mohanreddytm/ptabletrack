@@ -28,6 +28,15 @@
     
 }
 
+.home-nav-two{
+    text-decoration: none;
+}
+
+.home-nav-active{
+    color: #A78BFA;
+    font-weight: 600;
+}
+
 .header-logo-t{
     font-size: 30px;
     color: #ffffff;
