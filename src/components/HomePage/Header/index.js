@@ -1,11 +1,13 @@
 import React from 'react'
-import { MdLightMode } from "react-icons/md";
+import { IoMenu } from "react-icons/io5";
 
 import './index.css'
 
 
 const Header = () => {
   const [currentOne, setCurrentOne] = React.useState(0);
+  const [mobileNav, setMobileNav] = React.useState(false);
+
   return (
     <div className='header-initial-cont'>
       <div className='header-logo-cont'>
@@ -40,7 +42,17 @@ const Header = () => {
       </nav>
       <div className='header-login-cont'>
         <button className='home-header-login-button'>Login</button>
+        <button className='home-header-menu-button' onClick={() => {setMobileNav(!mobileNav)}}>
+          <IoMenu className='home-header-menu-icon' />
+        </button>
+        
         <button className='home-header-get-started-button'>Get Started</button>
+      </div>
+      <div className={`header-mobile-nav ${mobileNav ? "active" : ""}`}>
+        <h1>Home</h1>
+        <h1>Features</h1>
+        <h1>Pricing</h1>
+        <button className='home-header-login-button'>Get Started</button>
       </div>
     </div>
   )

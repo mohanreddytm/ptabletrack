@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 
 import Header from '../Header'
@@ -25,7 +25,7 @@ import orders from '../../../images/orders.png'
 
 import './index.css'
 
-const pricingList = [
+let pricingList = [
     {
         id:1,
         rates:[
@@ -134,6 +134,20 @@ const Home = () => {
     const [showQrDetail, setShowQrDetail] = useState(false);
     const [showMenuDetail, setShowMenuDetail] = useState(false);
     const [showOrderDetail, setShowOrderDetail] = useState(false);
+    const [laptopView, setLaptopView] = useState(true);
+    const [showAllPricing, setShowAllPricing] = useState(false);
+
+    useEffect(() => {
+        const checkWidth = () => {
+            setLaptopView(window.innerWidth > 768)
+        }
+
+        checkWidth();
+        window.addEventListener('resize', checkWidth);
+        return () => window.removeEventListener('resize', checkWidth);
+  }, [])
+
+
 
     const onClickQrClose = () => {
         setShowQrDetail(false);
@@ -370,7 +384,7 @@ const Home = () => {
         <div className='price-cont-heads'>
             <div>
             </div>
-            <div className='price-cont-item-one'>
+            <div className='price-cont-item-one price-cont-item-one-sp'>
                 <h1 className='price-cont-item-one-head'>Subscription Package</h1>
                 <div className='price-cont-item-one-div'>
                     <h1 className='price-cont-item-one-price'>{on ? "₹ 2000" : "₹ 200"}</h1>
@@ -381,7 +395,7 @@ const Home = () => {
             <div className='price-cont-item-one'>
                 <h1 className='price-cont-item-one-head'>Life Time</h1>
                 <div className='price-cont-item-one-div'>
-                    <h1 className='price-cont-item-one-price'>₹ 5000</h1>
+                    <h1 className='price-cont-item-one-price'>₹5000</h1>
                     <p className='price-cont-item-one-pay-month'>Pay One Time</p>
                 </div>
                 <button className='home-header-get-started-button home-header-get-started-button-home'>Get Started</button>
@@ -389,27 +403,61 @@ const Home = () => {
         </div>
         <div className='pricing-list-cont'>
             <ul className='pricing-list-items-cont'>
-                {pricingList[0].rates.map(each => 
+                {laptopView ?
+                pricingList[0].rates.map(each => 
                     <li className='pricing-list-item'>
                         <p>{each.name}</p>
                     </li>
-                )}
+                ) : pricingList[0].rates.slice(0, 5).map(each => 
+                    <li className='pricing-list-item'>
+                        <p>{each.name}</p>
+                    </li>
+                ) }
+
+                {showAllPricing && pricingList[0].rates.slice(5).map(each => 
+                    <li className='pricing-list-item'>
+                        <p>{each.name}</p>
+                    </li>) }
+                
             </ul>
             <ul className='pricing-list-items-middle-cont'>
-                {pricingList[0].rates.map(each => 
+                {laptopView ? pricingList[0].rates.map(each => 
                     <li className='pricing-list-item-is-ok'>
                         <p>{each.isOk ? <TiTick className='tick-one' /> : <GoDash className='dash-one' /> }</p>
                     </li>
-                )}
-            </ul>
-            <ul className='pricing-list-items-middle-cont'>
-                {pricingList[1].rates.map(each => 
+                ) :
+                pricingList[0].rates.slice(0,5).map(each => 
                     <li className='pricing-list-item-is-ok'>
                         <p>{each.isOk ? <TiTick className='tick-one' /> : <GoDash className='dash-one' /> }</p>
                     </li>
-                )}
+                ) }
+                {showAllPricing && pricingList[0].rates.slice(5).map(each => 
+                    <li className='pricing-list-item-is-ok'>
+                        <p>{each.isOk ? <TiTick className='tick-one' /> : <GoDash className='dash-one' /> }</p>
+                    </li>
+                ) }
+                
+            </ul>
+            <ul className='pricing-list-items-middle-cont'>
+                {laptopView ? pricingList[1].rates.map(each => 
+                    <li className='pricing-list-item-is-ok'>
+                        <p>{each.isOk ? <TiTick className='tick-one' /> : <GoDash className='dash-one' /> }</p>
+                    </li>
+                ) : pricingList[1].rates.slice(0,5).map(each => 
+                    <li className='pricing-list-item-is-ok'>
+                        <p>{each.isOk ? <TiTick className='tick-one' /> : <GoDash className='dash-one' /> }</p>
+                    </li>
+                ) }
+
+                {showAllPricing && pricingList[1].rates.slice(5).map(each => 
+                    <li className='pricing-list-item-is-ok'>
+                        <p>{each.isOk ? <TiTick className='tick-one' /> : <GoDash className='dash-one' /> }</p>
+                    </li>
+                ) }
+                
             </ul>
         </div>
+        <p className='pricing-show-more' onClick={() => setShowAllPricing(!showAllPricing)}>Show {showAllPricing ? "Less" : "More"} ...</p>
         <div className='copy-right-home'>
             <h1><FaRegCopyright className='copy-right-one' /> 2025 TableTrack. All Rights Reserved.</h1>
             <FaArrowUp className='copy-right-up-arrow' onClick={() => document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })} />

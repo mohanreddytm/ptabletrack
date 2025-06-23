@@ -213,7 +213,7 @@
 }
 
 .home-main-features-item-logo{
-    font-size: 30px;
+    font-size: 50px;
     color: #7f5eeb;
     background-color: #100e16;
     padding: 10px;
@@ -238,6 +238,10 @@
     color: #bcb6b6;
     margin: 0px;
     text-align: center;
+}
+
+.pricing-show-more{
+    display: none;
 }
 
 /* Toggle base */
@@ -311,22 +315,32 @@ input:checked + .slider:before {
     align-self: center;
     justify-content: flex-end;
     margin-top: 20px;
+    /* background-color: pink; */
+    align-items: center ;
+    padding: 20px;
 }
 
 .price-cont-heads div{
     width: 28%;
     background-color: #100e16;
 
-    /* background-color: yellow; */
+
+    
 }
 
 .price-cont-item-one{
     display: flex;
     flex-direction: column;
     padding: 24px;
-    margin-left: 10px;
+    margin: 0px 0px 0px 10px;
+min-height: 100%;
+
     border-radius: 10px;
     
+}
+
+.price-cont-item-one-sp{
+    margin-right: 7%;
 }
 
 .price-cont-item-one-head{
@@ -391,7 +405,7 @@ input:checked + .slider:before {
     font-size: 20px;
     font-weight: 400;
     color: #ffffff;
-    margin: 19px 0px;
+    margin: 20px 0px;
     padding: 0px;
     align-self: flex-start;
 }
@@ -666,3 +680,174 @@ input:checked + .slider:before {
 #powerfulFeatures, #pricing, #home{
       scroll-margin-top: 100px;
 }
+
+
+
+@media screen and (max-width: 900px) {
+    .home-res-cont{
+        flex-direction: column;
+        align-items: center;
+    }
+    .res-image{
+        width: 80%;
+        margin-bottom: 30px;
+    }
+    .home-res-button-cont{
+        justify-content: space-between;
+    }
+
+    .home-main-head{
+        font-size: 30px;
+        width: 80%;
+        align-self: center;
+    }
+    .home-main-content-cont{
+        flex-direction: column;
+        align-items: center;
+        background-color: #1F2937;
+        margin-bottom: 20px;
+        width: 85%;
+        border-radius: 10px;
+        padding: 8px;
+        align-self: center;
+    }
+    .qrcode-photo{
+        width: 90%;
+        margin-bottom: 20px;
+    }
+    .menu-manage-order{
+        order: -1;
+    }
+    .home-main-content-cont-details-button-right-side{
+        align-self: center;
+    }
+    .home-main-content-cont-details-button{
+        align-self: center;
+    }
+    .home-main-content-cont-details-head{
+        font-size: 16px;
+    }
+    .home-main-content-cont-details-para{
+        margin-top: 0px;
+        margin-left: 10px;
+    }
+    .home-main-power-heading{
+        width: 90%;
+        font-size: 24px;
+        align-self: center;
+    }
+    .home-main-features-item{
+        width: 45%;
+        
+        
+    }
+    .home-main-power-desc
+    {
+        width: 90%;
+        align-self: center;
+        font-size: 20px;
+    }
+    .home-main-features-cont
+    {
+        padding: 0px;
+        justify-content: space-evenly;
+    }
+    .price-cont-heads{
+        /* background-color: pink; */
+        width: 100%;
+    }
+    .price-cont-heads{
+        align-items: baseline;
+    }
+    .price-cont-item-one{
+        flex-direction: column;
+        min-width: 33%;
+        padding: 10px;
+        height: 180px !important;
+        justify-content: space-between;
+    }
+    .home-header-get-started-button-home{
+        display: block;
+    }
+    .price-cont-item-one-sp{
+        margin-right: 0px;
+    }
+    .price-cont-item-one-div{
+        align-items: baseline;
+        flex-direction: column;
+    }
+    .price-cont-item-one-head{
+        font-size: 16px;
+    }
+    .price-cont-item-one-price{
+        font-size: 20px;
+    }
+    .price-cont-item-one-pay-month{
+        font-size: 14px;
+        align-self: center;
+        margin-top: 10px;
+    }
+
+    .monthly-annual-plan-cont{
+        margin-top: 40px;
+    }
+
+
+
+    .pricing-list-cont
+    {
+        /* background-color: pink; */
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .pricing-list-item{
+        
+        margin: 23px 0px;
+        overflow: hidden;
+        /* background-color: green; */
+        width: 100%;
+
+    }
+    .pricing-list-items-cont{
+        padding: 8px;
+    }
+    .pricing-list-item p{
+        overflow: hidden;
+        width: 100%;
+        /* background-color: yellow; */
+        overflow: hidden;    
+        white-space: nowrap;
+        font-size: 16px;
+        margin: 0px;
+        text-overflow: ellipsis; 
+    }
+    .pricing-list-item-is-ok{
+        width: 100% !important;
+        /* background-color: pink; */
+    }
+    .pricing-list-items-cont{
+        width: 30% !important;
+    }
+
+    .pricing-list-items-middle-cont{
+        /* background-color: yellow; */
+        width:30% !important;
+        flex-grow: 1;
+    }
+    .copy-right-up-arrow{
+        font-size: 20px !important;
+        height: 40px;
+        width: 40px;
+    }
+    .home-initial-cont{
+        margin-top: 8vh;
+    }
+    .pricing-show-more{
+        display: block;
+        font-size: 16px;
+        color: #8be0fa;
+        margin-top: 0px;
+        align-self: center;
+    }
+}
+

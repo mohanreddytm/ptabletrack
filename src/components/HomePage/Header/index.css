@@ -1,5 +1,6 @@
 .header-initial-cont{
     display: flex;
+    
     justify-content: space-between;
     background-color:#1F2937 ;
     padding: 20px 5%;
@@ -138,4 +139,79 @@ nav a:hover{
 .home-header-get-started-button:hover{
     background-color: #383367;
 
+}
+.home-header-menu-button{
+    display: none;
+}
+.home-header-get-started-button{
+    display: block;
+}
+
+.header-mobile-nav {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    nav{
+        display: none;
+    }
+
+    .home-header-menu-button{
+        display: block;
+        color: #ffffff;
+       font-size: 28px;
+       border-radius: 2px;
+       margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        padding:4px 10px;
+        border: none;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+
+        background-color: #A78BFA;
+    }
+    .home-header-get-started-button{
+        display: none;
+    }
+    
+    .header-mobile-nav{
+        display: none;
+        position: fixed;
+        background-color: #A78BFA;
+        right:10px;
+        top: 80px;
+        padding: 10px 20px;
+        border-radius: 4px;
+        
+        }
+
+    .header-mobile-nav h1{
+        
+
+        color: #ffffff;
+        font-size: 20px;
+        margin: 0px;
+        margin-bottom: 10px;
+        padding: 0px;
+        font-weight: 600;
+
+
+    }
+    .active{
+        display: block;
+    }
+
+    .header-mobile-nav button{
+        background-color: #ffffff;
+    }
+    .home-header-login-button:hover{
+        background-color: #ffffff;
+        color: #A78BFA;
+    }
+    .header-initial-cont{
+        height: 8vh;
+    }
+    
 }
