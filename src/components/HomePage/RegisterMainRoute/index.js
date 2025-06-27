@@ -2,11 +2,26 @@ import Header from "../Header"
 import MainBack from './style'
 import RegisterImage from '../../../images/RegisterImage.jpg'
 
-import React from 'react'
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
+import React, { useState } from 'react'
 
 import './index.css'
 
 const RegisterMainRoute = () => {
+
+    const [restaurantName, setRestaurantName] = useState('');
+    const [ownerName, setOwnerName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [countryCode, setCountryCode] = useState('+91');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [branchName, setBranchName] = useState('');
+    const [country, setCountry] = useState('India');
+    const [branchAddress, setBranchAddress] = useState('');
+
 
     const countryCodes = [
         { name: 'India', code: 'IN', dial_code: '+91' },
@@ -30,11 +45,11 @@ const RegisterMainRoute = () => {
                 <div className="reg-form-left-cont">
                     <h2 className="reg-form-main-head">Register Your Restaurant</h2>   
                     <label htmlFor="restaurantName">Restaurant Name:</label>
-                    <input type="text" id="restaurantName" placeholder="Ex: Guntur Gongura" name="restaurantName" required />
+                    <input className={`${restaurantName.length > 0 ? "filled" : ""}`} value={restaurantName} onChange={(e) => setRestaurantName(e.target.value)} type="text" id="restaurantName" name="restaurantName" required />
                     <label htmlFor="ownerName">Your Full Name:</label>
-                    <input type="text" id="ownerName" name="ownerName" required />
+                    <input className={`${ownerName.length > 0 ? "filled" : ""}`} value={ownerName} onChange={(e) => setOwnerName(e.target.value)} type="text" id="ownerName" name="ownerName" required />
                     <label htmlFor="email">Email:</label>
-                    <input type="email" id="email" name="email" required />
+                    <input className={`${email.length > 0 ? "filled" : ""}`} value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="email" name="email" required />
                     <label htmlFor="phone">Phone Number:</label>
                     <div className="phone-input-container">
                         <select id="countryCode" className="reg-country-code-cont" name="countryCode" required>
@@ -44,16 +59,16 @@ const RegisterMainRoute = () => {
                             </option>
                             ))}
                         </select>
-                        <input type="tel" id="phone" name="phone" required />
+                        <input className={`${phone.length > 0 ? "filled" : ""}`} value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" id="phone" name="phone" required />
                     </div>
                     <label htmlFor="password">Password:</label>
-                    <input type="password" id="password" name="password" required />
+                    <input className={`${password.length > 0 ? "filled" : ""}`} value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="password" name="password" required />
                     <label htmlFor="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required />
+                    <input className={`${confirmPassword.length > 0 ? "filled" : ""}`} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type="password" id="confirmPassword" name="confirmPassword" required />
                 </div>
                 <div className="reg-form-right-cont">
                     <label htmlFor="branchName">Branch Name:</label>
-                    <input type="text" id="branchName" name="branchName" required />
+                    <input className={`${branchName.length > 0 ? "filled" : ""}`} value={branchName} onChange={(e) => setBranchName(e.target.value)} type="text" id="branchName" name="branchName" required />
                     <label htmlFor="country">Country:</label>
                     <select className="reg-country-code-cont" id="country" name="country" required>
                         {countryCodes.map((country) => (
@@ -63,7 +78,7 @@ const RegisterMainRoute = () => {
                         ))}
                     </select>
                     <label htmlFor="branchAddress">Branch Address:</label>
-                    <textarea rows={5} className="reg-country-text-area" id="branchAddress" name="branchAddress" required></textarea>
+                    <textarea className={`reg-country-text-area ${branchAddress.length > 0 ? "filled" : ""}`} value={branchAddress} onChange={(e) => setBranchAddress(e.target.value)} rows={5} id="branchAddress" name="branchAddress" required></textarea>
                     <button type="submit" className="reg-sub-button">Sign Up</button>
                     <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
                 </div>

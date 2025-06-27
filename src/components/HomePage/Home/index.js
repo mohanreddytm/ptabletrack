@@ -403,10 +403,9 @@ const Home = () => {
         </div>
         <div className='pricing-list-cont'>
             <ul className='pricing-list-items-cont'>
-                {laptopView ?
-                pricingList[0].rates.map(each => 
+                {laptopView ? pricingList[0].rates.map(each => 
                     <li className='pricing-list-item'>
-                        <p>{each.name}</p>
+                        <p className='pricing-list-items-sp'>{each.name}</p>
                     </li>
                 ) : pricingList[0].rates.slice(0, 5).map(each => 
                     <li className='pricing-list-item'>
@@ -417,7 +416,8 @@ const Home = () => {
                 {showAllPricing && pricingList[0].rates.slice(5).map(each => 
                     <li className='pricing-list-item'>
                         <p>{each.name}</p>
-                    </li>) }
+                    </li>) 
+                }
                 
             </ul>
             <ul className='pricing-list-items-middle-cont'>

@@ -69,6 +69,8 @@ min-height: 100vh;
     font-weight: 500;
 }
 
+
+
 .register-form input{
     border-radius: 12px;
     padding: 10px;
@@ -76,11 +78,21 @@ min-height: 100vh;
     border: none;
     outline: none;
     box-shadow: 0px 0px 5px 0px #ffffff;
-    color: rgb(255, 255, 255);
+    color: #383367;
     font-size: 16px;
     margin-bottom: 10px;
-    font-weight: 500;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
+
+.filled{
+    background-color: #E8F0FE !important;
+}
+
+.register-form input:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7) !important;
+} 
 
 .phone-input-container{
     display: flex;
@@ -99,7 +111,14 @@ min-height: 100vh;
     margin-right: 10px;
     outline: none;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+.reg-country-code-cont:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7) !important;
+} 
+
 
 #country{
     margin-right: 0px;
@@ -115,14 +134,22 @@ min-height: 100vh;
     background-color: transparent;
     border-radius: 10px;
     padding: 10px;
-        box-shadow: 0px 0px 5px 0px #ffffff;
-        border: none;
-        color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 5px 0px #ffffff;
+    border: none;
+    color: #383367;
     font-size: 16px;
     outline: none;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    transition: all 0.3s ease;
         
 }
 
+
+.reg-country-text-area:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7) !important;
+} 
 .reg-sub-button{
     align-self: center;
     margin: 40px 0px 20px 0px ;
@@ -136,9 +163,11 @@ min-height: 100vh;
     padding: 8px 16px;
     cursor: pointer;
     transition: all 0.3s ease;
+    outline: none;
 }
 
 .reg-sub-button:hover{
     background-color: #ffffff;
     color: #111827;
+    transform: scale(1.1);
 }

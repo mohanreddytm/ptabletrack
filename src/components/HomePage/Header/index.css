@@ -136,6 +136,11 @@ nav a:hover{
     transition: all 0.2s ease-in-out;
 }
 
+
+Link{
+    text-decoration: none;
+}
+
 .home-header-get-started-button:hover{
     background-color: #383367;
 

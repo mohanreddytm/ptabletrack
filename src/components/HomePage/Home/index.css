@@ -501,10 +501,16 @@ min-height: 100%;
     left: 0;
     z-index: 100;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    /* padding-top: max(10vh, 100px); */
+
     background: rgba(18, 18, 28, 0.4);
     height: 100vh;
+    overflow-y: auto;
+    /* padding-bottom: 20px; */
+
 }
 
 @keyframes zoomout {
@@ -532,10 +538,12 @@ min-height: 100%;
     max-width: 70% !important;
     background-color:#1F2937 ;
     animation: zoomout 0.5s linear;
-
+    flex-shrink: 1;
     border-radius: 10px;
+    height: 90%;
     padding: 20px;
     position: relative;
+
 }
 
 .home-detailed-inner-into{
@@ -671,7 +679,7 @@ min-height: 100%;
 }
 
 .home-order-detailed-one{
-    height: 70%;
+    
     overflow: scroll;
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -681,6 +689,25 @@ min-height: 100%;
       scroll-margin-top: 100px;
 }
 
+
+.pricing-list-item p{
+    overflow: hidden;
+    width: 100%;
+    overflow: hidden;    
+    white-space: nowrap;
+    font-size: 16px;
+    margin: 0px;
+    text-overflow: ellipsis; 
+}
+
+
+.pricing-list-items-sp{
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 16px;
+    margin: 2.7px 0px !important;
+    text-overflow: ellipsis; 
+}
 
 
 @media screen and (max-width: 900px) {
@@ -811,16 +838,7 @@ min-height: 100%;
     .pricing-list-items-cont{
         padding: 8px;
     }
-    .pricing-list-item p{
-        overflow: hidden;
-        width: 100%;
-        /* background-color: yellow; */
-        overflow: hidden;    
-        white-space: nowrap;
-        font-size: 16px;
-        margin: 0px;
-        text-overflow: ellipsis; 
-    }
+
     .pricing-list-item-is-ok{
         width: 100% !important;
         /* background-color: pink; */
@@ -849,5 +867,39 @@ min-height: 100%;
         margin-top: 0px;
         align-self: center;
     }
+    .home-detailed-inner-cont{
+        max-width: 90% !important;
+    
+    }
+    .home-detailed-infor-cont{
+        padding: 40px 0px;
+    }
+    .home-detailed-infor-main-head{
+        line-height: 1.7;
+        font-size: 20px;
+        width: 80%;
+    }
+    .home-detailed-infor-desc{
+        line-height: 1.5;
+    }
+    .home-detailed-infor-head{
+        font-size: 18px;
+    }
+    .home-detailed-inner-into{
+        background-color: rgb(255, 122, 122);
+        border-radius: 4px;
+    }
+    .home-detailed-infor-cont-one{
+        flex-direction: column;
+    }
+
+    .home-detailed-infor-cont-one div{
+        width: 100%;
+    }
+    .home-order-detailed-one{
+        height: auto;
+    }
 }
+
+
 
