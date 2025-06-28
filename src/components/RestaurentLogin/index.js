@@ -1,7 +1,16 @@
 import React from 'react'
 import './index.css'
 
+import { useNavigate } from 'react-router-dom'
+
 const RestaurantLogin = () => {
+
+    const navigate = useNavigate();
+
+    const onClickCreateAccount = () => {
+        navigate('/restaurantReg');
+    }
+
   return (
     <div className='restaurant-login-container-initial-cont'>
         <div className='restaurant-login-container-main'>
@@ -26,7 +35,7 @@ const RestaurantLogin = () => {
                     <a href='#' className='restaurant-login-form-forgot-password'>Forgot Password?</a>
                 </div>
                 <div className='restaurant-login-form-button-cont'>
-                    <h1 className='restaurant-login-form-button-header'>Are you new here ? <span>Create an Account</span> </h1>
+                    <h1 className='restaurant-login-form-button-header'>Are you new here ? <span onClick={onClickCreateAccount}>Create an Account</span> </h1>
 
                     <button className='restaurant-login-form-button'>Login</button>
                 </div>

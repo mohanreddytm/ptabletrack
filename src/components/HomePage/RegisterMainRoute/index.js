@@ -1,6 +1,6 @@
 import Header from "../Header"
-import MainBack from './style'
-import RegisterImage from '../../../images/RegisterImage.jpg'
+//import MainBack from './style'
+
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
@@ -21,7 +21,8 @@ const RegisterMainRoute = () => {
     const [branchName, setBranchName] = useState('');
     const [country, setCountry] = useState('India');
     const [branchAddress, setBranchAddress] = useState('');
-
+    const [togglePassword, setTogglePassword] = useState(false);
+    const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false);
 
     const countryCodes = [
         { name: 'India', code: 'IN', dial_code: '+91' },
@@ -36,11 +37,14 @@ const RegisterMainRoute = () => {
         { name: 'Brazil', code: 'BR', dial_code: '+55' },
     ];
 
+    // const onClickContinueButton = () => {
+
+
   return (
     <div className="register-initial-cont">
       <Header />
       <div className="main-container-reg">
-        <MainBack className="main-sub-reg" image={RegisterImage}>
+        <div className="main-sub-reg">
             <form className="register-form">
                 <div className="reg-form-left-cont">
                     <h2 className="reg-form-main-head">Register Your Restaurant</h2>   
@@ -52,25 +56,38 @@ const RegisterMainRoute = () => {
                     <input className={`${email.length > 0 ? "filled" : ""}`} value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="email" name="email" required />
                     <label htmlFor="phone">Phone Number:</label>
                     <div className="phone-input-container">
-                        <select id="countryCode" className="reg-country-code-cont" name="countryCode" required>
+                        <select onChange={(e) => setCountryCode(e.target.value)} value={countryCode} id="countryCode" className="reg-country-code-cont" name="countryCode" required>
                             {countryCodes.map((country) => (
                             <option key={country.code} value={country.dial_code}>
                                 {country.dial_code}
                             </option>
                             ))}
                         </select>
-                        <input className={`${phone.length > 0 ? "filled" : ""}`} value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" id="phone" name="phone" required />
+                        <input className={`phone-number ${phone.length > 0 ? "filled" : ""}`} value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" id="phone" name="phone" required />
                     </div>
                     <label htmlFor="password">Password:</label>
-                    <input className={`${password.length > 0 ? "filled" : ""}`} value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="password" name="password" required />
+                    <div className="password-input-container">
+                        <input className={`password-input ${password.length > 0 ? "filled" : ""}`} value={password} onChange={(e) => setPassword(e.target.value)} type={togglePassword ? "text" : "password"} id="password" name="password" required />
+                        <span className={`password-toggle-icon ${password.length > 0 ? "password-visi" : ""}`} onClick={() => setTogglePassword(!togglePassword)}>
+                            {togglePassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+                    </div>
                     <label htmlFor="confirmPassword">Confirm Password:</label>
-                    <input className={`${confirmPassword.length > 0 ? "filled" : ""}`} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type="password" id="confirmPassword" name="confirmPassword" required />
+                    <div className="password-input-container">
+                        <input className={`password-input ${confirmPassword.length > 0 ? "filled" : ""}`} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type={toggleConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" required />
+                        <span className={`password-toggle-icon ${confirmPassword.length > 0 ? "password-visi" : ""}`} onClick={() => setToggleConfirmPassword(!toggleConfirmPassword)}>
+                            {toggleConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+                    </div>
+                </div>
+                <div className="reg-form-button-cont">
+                    <button className="continue-button" onClick={onClickContinueButton}>Continue</button>
                 </div>
                 <div className="reg-form-right-cont">
                     <label htmlFor="branchName">Branch Name:</label>
                     <input className={`${branchName.length > 0 ? "filled" : ""}`} value={branchName} onChange={(e) => setBranchName(e.target.value)} type="text" id="branchName" name="branchName" required />
                     <label htmlFor="country">Country:</label>
-                    <select className="reg-country-code-cont" id="country" name="country" required>
+                    <select value={country} onChange={(e) => setCountry(e.target.value) } className="reg-country-code-cont" id="country" name="country" required>
                         {countryCodes.map((country) => (
                             <option key={country.code} value={country.name}>
                                 {country.name}
@@ -83,7 +100,7 @@ const RegisterMainRoute = () => {
                     <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
                 </div>
             </form>
-        </MainBack>
+        </div>
         
       </div>
     </div>
