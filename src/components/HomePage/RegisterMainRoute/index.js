@@ -1,11 +1,11 @@
 import Header from "../Header"
-//import MainBack from './style'
-
 
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
+
+import { FaArrowLeft } from "react-icons/fa";
 
 import './index.css'
 
@@ -23,6 +23,11 @@ const RegisterMainRoute = () => {
     const [branchAddress, setBranchAddress] = useState('');
     const [togglePassword, setTogglePassword] = useState(false);
     const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false);
+    const [isAllInitialDetailsDone, setIsAllInitialDetailsDone] = useState(false);
+
+    const [showIsConfirmPasswordMatch, setShowIsMatch] = useState(false);
+
+    const [onContinuePasswordMatch, setOnContinuePasswordMatch] = useState(false);
 
     const countryCodes = [
         { name: 'India', code: 'IN', dial_code: '+91' },
@@ -37,8 +42,38 @@ const RegisterMainRoute = () => {
         { name: 'Brazil', code: 'BR', dial_code: '+55' },
     ];
 
-    // const onClickContinueButton = () => {
+    const onChangeConfirmPassword = (e) => {
+        if(e.target.value != password){
+            setShowIsMatch(true);
+        }else{
+            setShowIsMatch(false);
+        }
 
+        setConfirmPassword(e.target.value);
+
+    }
+
+    const onClickLeftArrowInReg = () => {
+        setIsAllInitialDetailsDone(false);
+    }
+
+
+
+    const onClickContinueButton = () => {
+        if(restaurantName.trim() != '' && ownerName.trim() != '' && email.trim() != '' && phone.trim() != '' && password.trim() != '' && confirmPassword.trim() != '') {
+            if(password === confirmPassword) {
+                setOnContinuePasswordMatch(false)
+                setIsAllInitialDetailsDone(true)
+            } else {
+                setOnContinuePasswordMatch(true)
+                setTimeout(() => setOnContinuePasswordMatch(false), 1000);
+            }
+        }else{
+            console.log("not fill")
+        }
+    }
+
+    console.log(onContinuePasswordMatch)
 
   return (
     <div className="register-initial-cont">
@@ -46,7 +81,7 @@ const RegisterMainRoute = () => {
       <div className="main-container-reg">
         <div className="main-sub-reg">
             <form className="register-form">
-                <div className="reg-form-left-cont">
+                <div className={`reg-form-left-cont ${isAllInitialDetailsDone ? 'continue-the-reg-left-cont' : 'block-the-reg-left-cont'}`}>
                     <h2 className="reg-form-main-head">Register Your Restaurant</h2>   
                     <label htmlFor="restaurantName">Restaurant Name:</label>
                     <input className={`${restaurantName.length > 0 ? "filled" : ""}`} value={restaurantName} onChange={(e) => setRestaurantName(e.target.value)} type="text" id="restaurantName" name="restaurantName" required />
@@ -74,16 +109,18 @@ const RegisterMainRoute = () => {
                     </div>
                     <label htmlFor="confirmPassword">Confirm Password:</label>
                     <div className="password-input-container">
-                        <input className={`password-input ${confirmPassword.length > 0 ? "filled" : ""}`} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type={toggleConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" required />
+                        <input className={`password-input ${confirmPassword.length > 0 ? "filled" : ""}`} value={confirmPassword} onChange={onChangeConfirmPassword} type={toggleConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" required />
                         <span className={`password-toggle-icon ${confirmPassword.length > 0 ? "password-visi" : ""}`} onClick={() => setToggleConfirmPassword(!toggleConfirmPassword)}>
                             {toggleConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                     </div>
+                    {showIsConfirmPasswordMatch && <p className={`confirm-pass-error ${onContinuePasswordMatch && "animate-the-pass-one"}`}>should be match ?</p>}
                 </div>
-                <div className="reg-form-button-cont">
+                {isAllInitialDetailsDone == false ? <div className="reg-form-button-cont">
                     <button className="continue-button" onClick={onClickContinueButton}>Continue</button>
-                </div>
-                <div className="reg-form-right-cont">
+                </div> : "" }
+
+                <div className={`reg-form-right-cont ${isAllInitialDetailsDone && 'reg-right-cont-continue'}`}>
                     <label htmlFor="branchName">Branch Name:</label>
                     <input className={`${branchName.length > 0 ? "filled" : ""}`} value={branchName} onChange={(e) => setBranchName(e.target.value)} type="text" id="branchName" name="branchName" required />
                     <label htmlFor="country">Country:</label>
@@ -99,7 +136,9 @@ const RegisterMainRoute = () => {
                     <button type="submit" className="reg-sub-button">Sign Up</button>
                     <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
                 </div>
-            </form>
+                {isAllInitialDetailsDone && <FaArrowLeft onClick={onClickLeftArrowInReg} className="left-arrow-reg" />
+ }
+                            </form>
         </div>
         
       </div>
