@@ -266,11 +266,58 @@ display: none;
 
 }
 
+.mobile-login-text-reg{
+    display: none;
+}
+
+.email-error-one{
+    margin: 4px 0px 10px 6px;
+    color: rgba(255, 136, 0, 0.832);
+}
+
+.password-error-one-upon-it{
+    color: #4f46e5;
+    margin: 0px;
+    margin-left: 10px;
+
+}
+
+.password-error-one-upon-it-remove{
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.one-password-one{
+    position: relative;
+}
+
+@keyframes warning {
+  0% { bottom: 35px; }
+  50% { bottom: 65px; }
+  100% { bottom: 60px; }
+}
+.password-error-cont {
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    background-color: #ffffff;
+    z-index: 10;
+    animation: warning 0.5s linear forwards;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.password-error-cont:first-child{
+    margin: 20px;
+}
 
 
 @media screen and (max-width: 768px) {
     .reg-form-button-cont{
         display: flex;
+    }
+    .mobile-login-text-reg{
+        display: block;
     }
     .register-form{
         flex-direction: column;

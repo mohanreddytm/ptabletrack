@@ -39,7 +39,7 @@ const RestaurantLogin = () => {
 
                     <button className='restaurant-login-form-button'>Login</button>
                 </div>
-                <p className='restaurant-login-form-footer'>Go to Home</p>
+                <p onClick={() => navigate('/')} className='restaurant-login-form-footer'>Go to Home</p>
             </form>
         </div>
     </div>

@@ -24,6 +24,9 @@ const RegisterMainRoute = () => {
     const [togglePassword, setTogglePassword] = useState(false);
     const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false);
     const [isAllInitialDetailsDone, setIsAllInitialDetailsDone] = useState(false);
+    const [isValidEmailAddress, setIsValidEmailAddress] = useState("no");
+
+    const [showPasswordOne, setShowPasswordOne] = useState(false);
 
     const [showIsConfirmPasswordMatch, setShowIsMatch] = useState(false);
 
@@ -57,17 +60,38 @@ const RegisterMainRoute = () => {
         setIsAllInitialDetailsDone(false);
     }
 
+    const onChangeEmailOne = (e) => {
+        if(e.target.value.endsWith('@gmail.com')){
+            setIsValidEmailAddress('yes');
+        }
+        setEmail(e.target.value);
+
+    }
+
+    const onChangePasswordInput =  (e) => {
+        setShowPasswordOne(true)
+        if(e.target.value == ''){
+            setShowPasswordOne(false)
+        }
+        setPassword(e.target.value)
+    } 
 
 
     const onClickContinueButton = () => {
         if(restaurantName.trim() != '' && ownerName.trim() != '' && email.trim() != '' && phone.trim() != '' && password.trim() != '' && confirmPassword.trim() != '') {
-            if(password === confirmPassword) {
-                setOnContinuePasswordMatch(false)
-                setIsAllInitialDetailsDone(true)
-            } else {
-                setOnContinuePasswordMatch(true)
-                setTimeout(() => setOnContinuePasswordMatch(false), 1000);
+            if(email.endsWith("@gmail.com")){
+                setIsValidEmailAddress("yes")
+                if(password === confirmPassword) {
+                    setOnContinuePasswordMatch(false)
+                    setIsAllInitialDetailsDone(true)
+                } else {
+                    setOnContinuePasswordMatch(true)
+                    setTimeout(() => setOnContinuePasswordMatch(false), 1000);
+                }
+            }else{
+                setIsValidEmailAddress("error")
             }
+
         }else{
             console.log("not fill")
         }
@@ -88,7 +112,7 @@ const RegisterMainRoute = () => {
                     <label htmlFor="ownerName">Your Full Name:</label>
                     <input className={`${ownerName.length > 0 ? "filled" : ""}`} value={ownerName} onChange={(e) => setOwnerName(e.target.value)} type="text" id="ownerName" name="ownerName" required />
                     <label htmlFor="email">Email:</label>
-                    <input className={`${email.length > 0 ? "filled" : ""}`} value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="email" name="email" required />
+                    <input className={`${email.length > 0 ? "filled" : ""}`} value={email} onChange={onChangeEmailOne} type="email" id="email" name="email" required />
                     <label htmlFor="phone">Phone Number:</label>
                     <div className="phone-input-container">
                         <select onChange={(e) => setCountryCode(e.target.value)} value={countryCode} id="countryCode" className="reg-country-code-cont" name="countryCode" required>
@@ -101,12 +125,23 @@ const RegisterMainRoute = () => {
                         <input className={`phone-number ${phone.length > 0 ? "filled" : ""}`} value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" id="phone" name="phone" required />
                     </div>
                     <label htmlFor="password">Password:</label>
-                    <div className="password-input-container">
-                        <input className={`password-input ${password.length > 0 ? "filled" : ""}`} value={password} onChange={(e) => setPassword(e.target.value)} type={togglePassword ? "text" : "password"} id="password" name="password" required />
+                    <div className="password-input-container one-password-one">
+                        <input className={`password-input ${password.length > 0 ? "filled" : ""}`} value={password} onChange={onChangePasswordInput} type={togglePassword ? "text" : "password"} id="password" name="password" required />
                         <span className={`password-toggle-icon ${password.length > 0 ? "password-visi" : ""}`} onClick={() => setTogglePassword(!togglePassword)}>
                             {togglePassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
+                        {showPasswordOne && <div className="password-error-cont">
+                            <p className="password-error-one-upon-it password-error-one-upon-it-remove">Password should - </p>
+                            <p className="password-error-one-upon-it"> - has atleast 8 characters</p>
+                            <p className="password-error-one-upon-it"> - has atleast 1 Uppercase</p>
+                            <p className="password-error-one-upon-it"> - has atleast 1 Lowercase</p>
+                            <p className="password-error-one-upon-it"> - has atleast 1 Number</p>
+                            <p className="password-error-one-upon-it"> - has atleast 1 Special Character</p>
+                        </div>
+                        }
+
                     </div>
+                    
                     <label htmlFor="confirmPassword">Confirm Password:</label>
                     <div className="password-input-container">
                         <input className={`password-input ${confirmPassword.length > 0 ? "filled" : ""}`} value={confirmPassword} onChange={onChangeConfirmPassword} type={toggleConfirmPassword ? "text" : "password"} id="confirmPassword" name="confirmPassword" required />
@@ -114,6 +149,10 @@ const RegisterMainRoute = () => {
                             {toggleConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
                     </div>
+
+                    <p className="login-link mobile-login-text-reg">Already have an account? <a href="/login">Login here</a></p>
+                    {isValidEmailAddress == "error" && <p className="email-error-one">The Email should consists of @gmail.com</p>}
+
                     {showIsConfirmPasswordMatch && <p className={`confirm-pass-error ${onContinuePasswordMatch && "animate-the-pass-one"}`}>should be match ?</p>}
                 </div>
                 {isAllInitialDetailsDone == false ? <div className="reg-form-button-cont">
@@ -133,12 +172,15 @@ const RegisterMainRoute = () => {
                     </select>
                     <label htmlFor="branchAddress">Branch Address:</label>
                     <textarea className={`reg-country-text-area ${branchAddress.length > 0 ? "filled" : ""}`} value={branchAddress} onChange={(e) => setBranchAddress(e.target.value)} rows={5} id="branchAddress" name="branchAddress" required></textarea>
+                    
+                    
                     <button type="submit" className="reg-sub-button">Sign Up</button>
-                    <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
+
+                                        <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
                 </div>
                 {isAllInitialDetailsDone && <FaArrowLeft onClick={onClickLeftArrowInReg} className="left-arrow-reg" />
  }
-                            </form>
+            </form>
         </div>
         
       </div>

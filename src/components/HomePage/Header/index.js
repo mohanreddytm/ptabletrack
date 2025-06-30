@@ -12,6 +12,10 @@ const Header = () => {
 
   const navigate = useNavigate();
 
+  const onClickLoginOne = () => {
+    navigate('/login');
+  }
+
   const onClickAppLogo = () => {
       navigate('/home');
   }
@@ -49,7 +53,7 @@ const Header = () => {
 
       </nav>
       <div className='header-login-cont'>
-        <button className='home-header-login-button'>Login</button>
+        <button onClick={onClickLoginOne} className='home-header-login-button'>Login</button>
         <button className='home-header-menu-button' onClick={() => {setMobileNav(!mobileNav)}}>
           <IoMenu className='home-header-menu-icon' />
         </button>
