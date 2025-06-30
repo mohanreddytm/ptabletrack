@@ -13,7 +13,7 @@ import RestaurantRegister  from './components/RestaurentRegister'
 const App = () => {
   return (
     <Routes>
-      <Route exact path='/home' Component={Home} />
+      <Route exact path='/' Component={Home} />
       <Route exact path='/login' Component={RestaurantLogin} />
       <Route exact path='/register' Component={RestaurantRegister} />
       <Route exact path='/restaurantReg' Component={RegisterMainRoute} />
