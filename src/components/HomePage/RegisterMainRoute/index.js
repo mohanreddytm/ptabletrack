@@ -3,6 +3,8 @@ import Header from "../Header"
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
+import { v4 as uuidv4 } from 'uuid';
+
 import React, { use, useState } from 'react'
 
 import { FaArrowLeft } from "react-icons/fa";
@@ -26,9 +28,20 @@ const RegisterMainRoute = () => {
     const [isAllInitialDetailsDone, setIsAllInitialDetailsDone] = useState(false);
     const [isValidEmailAddress, setIsValidEmailAddress] = useState("no");
 
+    const [isAlreadyAUser, setIsAlreadyAUser] = useState(false);
+
+    const [isHas8Characters, setIsHas8Characters] = useState(false);
+    const [isHasUpperCase, setIsHasUpperCase] = useState(false);
+    const [isHasLowerCase, setIsHasLowerCase] = useState(false);
+    const [isHasNumber, setIsHasNumber] = useState(false);
+    const [isHasSpecialCharacter, setIsHasSpecialCharacter] = useState(false);
+
     const [showPasswordOne, setShowPasswordOne] = useState(false);
 
-    const [showIsConfirmPasswordMatch, setShowIsMatch] = useState(false);
+    const [showAllDonePassword, setShowAllDonePassword] = useState("initial");
+
+
+    const [showIsConfirmPasswordMatch, setShowIsMatch] = useState("initial");
 
     const [onContinuePasswordMatch, setOnContinuePasswordMatch] = useState(false);
 
@@ -47,9 +60,9 @@ const RegisterMainRoute = () => {
 
     const onChangeConfirmPassword = (e) => {
         if(e.target.value != password){
-            setShowIsMatch(true);
+            setShowIsMatch('no');
         }else{
-            setShowIsMatch(false);
+            setShowIsMatch("yes");
         }
 
         setConfirmPassword(e.target.value);
@@ -69,24 +82,88 @@ const RegisterMainRoute = () => {
     }
 
     const onChangePasswordInput =  (e) => {
+        const passwordValue = e.target.value;
         setShowPasswordOne(true)
-        if(e.target.value == ''){
-            setShowPasswordOne(false)
+
+        if(passwordValue === confirmPassword) {
+            setShowIsMatch(false);
         }
+
+        let isAll = 0;
+
+
+        if(passwordValue.length === 0) {
+            setShowPasswordOne(false);
+        }
+
+
+        if(passwordValue.length >= 8) {
+            setIsHas8Characters(true);
+            isAll = isAll + 1;
+        } else {
+            setIsHas8Characters(false);
+        }
+
+        if(/[A-Z]/.test(passwordValue)) {
+            setIsHasUpperCase(true);
+            isAll = isAll + 1;
+        } else {
+            setIsHasUpperCase(false);
+        }
+
+
+        if(/[a-z]/.test(passwordValue)) {
+            setIsHasLowerCase(true);
+            isAll = isAll + 1;
+        } else {
+            setIsHasLowerCase(false);
+        }
+
+        if(/\d/.test(passwordValue)) {
+            setIsHasNumber(true);
+            isAll = isAll + 1;
+        } else {
+            setIsHasNumber(false);
+        }
+
+
+        if(/[@$!%*?&]/.test(passwordValue)) {
+            setIsHasSpecialCharacter(true);
+            isAll = isAll + 1;
+        } else {
+            setIsHasSpecialCharacter(false);
+        }
+
+        if(isAll === 5) {
+            setShowPasswordOne(false);
+        }
+
+
         setPassword(e.target.value)
     } 
+
+    
+
+
 
 
     const onClickContinueButton = () => {
         if(restaurantName.trim() != '' && ownerName.trim() != '' && email.trim() != '' && phone.trim() != '' && password.trim() != '' && confirmPassword.trim() != '') {
             if(email.endsWith("@gmail.com")){
                 setIsValidEmailAddress("yes")
-                if(password === confirmPassword) {
-                    setOnContinuePasswordMatch(false)
+                if(password.length >= 8 && isHasUpperCase && isHasLowerCase && isHasNumber && isHasSpecialCharacter) {
+                    setShowAllDonePassword("yes");
                     setIsAllInitialDetailsDone(true)
-                } else {
-                    setOnContinuePasswordMatch(true)
-                    setTimeout(() => setOnContinuePasswordMatch(false), 1000);
+                    if(password === confirmPassword) {
+                        setOnContinuePasswordMatch(false)
+                        console.log("password match")
+                    } else {
+                        setShowIsMatch('no');
+                        setOnContinuePasswordMatch(true)
+                        setTimeout(() => setOnContinuePasswordMatch(false), 1000);
+                    }
+                }else{
+                    setShowAllDonePassword("error");
                 }
             }else{
                 setIsValidEmailAddress("error")
@@ -97,6 +174,76 @@ const RegisterMainRoute = () => {
         }
     }
 
+    const onSubmitTheSignUpForm = async (e) => {
+
+        if(restaurantName.trim() != '' && ownerName.trim() != '' && email.trim() != '' && phone.trim() != '' && password.trim() != '' && confirmPassword.trim() != '') {
+            if(email.endsWith("@gmail.com")){
+                setIsValidEmailAddress("yes")
+                if(password === confirmPassword) {
+                    setOnContinuePasswordMatch(false)
+                } else {
+                    setOnContinuePasswordMatch(true)
+                    setShowIsMatch('no');
+                    setTimeout(() => setOnContinuePasswordMatch(false), 1000);
+                }
+            }else{
+                setIsValidEmailAddress("error")
+            }
+
+        }else{
+            console.log("not fill")
+        }
+
+
+        e.preventDefault();
+
+        console.log(restaurantName, ownerName, email, phone, password, branchName, country, branchAddress);
+
+        if(showPasswordOne){
+            setShowAllDonePassword('error');
+        }
+
+        if(!showPasswordOne && showIsConfirmPasswordMatch === "yes"){
+            console.log("done")
+        }else{
+            console.log("not done")
+        }
+        
+        // const url = "https://ttbackone.onrender.com/users"
+        // const options = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         restaurentname: restaurantName,
+        //         name: ownerName,
+        //         email,
+        //         phonenumber: phone,
+        //         password,
+        //         branchname: branchName,
+        //         country,
+        //         branchaddress: branchAddress,
+        //         id: uuidv4(),
+        //         countrycode: countryCode,
+        //         isadmin: false,
+        //         is_email_verified: false,
+        //         is_phonenumber_verified: false,
+        //     }),
+        // }
+
+        // const response = await fetch(url, options);
+        // const data = await response.json();
+
+        // console.log(data);
+        
+        // if(data.error == "User with this email already exists"){
+        //     alert("User with this email already exists");
+        // }  
+    }
+
+
+
     console.log(onContinuePasswordMatch)
 
   return (
@@ -104,7 +251,7 @@ const RegisterMainRoute = () => {
       <Header />
       <div className="main-container-reg">
         <div className="main-sub-reg">
-            <form className="register-form">
+            <form className="register-form" onSubmit={onSubmitTheSignUpForm}>
                 <div className={`reg-form-left-cont ${isAllInitialDetailsDone ? 'continue-the-reg-left-cont' : 'block-the-reg-left-cont'}`}>
                     <h2 className="reg-form-main-head">Register Your Restaurant</h2>   
                     <label htmlFor="restaurantName">Restaurant Name:</label>
@@ -130,15 +277,17 @@ const RegisterMainRoute = () => {
                         <span className={`password-toggle-icon ${password.length > 0 ? "password-visi" : ""}`} onClick={() => setTogglePassword(!togglePassword)}>
                             {togglePassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
-                        {showPasswordOne && <div className="password-error-cont">
+                        {showPasswordOne && 
+                        <div className="password-error-cont">
                             <p className="password-error-one-upon-it password-error-one-upon-it-remove">Password should - </p>
-                            <p className="password-error-one-upon-it"> - has atleast 8 characters</p>
-                            <p className="password-error-one-upon-it"> - has atleast 1 Uppercase</p>
-                            <p className="password-error-one-upon-it"> - has atleast 1 Lowercase</p>
-                            <p className="password-error-one-upon-it"> - has atleast 1 Number</p>
-                            <p className="password-error-one-upon-it"> - has atleast 1 Special Character</p>
+                            <p className={`password-error-one-upon-it ${isHas8Characters && "has-pass-done"}`}> - has atleast 8 characters</p>
+                            <p className={`password-error-one-upon-it ${isHasUpperCase && "has-pass-done"}`}> - has atleast 1 Uppercase</p>
+                            <p className={`password-error-one-upon-it ${isHasLowerCase && "has-pass-done"}`}> - has atleast 1 Lowercase</p>
+                            <p className={`password-error-one-upon-it ${isHasNumber && "has-pass-done"}`}> - has atleast 1 Number</p>
+                            <p className={`password-error-one-upon-it ${isHasSpecialCharacter && "has-pass-done"}`}> - has atleast 1 Special Character</p>
                         </div>
                         }
+                        {showAllDonePassword === "error" && <p className="password-error-one">Please fill the password correctly</p>}
 
                     </div>
                     
@@ -148,12 +297,13 @@ const RegisterMainRoute = () => {
                         <span className={`password-toggle-icon ${confirmPassword.length > 0 ? "password-visi" : ""}`} onClick={() => setToggleConfirmPassword(!toggleConfirmPassword)}>
                             {toggleConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
+                        {showIsConfirmPasswordMatch === "no" && <p className={`confirm-pass-error ${onContinuePasswordMatch && "animate-the-pass-one"}`}>should be match ?</p>}
                     </div>
 
                     <p className="login-link mobile-login-text-reg">Already have an account? <a href="/login">Login here</a></p>
                     {isValidEmailAddress == "error" && <p className="email-error-one">The Email should consists of @gmail.com</p>}
 
-                    {showIsConfirmPasswordMatch && <p className={`confirm-pass-error ${onContinuePasswordMatch && "animate-the-pass-one"}`}>should be match ?</p>}
+
                 </div>
                 {isAllInitialDetailsDone == false ? <div className="reg-form-button-cont">
                     <button className="continue-button" onClick={onClickContinueButton}>Continue</button>
@@ -176,7 +326,9 @@ const RegisterMainRoute = () => {
                     
                     <button type="submit" className="reg-sub-button">Sign Up</button>
 
-                                        <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
+                    {isAlreadyAUser && <p className="account-error">User with this email already exists</p>}
+
+                    <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
                 </div>
                 {isAllInitialDetailsDone && <FaArrowLeft onClick={onClickLeftArrowInReg} className="left-arrow-reg" />
  }

@@ -20,12 +20,14 @@ min-height: 100vh;
 
 
 .main-sub-reg{
-    width: 60%;
+
     border-radius: 10px;
 }
 
 .register-form{
     display: flex;
+    /* background-color: pink; */
+
     
 }
 
@@ -34,12 +36,13 @@ min-height: 100vh;
     flex: 1;
     padding: 20px;
     display: flex;
-    margin: 40px 20px 40px 40px;
+    margin: 40px 20px 40px 40px;    
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
 }
 
 .reg-form-right-cont {
@@ -48,6 +51,7 @@ min-height: 100vh;
     margin: 40px 40px 40px 20px;    
     display: flex;
     flex-direction: column;
+    width: 100% !important;
         background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 10px;
@@ -238,12 +242,19 @@ min-height: 100vh;
     text-decoration: none;
 }
 
+.password-input-container{
+    position: relative;
+}
+
 .confirm-pass-error{
+    position: absolute;
     color: rgb(228, 37, 37);
-    margin: 6px 0px 0px 2px;
+    margin: 0px 0px 0px 0px;
     align-self: flex-start;
     padding: 2px 6px;
     border-radius: 2px;
+    font-size: 12px;
+    bottom: -22px;
 }
 
 @keyframes rec {
@@ -253,7 +264,7 @@ min-height: 100vh;
     50%{
         margin-left: -5px;
     }100%{
-        margin-left: 2px;
+        margin-left: 0px;
     }
 }
 
@@ -276,7 +287,7 @@ display: none;
 }
 
 .password-error-one-upon-it{
-    color: #4f46e5;
+    color: #333;
     margin: 0px;
     margin-left: 10px;
 
@@ -312,6 +323,16 @@ display: none;
 }
 
 
+.has-pass-done{
+    color: green;
+    text-decoration: line-through;
+}
+
+
+@media screen and (min-width: 768px) {
+    
+}
+
 @media screen and (max-width: 768px) {
     .reg-form-button-cont{
         display: flex;
@@ -319,9 +340,18 @@ display: none;
     .mobile-login-text-reg{
         display: block;
     }
+
+    .main-sub-reg{
+        /* background-color: pink; */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
     .register-form{
         flex-direction: column;
-        width: 100%;
+        width: 80%;
+        align-self: center !important;
+
     }
     .reg-form-left-cont {
         width: 100%;
@@ -367,4 +397,11 @@ display: none;
 
 }
 
+@media screen and (max-width: 480px) {
+    .main-sub-reg{
+        width: 100%;
+    }
+
+    
+}
 
