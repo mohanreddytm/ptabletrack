@@ -17,7 +17,7 @@ const Header = () => {
   }
 
   const onClickAppLogo = () => {
-      navigate('/home');
+      navigate('/');
   }
 
   return (

@@ -9,7 +9,11 @@ import React, { use, useState } from 'react'
 
 import { FaArrowLeft } from "react-icons/fa";
 
+import { IoClose } from "react-icons/io5";
+
+
 import './index.css'
+import { useActionData, useNavigate } from "react-router-dom";
 
 const RegisterMainRoute = () => {
 
@@ -44,6 +48,12 @@ const RegisterMainRoute = () => {
     const [showIsConfirmPasswordMatch, setShowIsMatch] = useState("initial");
 
     const [onContinuePasswordMatch, setOnContinuePasswordMatch] = useState(false);
+
+    const [showRegisterError, setShowRegisterError] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    const navigate = useNavigate();
 
     const countryCodes = [
         { name: 'India', code: 'IN', dial_code: '+91' },
@@ -136,6 +146,7 @@ const RegisterMainRoute = () => {
 
         if(isAll === 5) {
             setShowPasswordOne(false);
+            setShowAllDonePassword(true);
         }
 
 
@@ -148,14 +159,14 @@ const RegisterMainRoute = () => {
 
 
     const onClickContinueButton = () => {
-        if(restaurantName.trim() != '' && ownerName.trim() != '' && email.trim() != '' && phone.trim() != '' && password.trim() != '' && confirmPassword.trim() != '') {
+        if(restaurantName.trim() !== '' && ownerName.trim() !== '' && email.trim() !== '' && phone.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '') {
             if(email.endsWith("@gmail.com")){
                 setIsValidEmailAddress("yes")
                 if(password.length >= 8 && isHasUpperCase && isHasLowerCase && isHasNumber && isHasSpecialCharacter) {
                     setShowAllDonePassword("yes");
-                    setIsAllInitialDetailsDone(true)
                     if(password === confirmPassword) {
                         setOnContinuePasswordMatch(false)
+                        setIsAllInitialDetailsDone(true)
                         console.log("password match")
                     } else {
                         setShowIsMatch('no');
@@ -174,9 +185,10 @@ const RegisterMainRoute = () => {
         }
     }
 
-    const onSubmitTheSignUpForm = async (e) => {
+    const OnSubmitTheSignUpForm = async (e) => {
+        setIsLoading(true);
 
-        if(restaurantName.trim() != '' && ownerName.trim() != '' && email.trim() != '' && phone.trim() != '' && password.trim() != '' && confirmPassword.trim() != '') {
+        if(restaurantName.trim() !== '' && ownerName.trim() !== '' && email.trim() !== '' && phone.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '') {
             if(email.endsWith("@gmail.com")){
                 setIsValidEmailAddress("yes")
                 if(password === confirmPassword) {
@@ -209,49 +221,71 @@ const RegisterMainRoute = () => {
             console.log("not done")
         }
         
-        // const url = "https://ttbackone.onrender.com/users"
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         restaurentname: restaurantName,
-        //         name: ownerName,
-        //         email,
-        //         phonenumber: phone,
-        //         password,
-        //         branchname: branchName,
-        //         country,
-        //         branchaddress: branchAddress,
-        //         id: uuidv4(),
-        //         countrycode: countryCode,
-        //         isadmin: false,
-        //         is_email_verified: false,
-        //         is_phonenumber_verified: false,
-        //     }),
-        // }
+        const url = "https://ttbackone.onrender.com/users"
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                restaurentname: restaurantName,
+                name: ownerName,
+                email,
+                phonenumber: phone,
+                password,
+                branchname: branchName,
+                country,
+                branchaddress: branchAddress,
+                id: uuidv4(),
+                countrycode: countryCode,
+                isadmin: false,
+                is_email_verified: false,
+                is_phonenumber_verified: false,
+            }),
+        }
 
-        // const response = await fetch(url, options);
-        // const data = await response.json();
+        const response = await fetch(url, options);
+        const data = await response.json();
+        setIsLoading(false);
+        if(response.ok){
+            if(data.registration_status === "Success") {
+                setIsAlreadyAUser(false);
+                navigate(
+                `/getMoreInforRest`
+                )
+            }else{
+                setShowRegisterError(true);
+                setTimeout(() => {
+                    setShowRegisterError(false);
+                }, 5000);
+            }
+        }else{
+            if(data.error == "User with this email already exists"){
+                setShowRegisterError(true);
+                setIsAlreadyAUser(true);
+                setTimeout(() => {
+                    setShowRegisterError(false);
+                    setIsAlreadyAUser(false);
+                }, 5000);
+            }
+        }
+    }
 
-        // console.log(data);
-        
-        // if(data.error == "User with this email already exists"){
-        //     alert("User with this email already exists");
-        // }  
+    const onClickCloseError = () => {
+        setShowRegisterError(false);
+        setIsAlreadyAUser(false);
     }
 
 
 
-    console.log(onContinuePasswordMatch)
+    // console.log(onContinuePasswordMatch)
 
   return (
     <div className="register-initial-cont">
       <Header />
       <div className="main-container-reg">
         <div className="main-sub-reg">
-            <form className="register-form" onSubmit={onSubmitTheSignUpForm}>
+            <form className="register-form" onSubmit={OnSubmitTheSignUpForm}>
                 <div className={`reg-form-left-cont ${isAllInitialDetailsDone ? 'continue-the-reg-left-cont' : 'block-the-reg-left-cont'}`}>
                     <h2 className="reg-form-main-head">Register Your Restaurant</h2>   
                     <label htmlFor="restaurantName">Restaurant Name:</label>
@@ -305,9 +339,10 @@ const RegisterMainRoute = () => {
 
 
                 </div>
-                {isAllInitialDetailsDone == false ? <div className="reg-form-button-cont">
+                {isAllInitialDetailsDone === false && <div className={`reg-form-button-cont`}>
                     <button className="continue-button" onClick={onClickContinueButton}>Continue</button>
-                </div> : "" }
+                </div> }
+                
 
                 <div className={`reg-form-right-cont ${isAllInitialDetailsDone && 'reg-right-cont-continue'}`}>
                     <label htmlFor="branchName">Branch Name:</label>
@@ -324,15 +359,26 @@ const RegisterMainRoute = () => {
                     <textarea className={`reg-country-text-area ${branchAddress.length > 0 ? "filled" : ""}`} value={branchAddress} onChange={(e) => setBranchAddress(e.target.value)} rows={5} id="branchAddress" name="branchAddress" required></textarea>
                     
                     
-                    <button type="submit" className="reg-sub-button">Sign Up</button>
-
-                    {isAlreadyAUser && <p className="account-error">User with this email already exists</p>}
-
+                    
+                        <button type="submit" className="reg-sub-button">Sign Up</button>
+                        
+                        
                     <p className="login-link">Already have an account? <a href="/login">Login here</a></p>
                 </div>
-                {isAllInitialDetailsDone && <FaArrowLeft onClick={onClickLeftArrowInReg} className="left-arrow-reg" />
- }
+                {isAllInitialDetailsDone && <FaArrowLeft onClick={onClickLeftArrowInReg} className="left-arrow-reg" />}
             </form>
+            {isAlreadyAUser &&
+            <div className="account-error-cont">
+                 <p className="account-error">User with this email already exists Please Login <IoClose onClick={onClickCloseError} className="close-button-error" /></p>
+            </div>
+            }
+            {isLoading &&
+            <div className="loader-cont">
+                <div className="loader"></div>
+            </div>
+            }
+            
+            
         </div>
         
       </div>

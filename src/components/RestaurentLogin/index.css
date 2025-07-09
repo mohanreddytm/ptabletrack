@@ -13,7 +13,7 @@
 
     align-self: center;
     justify-content: center;
-    width: 33%;
+    width: max(33%, 400px);
     flex-direction: column;
 
     

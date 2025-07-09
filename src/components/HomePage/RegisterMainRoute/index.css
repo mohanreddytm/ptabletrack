@@ -26,6 +26,10 @@ min-height: 100vh;
 
 .register-form{
     display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+    /* background-color: yellow; */
+    /* min-width: 60%; */
     /* background-color: pink; */
 
     
@@ -33,29 +37,34 @@ min-height: 100vh;
 
 
 .reg-form-left-cont {
-    flex: 1;
+    flex-grow: 1 !important;
+    /* background-color: black; */
     padding: 20px;
     display: flex;
-    margin: 40px 20px 40px 40px;    
+    /* width: 50% !important; */
+
+    margin-right: 20px;    
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* width: 100%; */
 }
 
 .reg-form-right-cont {
-    flex: 1;
+    flex-grow: 1 !important;
     padding: 20px;
-    margin: 40px 40px 40px 20px;    
+    margin-left:10px;    
     display: flex;
     flex-direction: column;
-    width: 100% !important;
-        background-color: rgba(255, 255, 255, 0.1);
+    /* width: 400px; */
+    /* width: 100%; */
+    
+    background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .reg-form-main-head{
@@ -80,6 +89,7 @@ min-height: 100vh;
     padding: 10px;
     background-color: transparent;
     border: none;
+    /* width: 500px; */
     outline: none;
     box-shadow: 0px 0px 5px 0px #ffffff;
     color: #383367;
@@ -213,12 +223,14 @@ min-height: 100vh;
 }
 
 .continue-button{
+    display: none;
     width: 100%;
     background-color: #4f46e5;
     color: #ffffff;
     border: none;
     padding: 12px 20px;
     border-radius: 10px;
+    align-self: center;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -226,8 +238,9 @@ min-height: 100vh;
 }
 
 .phone-number{
-    flex: 1;
+    /* flex: 1; */
     /* min-width: 0; */
+    width: 100%;
 }
 
 .login-link{
@@ -286,6 +299,13 @@ display: none;
     color: rgba(255, 136, 0, 0.832);
 }
 
+.password-error-one{
+    color: rgb(255, 98, 98);
+    position: absolute;
+    bottom: -29px;
+    font-size: 12px;
+}
+
 .password-error-one-upon-it{
     color: #333;
     margin: 0px;
@@ -328,10 +348,94 @@ display: none;
     text-decoration: line-through;
 }
 
+/* .reg-form-button-cont{
+    position: relative;
+    /* background-color: yellow; */
+    /* display: flex;
+    flex-direction: column;
+    width: 100%; */
+    /* background-color: palegoldenrod; */
 
-@media screen and (min-width: 768px) {
+
+@keyframes warning2 {
+  0% { bottom: -10px; }
+  50% { bottom: 10px; }
+  100% { bottom: 20px; }
     
 }
+
+.account-error-cont{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    animation: warning2 0.3s linear forwards;
+}
+
+.account-error{
+    
+    background-color: rgb(232, 109, 109);
+    color: white;
+    border-radius: 4px;
+    padding: 10px 20px;
+
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.close-button-error:hover{
+    background-color: #7d7c76;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.loader-cont{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7)
+
+;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader {
+    border: 8px solid transparent;
+    border-top: 8px solid #A78BFA;
+    border-radius: 50%;
+    width: 50px;
+    position: fixed;
+
+    height: 50px;
+    animation: spin 1s linear infinite;
+    /* background: rgba(255, 255, 255, 0.1); /* transparent white */
+  /* backdrop-filter: blur(10px); */ 
+  /* padding: 20px; */
+
+    
+}
+
+
+/* @media screen and (min-width: 768px) {
+    
+} */
 
 @media screen and (max-width: 768px) {
     .reg-form-button-cont{
@@ -353,6 +457,12 @@ display: none;
         align-self: center !important;
 
     }
+    .account-error{
+        width: 70%;
+    }
+    .continue-button{
+        display: block;
+    }
     .reg-form-left-cont {
         width: 100%;
         margin: 20px 0;
@@ -361,6 +471,7 @@ display: none;
     .reg-form-right-cont{
         display: none;
         width: 100%;
+        
         margin: 0px;
 
     }
@@ -385,15 +496,15 @@ display: none;
 
     .continue-the-reg-left-cont{
     display: none;
-}
+    }
 
-.block-the-reg-left-cont{
-    display: flex;
-}
+    .block-the-reg-left-cont{
+        display: flex;
+    }
 
-.reg-right-cont-continue{
-    display: flex;
-}
+    .reg-right-cont-continue{
+        display: flex;
+    }
 
 }
 
