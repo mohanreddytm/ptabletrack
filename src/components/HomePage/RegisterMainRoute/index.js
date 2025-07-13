@@ -167,7 +167,6 @@ const RegisterMainRoute = () => {
                     if(password === confirmPassword) {
                         setOnContinuePasswordMatch(false)
                         setIsAllInitialDetailsDone(true)
-                        console.log("password match")
                     } else {
                         setShowIsMatch('no');
                         setOnContinuePasswordMatch(true)
@@ -179,15 +178,11 @@ const RegisterMainRoute = () => {
             }else{
                 setIsValidEmailAddress("error")
             }
-
-        }else{
-            console.log("not fill")
         }
     }
 
     const OnSubmitTheSignUpForm = async (e) => {
-        setIsLoading(true);
-
+        e.preventDefault();
         if(restaurantName.trim() !== '' && ownerName.trim() !== '' && email.trim() !== '' && phone.trim() !== '' && password.trim() !== '' && confirmPassword.trim() !== '') {
             if(email.endsWith("@gmail.com")){
                 setIsValidEmailAddress("yes")
@@ -202,71 +197,63 @@ const RegisterMainRoute = () => {
                 setIsValidEmailAddress("error")
             }
 
-        }else{
-            console.log("not fill")
         }
-
-
-        e.preventDefault();
-
-        console.log(restaurantName, ownerName, email, phone, password, branchName, country, branchAddress);
 
         if(showPasswordOne){
             setShowAllDonePassword('error');
-        }
-
-        if(!showPasswordOne && showIsConfirmPasswordMatch === "yes"){
-            console.log("done")
         }else{
-            console.log("not done")
-        }
-        
-        const url = "https://ttbackone.onrender.com/users"
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                restaurentname: restaurantName,
-                name: ownerName,
-                email,
-                phonenumber: phone,
-                password,
-                branchname: branchName,
-                country,
-                branchaddress: branchAddress,
-                id: uuidv4(),
-                countrycode: countryCode,
-                isadmin: false,
-                is_email_verified: false,
-                is_phonenumber_verified: false,
-            }),
-        }
+            
+            if(!showPasswordOne && showIsConfirmPasswordMatch === "yes"){
+                setIsLoading(true);
+                const url = "https://ttbackone.onrender.com/users"
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        restaurentname: restaurantName,
+                        name: ownerName,
+                        email,
+                        phonenumber: phone,
+                        password,
+                        branchname: branchName,
+                        country,
+                        branchaddress: branchAddress,
+                        id: uuidv4(),
+                        countrycode: countryCode,
+                        isadmin: false,
+                        is_email_verified: false,
+                        is_phonenumber_verified: false,
+                    }),
+                }
 
-        const response = await fetch(url, options);
-        const data = await response.json();
-        setIsLoading(false);
-        if(response.ok){
-            if(data.registration_status === "Success") {
-                setIsAlreadyAUser(false);
-                navigate(
-                `/getMoreInforRest`
-                )
-            }else{
-                setShowRegisterError(true);
-                setTimeout(() => {
-                    setShowRegisterError(false);
-                }, 5000);
-            }
-        }else{
-            if(data.error == "User with this email already exists"){
-                setShowRegisterError(true);
-                setIsAlreadyAUser(true);
-                setTimeout(() => {
-                    setShowRegisterError(false);
-                    setIsAlreadyAUser(false);
-                }, 5000);
+                const response = await fetch(url, options);
+                const data = await response.json();
+                setIsLoading(false);
+                if(response.ok){
+                    if(data.registration_status === "Success") {
+                        setIsAlreadyAUser(false);
+                        navigate(
+                        `/getMoreInforRest`
+                        )
+                    }else{
+                        setShowRegisterError(true);
+                        setTimeout(() => {
+                            setShowRegisterError(false);
+                        }, 5000);
+                    }
+                }else{
+                    if(data.error == "User with this email already exists"){
+                        setShowRegisterError(true);
+                        setIsAlreadyAUser(true);
+                        setTimeout(() => {
+                            setShowRegisterError(false);
+                            setIsAlreadyAUser(false);
+                        }, 5000);
+                    }
+                }
             }
         }
     }
