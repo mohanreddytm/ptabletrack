@@ -1,0 +1,104 @@
+.dash-header-initial-cont{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    background-color:var(--header-dark-bc);
+    height: max(70px, 10vh);
+    z-index: 10;
+}
+
+.dash-header-main-c{
+    display: flex;
+    align-items: center;
+    width: 95%;
+    margin: 8px 0px;
+    justify-content: space-between;
+}
+
+.dash-header-main-head{
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--main-head-dark-c);
+}
+
+.dash-h-logo{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.dash-h-left-c{
+    display: flex;
+    align-items: center;
+}
+
+.dash-h-middle-c{
+    background-color: var(--main-dark-bc);
+    border-radius: 6px;
+    padding: 0px 10px;
+}
+
+.dash-h-right-c{
+    display: flex;
+    align-items: center;
+}
+
+.dash-h-btn{
+    background-color: var(--main-theme-c);
+    border: 4px;
+    padding: 8px 16px;
+    border-radius: 2px; 
+    font-size: 16px;
+    color: #ffffff;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.dash-h-btn:hover{
+    background-color: var(--main-theme-hover-c);
+}
+
+.dash-h-profile{
+    background-color: #ffffff;
+    border-radius: 50%;
+    padding: 10px 8px;
+    color: var(--main-theme-c);
+    font-size: 16px;
+}
+
+.dash-h-middle-c button{
+    margin: 8px 10px 8px 10px;
+    border: 2px solid var(--main-theme-c);
+    background-color: transparent;
+    border-radius: 4px;
+    padding: 6px 16px;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.dash-h-middle-c button:hover{
+    transform: scale(1.03);
+    /* box-shadow: 0px 0px 10px 0px var(--main-theme-c); */
+}
+
+.dash-h-btn-span{
+    background-color: var(--main-dark-bc);
+    border: 2px solid var(--main-theme-c);
+    padding: 2px 6px;
+    border-radius: 30%;
+    font-size: 14px;
+    font-weight: 600;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    /* border: 2px solid black; */
+}

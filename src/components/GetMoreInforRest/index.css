@@ -130,6 +130,7 @@
 
 .gm-skip-icon{
     margin:0px 4px;
+
 }
 .gm-skip:hover{
     color: #c9b8ff;
@@ -420,6 +421,7 @@
 .gm-use-bottom-p-menu-items{
     width: 45%;
     position: relative;
+    background-color: rgb(115, 115, 115);
 
 }
 
@@ -427,6 +429,42 @@
     display: flex;
     align-items: center;
 
+}
+
+.gm-next-btn{
+    position: relative;
+}
+
+.failure-image{
+    width: 30%;
+    align-self: center;
+    border-radius: 10px;
+}
+
+.failure-button{
+    background-color: rgb(117, 76, 76);
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px;
+    align-self: center;
+    margin-top: 20px;
+}
+
+.failure-button:hover{
+    background-color: rgb(149, 80, 80);
+}
+.inside-loader{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gm-menu-item-details{
@@ -522,6 +560,11 @@
     gap: 20px;
     scrollbar-width: thin;
     scrollbar-color: #A78BFA transparent;
+}
+
+
+.gm-skip-none{
+    display: none;
 }
 
 
@@ -626,8 +669,19 @@
     .gm-use-cont-menu-items{
         min-width: 600px;
         max-width: 60%;
-    }
-    
+    }    
+}
 
-    
+
+
+@media screen and (min-width: 1500px){
+    .gm-main-cont{
+        width: 1200px !important;
+    }
+    .gm-use-cont-menu{
+        min-width: 950px !important;
+    }
+    .gm-use-cont-menu-items{
+        min-width: 950px;
+    }
 }

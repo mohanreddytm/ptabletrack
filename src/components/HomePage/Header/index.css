@@ -224,3 +224,11 @@ Link{
     }
     
 }
+
+@media screen and (min-width:1500px) {
+    .header-initial-cont
+    {
+        /* background-color: pink; */
+        height: 100px;
+    }
+}

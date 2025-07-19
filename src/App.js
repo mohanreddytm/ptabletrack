@@ -21,7 +21,7 @@ const App = () => {
       <Route exact path='/login' Component={RestaurantLogin} />
       <Route exact path='/restaurantReg' Component={RegisterMainRoute} />
       <Route exact path='/getMoreInforRest' Component={GetMoreInforRest} />
-      <Route exact path='/restaurentDashboard/:id' Component={RestaurantDashboard} />
+      <Route exact path='/restaurantDashboard' Component={RestaurantDashboard} />
     </Routes>
   )
 }

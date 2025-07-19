@@ -488,10 +488,10 @@ display: none;
     }
     .left-arrow-reg{
         display: block;
-            color: #ffffff;
-    font-size: 20px;
-    margin-left: 10px;
-    margin-top: 20px;
+        color: #ffffff;
+        font-size: 20px;
+        margin-left: 10px;
+        margin-top: 20px;
     }
 
     .continue-the-reg-left-cont{
@@ -516,3 +516,9 @@ display: none;
     
 }
 
+
+@media screen and (min-width:1400px) {
+    .register-form{
+        min-width: max(1000px, 80%);
+    }
+}

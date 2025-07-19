@@ -5,7 +5,9 @@ import { FaEyeSlash } from "react-icons/fa";
 
 import { v4 as uuidv4 } from 'uuid';
 
-import React, { use, useState } from 'react'
+import React, { use, useState, useEffect } from 'react'
+
+import cookie from 'js-cookie';
 
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -51,9 +53,18 @@ const RegisterMainRoute = () => {
 
     const [showRegisterError, setShowRegisterError] = useState(false);
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)   
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const isAuth = cookie.get('t_user');
+        if (isAuth) {
+            navigate('/getMoreInforRest');
+        }
+    }, [navigate]);
+
+
 
     const countryCodes = [
         { name: 'India', code: 'IN', dial_code: '+91' },
@@ -205,7 +216,7 @@ const RegisterMainRoute = () => {
             
             if(!showPasswordOne && showIsConfirmPasswordMatch === "yes"){
                 setIsLoading(true);
-                const url = "https://ttbackone.onrender.com/users"
+                const url = "https://ttbackone.onrender.com/restaurant"
                 const options = {
                     method: 'POST',
                     headers: {
@@ -235,6 +246,9 @@ const RegisterMainRoute = () => {
                 if(response.ok){
                     if(data.registration_status === "Success") {
                         setIsAlreadyAUser(false);
+                        if(data.token){
+                            cookie.set('t_user', data.token, { expires: 7 });
+                        }
                         navigate(
                         `/getMoreInforRest`
                         )
@@ -321,7 +335,7 @@ const RegisterMainRoute = () => {
                         {showIsConfirmPasswordMatch === "no" && <p className={`confirm-pass-error ${onContinuePasswordMatch && "animate-the-pass-one"}`}>should be match ?</p>}
                     </div>
 
-                    <p className="login-link mobile-login-text-reg">Already have an account? <a href="/login">Login here</a></p>
+                    <p className="login-link mobile-login-text-reg">Already have an account? <a onClick={() => navigate('/login')}>Login here</a></p>
                     {isValidEmailAddress == "error" && <p className="email-error-one">The Email should consists of @gmail.com</p>}
 
 

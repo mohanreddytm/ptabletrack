@@ -8,6 +8,21 @@ body {
 
 }
 
+:root {
+  --header-dark-bc: #1F2937;
+  --main-dark-bc: #111827;
+  --main-head-dark-c: #ffffff;
+  --text-color: #bcb6b6;
+  --main-theme-c: #A78BFA;
+  --main-theme-hover-c:#7f5eeb;
+  --glass-c:rgba(255, 255, 255, 0.1);
+  --glass-br-c:rgba(255, 255, 255, 0.2);
+  --red-c:#dc3545;
+  --green-c:#218838;
+  --btn-c:#4f46e5;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

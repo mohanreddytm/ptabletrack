@@ -13,13 +13,9 @@
 
     align-self: center;
     justify-content: center;
-    width: max(33%, 400px);
-    flex-direction: column;
-
     
-
-
-
+    min-width: max(33%, 400px);
+    flex-direction: column;
 }
 
 .header-logo-mini-cont{
@@ -151,8 +147,22 @@
     cursor: pointer;
 }
 
-@media screen and (max-width:769px) {
+.error-cont-login-style{
+    width: 30%;
+}
+
+@media screen and (max-width:500px) {
     .restaurant-login-container-main{
         width: 90%;
+        /* display: none; */
+    }
+    .error-cont-login-style{
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .restaurant-login-container-main{
+        min-width: 98%;
     }
 }
