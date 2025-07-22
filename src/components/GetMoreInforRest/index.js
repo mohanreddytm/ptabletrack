@@ -118,7 +118,7 @@ const GetMoreInforRest = () => {
     const onClickSaveNxtAreas = async () => {
         if(areas.length > 0) {
             setAreasLoading(true)
-            const url = "https://ttbackone.onrender.com/restaurant_details/addAreas"
+            const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addAreas"
             const options = {
                 method: "POST",
                 headers:{
@@ -181,7 +181,7 @@ const GetMoreInforRest = () => {
     const onClickSaveAndNextTable = async () => {
         if(tables.length > 0) {
             setTablesLoading(true);
-            const url = "https://ttbackone.onrender.com/restaurant_details/addTable"
+            const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addTable"
             const options = 
             {
                 method: "POST",
@@ -207,7 +207,7 @@ const GetMoreInforRest = () => {
     const onClickMenuNxtB = async () => {
         if(menuCategories.length > 0){
             setMenuCategoryLoading(true);
-            const url = "https://ttbackone.onrender.com/restaurant_details/addMenuCategory"
+            const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuCategory"
             const options = 
             {
                 method: "POST",
@@ -498,7 +498,7 @@ const GetMoreInforRest = () => {
     const onClickSaveNxtMenuItems = async () => {
         if(menuItems.length > 0){
             setMenuItemLoading(true);
-            const url = "https://ttbackone.onrender.com/restaurant_details/addMenuItems"
+            const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuItems"
             const options = 
             {
                 method: "POST",

@@ -1,31 +1,36 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { FaLocationDot } from "react-icons/fa6";
-import { FaCaretDown, FaAngleDown,FaRegBell, FaAngleDoubleUp } from "react-icons/fa";
+import { FaLocationDot, FaIndianRupeeSign } from "react-icons/fa6";
+import { FaCaretDown, FaAngleDown,FaRegBell, FaAngleDoubleUp, FaThumbsUp, FaThumbsDown  } from "react-icons/fa";
 import { CiHome } from "react-icons/ci";
-import { BiSolidDish } from "react-icons/bi"
-import { BiFoodMenu } from "react-icons/bi";
+import { BiSolidDish,BiFoodMenu } from "react-icons/bi"
+
+
 import { MdOutlineTableRestaurant } from "react-icons/md";
 import { GiLaptop } from "react-icons/gi";
 import { IoMdPeople } from "react-icons/io";
 import { RiReservedLine } from "react-icons/ri";
-import { FaIndianRupeeSign } from "react-icons/fa6";
 import { IoSettingsOutline } from "react-icons/io5";
+import error from '../../../images/error.jpg'
 
 import './index.css'
 
 import { useNavigate } from 'react-router-dom'
+
+import Dashboard from '../Dashboard';
+
+import Orders from '../Orders';
 
 import {jwtDecode} from 'jwt-decode';
 
 import Header from '../Header';
 
 import AllInOne from '../../../complexOne/index'
-import order from '../../../images/order.png'
+
 
 import cookies from 'js-cookie'
 
-import { FaArrowUpLong } from "react-icons/fa6";
+
 
 const MenuItmes = [
   { id:1,
@@ -65,47 +70,125 @@ const MenuItmes = [
   }
 ]
 
+const statusOne = {
+  INITIAL: "INITIAL",
+  SUCCESS: "SUCCESS",
+  FAILED: "FAILED",
+  PENDING: "PENDING",
+}
+
+
+
 const RestaurantDashboard = () => {
 
   const navigate = useNavigate();
 
 
-  const [restaurantData, setRestaurantData] = useState('');
-  const [userId, setUserId] = useState('') 
-  const [currentMenu, setCurrentMenu] = useState(1);
+    const [restaurantData, setRestaurantData] = useState('');
+    const [dataStatus, setDataStatus] = useState(statusOne.INITIAL);
+    const [userId, setUserId] = useState('') 
+    const [currentMenu, setCurrentMenu] = useState(1);
 
-  useEffect(() => {
-
-    const token = cookies.get('t_user');
-    if(token === undefined){
-      navigate('/login')
-    }
-  }, [navigate])
-
-
-  useEffect(() => 
-  {
-    const token = cookies.get("t_user");
-    if(!token){
-      navigate('/login')
-    }
-    const data = jwtDecode(token);
-    const restaurantId = data.userId;
-    setUserId(restaurantId);
-    const getRestaurantData = async () => {
-      const url  = `https://ttbackone.onrender.com/restaurant/${restaurantId}`
-      const response = await fetch(url);
-      const jsonOne = await response.json();
-      if(response.ok){
-        setRestaurantData(jsonOne[0]);
-      }else{
-        console.log("oneone")
+    useEffect(() => {
+      const token = cookies.get('t_user');
+      if(token === undefined){
+        navigate('/login')
       }
+    }, [navigate])
+  
+  
+    useEffect(() => 
+    {
+      const token = cookies.get("t_user");
+      if(!token){
+        navigate('/login')
+      }
+      setDataStatus(statusOne.PENDING);
+      const data = jwtDecode(token);
+      const restaurantId = data.userId;
+      setUserId(restaurantId);
+      const getRestaurantData = async () => {
+        try{
+  
+        const url  = `https://ttbackone-v48h.onrender.com/restaurant/${restaurantId}`
+        const response = await fetch(url);
+  
+        if(response.ok){
+          const jsonOne = await response.json();
+          setRestaurantData(jsonOne[0]);
+          setDataStatus(statusOne.SUCCESS);
+        }else{
+          setDataStatus(statusOne.FAILED);
+          console.log('failed')
+        }
+        }
+        catch(error){
+          setDataStatus(statusOne.FAILED);
+          console.log('failed')
+        }
+      }
+  
+      getRestaurantData()
+    }, [])
+  
+    const onClickRetry = () => {
+      setDataStatus(statusOne.PENDING);
+      const getRestaurantData = async () => {
+        try{
+          const url = `https://ttbackone-v48h.onrender.com/restaurant/${userId}`;
+          const response = await fetch(url);
+          if(response.ok){
+            const jsonOne = await response.json();
+            setRestaurantData(jsonOne[0]);
+            setDataStatus(statusOne.SUCCESS);
+          }else{
+            setDataStatus(statusOne.FAILED);
+          }
+        }
+        catch(error){
+          setDataStatus(statusOne.FAILED);
+        }
+        }
+      getRestaurantData();
     }
+  
 
-    getRestaurantData()
-  }, [])
+    if(dataStatus === statusOne.FAILED){
+        return(
+          <div className='dash-initial-cont dash-error-cont'>
+            <h1 className='dash-error-head'>ERR<span className='dash-error-head-o'>O</span>R</h1>
+            <img src={error} alt="error" className='dash-error-img' />
+            <p className='dash-error-p'>Something went wrong</p>
+            <button type='button' onClick={onClickRetry} className='dash-error-button'>Retry</button>
+          </div>
+        )
+      }
 
+      const mainBox = () => {
+        if(currentMenu === 1){
+          return <Dashboard />
+        }else if(currentMenu === 2){
+          return <Orders />
+        }else if(currentMenu === 3){
+          // return <Menu />
+        }else if(currentMenu === 4){
+          // return <Tables />
+        }else if(currentMenu === 5){
+          // return <WaiterRequests />
+        }else if(currentMenu === 6){
+          // return <POS />
+        }else if(currentMenu === 7){
+          // return <Staff />
+        }else if(currentMenu === 8){
+          // return <Reservations />
+        }else if(currentMenu === 9){
+          // return <Payments />
+        }else if(currentMenu === 10){
+          // return <Settings />
+        }
+        return <Dashboard />
+
+      }
 
   return (
     <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData}}>
@@ -130,76 +213,7 @@ const RestaurantDashboard = () => {
               </div>
             </div>
           </div>
-          <div className='dash-main-m'>
-            <div className='dash-main-dashboard-cont'>
-              <h1 className='dash-dash-head'>DashBoard</h1>
-              <p className='dash-dash-time'>Monday, 19 Jul, 7:25 AM</p>
-            </div>
-            <div className='dash-middle-m-cont'>
-                <div className='dash-middle-m-left-cont'>
-                  <h1 className='dash-middle-m-left-main-head'>Statistics</h1>
-                  <div className='dash-stats-cont'>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>Today's Orders</h1>
-                      </div>
-
-                      <p className='dash-stats-parts-count'>10</p>
-                      <div className='dash-stats-parts-inner-cont'>
-                          <p className='dash-stats-parts-percent'><FaArrowUpLong /> 40%</p>
-                          <p className='dash-stats-parts-p'>Since Yesterday</p>
-                      </div>
-                    </div>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>Today's Earnings</h1>
-                      </div>
-                      <p className='dash-stats-parts-count'>₹ 5400</p>
-                      <div className='dash-stats-parts-inner-cont'>
-                          <p className='dash-stats-parts-percent'><FaArrowUpLong /> 60%</p>
-                          <p className='dash-stats-parts-p'>Since Yesterday</p>
-                      </div>
-                    </div>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>Average Daily Earnings</h1>
-                      </div>
-                      <p className='dash-stats-parts-count'>₹ 7675</p>
-                      <div className='dash-stats-parts-inner-cont'>
-                          <p className='dash-stats-parts-percent'><FaArrowUpLong /> 120%</p>
-                          <p className='dash-stats-parts-p'>This Month - July</p>
-                      </div>
-                    </div>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>#1 Selling Dish</h1>
-                      </div>
-
-                      <p className='dash-stats-parts-count on-sp-count'>Chicken Biryani</p>
-                      <div className='dash-stats-parts-inner-cont'>
-                          <p className='dash-stats-parts-selling-ye'>Mutton Paya</p>
-                          <p className='dash-stats-parts-p'>- Yesterday</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className='dash-middle-m-right-cont'>
-
-                </div>
-            </div>
-          </div>
+          {mainBox()}
 
         </div>
       </div>

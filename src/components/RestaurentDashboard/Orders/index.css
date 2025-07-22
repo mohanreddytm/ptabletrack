@@ -1,0 +1,127 @@
+.dash-orders-main-cont{
+    padding-top: max(70px , 10vh);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: 100vh;
+    overflow-y: auto;
+    scrollbar-width:none
+
+}
+
+.dash-orders-main-head{
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.dash-orders-main-head-cont{
+    background-color: var(--header-dark-bc);
+    margin: 4px 4px 4px 0px;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dash-orders-main-head-cont-left{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.dash-orders-main-head-auto-refresh{
+    display: flex;
+    align-items: center;
+
+}
+
+.dash-orders-main-head{
+    margin: 0px;
+}
+
+.dash-orders-main-head-auto-refresh-text{
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.dash-orders-main-head-new-order-button{
+    background-color: var(--main-theme-c);
+    color: #ffffff;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.dash-orders-main-head-cont-right{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* margin-top: 10px; */
+}
+
+.dash-orders-main-head-date-cont{
+    display: flex;
+    align-items:center;
+
+}
+
+.dash-orders-main-head-select{
+    background-color: var(--header-dark-bc);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.dash-orders-main-head-date-input{
+    background-color: var(--header-dark-bc);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.dash-orders-main-head-date-to{
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.dash-orders-main-head-date-button{
+    background-color: var(--btn-c);
+    color: #ffffff;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 10px;
+}
+
+.dash-orders-main-table-cont{
+    background-color: var(--header-dark-bc);
+}
+
+.dash-orders-main-table-list{
+    margin: 0px;
+    padding: 0px;
+}

@@ -45,7 +45,7 @@ const RestaurantLogin = () => {
         if(loginEmail && loginPassword) {
             setIsLoading(true);
             setGetError(false);
-            const url = "https://ttbackone.onrender.com/restaurantLogin"
+            const url = "https://ttbackone-v48h.onrender.com/restaurantLogin"
             const options = {
                 method: 'POST',
                 headers: {
@@ -69,7 +69,7 @@ const RestaurantLogin = () => {
                 if(jsonResponse.message === "Login successful"){
 
                     cookies.set('t_user', jsonResponse.token, { expires: 7 });
-                    navigate(`/restaurentDashboard`);
+                    navigate(`/restaurantDashboard`);
                     console.log(jsonResponse);
                 }
             }else{
