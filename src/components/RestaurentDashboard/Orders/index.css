@@ -5,8 +5,8 @@
     flex-grow: 1;
     max-height: 100vh;
     overflow-y: auto;
-    scrollbar-width:none
-
+    scrollbar-width:none;
+    width: 100%;
 }
 
 .dash-orders-main-head{
@@ -118,10 +118,63 @@
 }
 
 .dash-orders-main-table-cont{
-    background-color: var(--header-dark-bc);
+    /* background-color: var(--header-dark-bc); */
+    margin-top: 10px;
 }
 
 .dash-orders-main-table-list{
     margin: 0px;
     padding: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 8px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.dash-orders-main-table-list-item{
+    position: relative;
+    flex-grow: 0;
+    min-width: 32%;
+    max-width: 33%;
+    background-color: var(--header-dark-bc);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 6px;
+
+    border: 1px solid var(--glass-br-c);
+
+}
+
+.dash-orders-main-table-list-item-number-cont{
+    position: absolute;
+    top: -16px;
+    left: 0;
+    right: 0;
+    /* background-color: var(--main-theme-c); */
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.dash-orders-main-table-list-item-number-cont-text{
+    margin: 0px;  
+    background-color: var(--header-dark-bc);
+    border: 1px solid var(--glass-br-c);
+    color: #e9e6e6;
+    font-size: 14px;
+    box-shadow: 0 0 3px 0 var(--main-theme-c);
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin: 0px;
 }

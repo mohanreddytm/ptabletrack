@@ -13,6 +13,8 @@ import { RiReservedLine } from "react-icons/ri";
 import { IoSettingsOutline } from "react-icons/io5";
 import error from '../../../images/error.jpg'
 
+import MenuPage from '../Menu'
+
 import './index.css'
 
 import { useNavigate } from 'react-router-dom'
@@ -43,8 +45,9 @@ const MenuItmes = [
   },
   {
     id:3,
-    content:<><BiFoodMenu className='menu-logos' /> <h1 className='dash-m-menu-items-head'>Menu</h1> <FaAngleDown className='menu-down-arr' /> </>
-  },{
+    content:<><BiFoodMenu className='menu-logos' /> <h1 className='dash-m-menu-items-head'>Menu</h1></>
+  },
+  {
     id:4,
     content:<><MdOutlineTableRestaurant className='menu-logos' /> <h1 className='dash-m-menu-items-head'>Tables</h1> <FaAngleDown className='menu-down-arr' /></>
   },{
@@ -170,7 +173,7 @@ const RestaurantDashboard = () => {
         }else if(currentMenu === 2){
           return <Orders />
         }else if(currentMenu === 3){
-          // return <Menu />
+          return <MenuPage />
         }else if(currentMenu === 4){
           // return <Tables />
         }else if(currentMenu === 5){
@@ -189,6 +192,7 @@ const RestaurantDashboard = () => {
         return <Dashboard />
 
       }
+      
 
   return (
     <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData}}>
@@ -202,7 +206,6 @@ const RestaurantDashboard = () => {
               </div>
               <ul className='dash-m-menu-list'>
                 {MenuItmes.map(each => (
-
                   <li key={each.id} onClick={() => setCurrentMenu(each.id) } className={`dash-m-menu-items ${each.id === currentMenu ? "dash-current-one" : "dash-m-menu-items"}`}>
                     {each.content}
                   </li>

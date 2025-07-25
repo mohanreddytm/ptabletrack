@@ -12,6 +12,8 @@ import RestaurantLogin from './components/RestaurentLogin'
 import RestaurantDashboard from './components/RestaurentDashboard/MainPage'
 import GetMoreInforRest from './components/GetMoreInforRest/'
 
+import MenuPage from './components/RestaurentDashboard/Menu'
+
 import './App.css'
 
 const App = () => {
@@ -22,6 +24,7 @@ const App = () => {
       <Route exact path='/restaurantReg' Component={RegisterMainRoute} />
       <Route exact path='/getMoreInforRest' Component={GetMoreInforRest} />
       <Route exact path='/restaurantDashboard' Component={RestaurantDashboard} />
+      <Route exact path='/menu' Component={MenuPage} />
     </Routes>
   )
 }

@@ -509,7 +509,7 @@
 
 .dash-middle-m-right-list-item{
     list-style-type: none;
-    min-width: 100%;
+    width: 100%;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -651,9 +651,7 @@
     position: absolute;
     transform: translateX(-60px);
     right: 50px;
-    top: -10px;
-
-   
+    top: -10px;   
     background-color: var(--header-dark-bc);
     border: 1px solid var(--glass-br-c);
     color: #e9e6e6;

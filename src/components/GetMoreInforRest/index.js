@@ -25,6 +25,7 @@ import nonveg from '../../images/nonveg.png'
 import './index.css'
 
 
+
 const GetMoreInforRest = () => {
     const navigate = useNavigate();
     const [areas, setAreas] = useState([]);
@@ -80,6 +81,34 @@ const GetMoreInforRest = () => {
         if(token){
             const data = jwtDecode(token);
             setRestaurantId(data.userId);
+            const preDefinedMenuCategories = [  
+                {
+                    menu_category_id: uuidv4(),
+                    menu_category_name: "Starters",
+                    restaurant_id: data.userId
+                },
+                {
+                    menu_category_id: uuidv4(),
+                    menu_category_name: "Main Course",
+                    restaurant_id: data.userId
+                },
+                {
+                    menu_category_id: uuidv4(),
+                    menu_category_name: "Desserts",
+                    restaurant_id: data.userId
+                },
+                {
+                    menu_category_id: uuidv4(),
+                    menu_category_name: "Beverages",
+                    restaurant_id: data.userId
+                },
+                {
+                    menu_category_id: uuidv4(),
+                    menu_category_name: "Snacks",
+                    restaurant_id: data.userId
+                }
+            ]
+            setMenuCategories(preDefinedMenuCategories)
         }else{
             navigate('/login');
         }
@@ -164,18 +193,23 @@ const GetMoreInforRest = () => {
         }
     } 
 
-    const onChangeFileName = (e) => {
-        const file = e.target.files[0];
+    const onChangeFileName = async (event) => {
+        const file = event.target.files[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageURL(reader.result);
-            
-            console.log(reader.result)
-        }
-        reader.readAsDataURL(file);
-    }
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "my_preset"); // <-- your unsigned upload preset name
+
+        const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dbrwqjsl3/image/upload",
+        { method: "POST", body: formData }
+        );
+        const data = await res.json();
+        console.log(data.secure_url); // This is your image URL
+        setImageURL(data.secure_url);
+        console.log("data", data)
+      };
     
 
     const onClickSaveAndNextTable = async () => {
@@ -208,6 +242,7 @@ const GetMoreInforRest = () => {
         if(menuCategories.length > 0){
             setMenuCategoryLoading(true);
             const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuCategory"
+            console.log(menuCategories)
             const options = 
             {
                 method: "POST",
@@ -498,6 +533,7 @@ const GetMoreInforRest = () => {
     const onClickSaveNxtMenuItems = async () => {
         if(menuItems.length > 0){
             setMenuItemLoading(true);
+            console.log("menuItems", menuItems)
             const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuItems"
             const options = 
             {
