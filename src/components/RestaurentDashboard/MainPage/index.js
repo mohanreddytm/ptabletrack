@@ -162,7 +162,7 @@ const RestaurantDashboard = () => {
       const getAreasData = async () => {
         try{
           setAreasDataStatus(statusOne.PENDING);
-          const url = `http://localhost:8000/getAreas/${restaurantId}`;
+          const url = `https://ttbackone-v48h.onrender.com/getAreas/${restaurantId}`;
           const response = await fetch(url);
           if(response.ok){
             const jsonOne = await response.json();

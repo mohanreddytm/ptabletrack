@@ -27,7 +27,7 @@ const Tables = () => {
             const getTablesData = async () => {
                 try{
                     console.log("each", each);
-                    const url = `http://localhost:8000/getTables/${each.id}`;
+                    const url = `https://ttbackone-v48h.onrender.com/getTables/${each.id}`;
                     const response = await fetch(url);
                     // console.log("response", response);
                     if(response.ok){

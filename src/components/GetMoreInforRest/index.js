@@ -546,7 +546,7 @@ const GetMoreInforRest = () => {
         if(menuItems.length > 0){
             setMenuItemLoading(true);
             console.log("menuItems", menuItems)
-            const url = "http://localhost:8000/restaurant_details/addMenuItems"
+            const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuItems"
             const options = 
             {
                 method: "POST",
