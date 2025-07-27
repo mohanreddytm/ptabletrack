@@ -395,6 +395,9 @@
     background-color: #111827;
     background-size: cover;
     align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 

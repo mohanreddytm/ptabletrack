@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { IoIosSearch } from "react-icons/io";
+import AllInOne from "../../../complexOne";
+
 
 import { MdDeleteForever } from "react-icons/md";
 
@@ -9,6 +11,8 @@ import ChickenBurger from '../../../images/burger.jpg'
 import './index.css'
 
 const MenuPage = () => {
+    const {menuData, menuDataStatus} = useContext(AllInOne);
+    console.log(menuData);
     return(
         <div className="menu-page-main-cont">
             <div className="menu-page-main-cont-one">
@@ -70,37 +74,19 @@ const MenuPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Item</td>
-                                <td>350</td>
-                                <td>Yes</td>
-                                <td>Starters</td>
-                                <td>Veg</td>
-                                <td className="menu-page-main-cont-one-select-cont-two-table-td-button-cont">
-                                    <button className="menu-page-main-cont-one-select-cont-two-table-button">Edit</button>
-                                    <button className="menu-page-main-cont-one-select-cont-two-table-delete-button"><MdDeleteForever /></button>
-                                </td>
-                            </tr><tr>
-                                <td className="menu-page-main-cont-one-select-cont-two-table-td"><img className="menu-page-main-cont-one-select-cont-two-table-img" src={ChickenBurger} alt="item" /> <h1 className="menu-page-main-cont-one-select-cont-two-table-h1">Chicken Burger</h1></td>
-                                <td>460</td>
-                                <td>Yes</td>
-                                <td>Starters</td>
-                                <td>Veg</td>
-                                <td className="menu-page-main-cont-one-select-cont-two-table-td-button-cont">
-                                    <button className="menu-page-main-cont-one-select-cont-two-table-button">Edit</button>
-                                    <button className="menu-page-main-cont-one-select-cont-two-table-delete-button"><MdDeleteForever /></button>
-                                </td>
-                            </tr><tr>
-                                <td>Item</td>
-                                <td>990</td>
-                                <td>Yes</td>
-                                <td>Starters</td>
-                                <td>Veg</td>
-                                <td className="menu-page-main-cont-one-select-cont-two-table-td-button-cont">
-                                    <button className="menu-page-main-cont-one-select-cont-two-table-button">Edit</button>
-                                    <button className="menu-page-main-cont-one-select-cont-two-table-delete-button"><MdDeleteForever /></button>
-                                </td>
-                            </tr>
+                            {menuData.map((eachItem) => (
+                                <tr>
+                                    <td className="menu-page-main-cont-one-select-cont-two-table-td"><img className="menu-page-main-cont-one-select-cont-two-table-img" src={eachItem.image_url} alt="item" /> <h1 className="menu-page-main-cont-one-select-cont-two-table-h1">{eachItem.item_name}</h1></td>
+                                    <td>{eachItem.price}</td>
+                                    <td>{eachItem.availability}</td>
+                                    <td>{eachItem.category_name}</td>
+                                    <td>{eachItem.item_category}</td>
+                                    <td className="menu-page-main-cont-one-select-cont-two-table-td-button-cont">
+                                        <button className="menu-page-main-cont-one-select-cont-two-table-button">Edit</button>
+                                        <button className="menu-page-main-cont-one-select-cont-two-table-delete-button"><MdDeleteForever /></button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

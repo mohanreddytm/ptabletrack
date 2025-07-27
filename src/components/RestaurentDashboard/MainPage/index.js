@@ -20,7 +20,7 @@ import './index.css'
 import { useNavigate } from 'react-router-dom'
 
 import Dashboard from '../Dashboard';
-
+import Tables from '../Tables';
 import Orders from '../Orders';
 
 import {jwtDecode} from 'jwt-decode';
@@ -49,7 +49,7 @@ const MenuItmes = [
   },
   {
     id:4,
-    content:<><MdOutlineTableRestaurant className='menu-logos' /> <h1 className='dash-m-menu-items-head'>Tables</h1> <FaAngleDown className='menu-down-arr' /></>
+    content:<><MdOutlineTableRestaurant className='menu-logos' /> <h1 className='dash-m-menu-items-head'>Tables</h1></>
   },{
     id:5,
     content:<><FaRegBell className='menu-logos' /> <h1 className='dash-m-menu-items-head'>Waiter Requests</h1></>
@@ -91,6 +91,13 @@ const RestaurantDashboard = () => {
     const [dataStatus, setDataStatus] = useState(statusOne.INITIAL);
     const [userId, setUserId] = useState('') 
     const [currentMenu, setCurrentMenu] = useState(1);
+    const [menuData, setMenuData] = useState('');
+    const [menuDataStatus, setMenuDataStatus] = useState(statusOne.INITIAL);
+    const [tablesData, setTablesData] = useState('');
+    const [tablesDataStatus, setTablesDataStatus] = useState(statusOne.INITIAL);
+    const [areasData, setAreasData] = useState('');
+    const [areasDataStatus, setAreasDataStatus] = useState(statusOne.INITIAL);
+
 
     useEffect(() => {
       const token = cookies.get('t_user');
@@ -112,26 +119,67 @@ const RestaurantDashboard = () => {
       setUserId(restaurantId);
       const getRestaurantData = async () => {
         try{
-  
-        const url  = `https://ttbackone-v48h.onrender.com/restaurant/${restaurantId}`
-        const response = await fetch(url);
-  
-        if(response.ok){
-          const jsonOne = await response.json();
-          setRestaurantData(jsonOne[0]);
-          setDataStatus(statusOne.SUCCESS);
-        }else{
-          setDataStatus(statusOne.FAILED);
-          console.log('failed')
-        }
+          setDataStatus(statusOne.PENDING);
+          const url  = `https://ttbackone-v48h.onrender.com/restaurant/${restaurantId}`
+          const response = await fetch(url);
+    
+          if(response.ok){
+            const jsonOne = await response.json();
+            setRestaurantData(jsonOne[0]);
+            setDataStatus(statusOne.SUCCESS);
+          }else{
+            setDataStatus(statusOne.FAILED);
+            console.log('failed')
+          }
         }
         catch(error){
           setDataStatus(statusOne.FAILED);
           console.log('failed')
         }
       }
-  
       getRestaurantData()
+
+      const getMenuData = async () => {
+        try{
+          setMenuDataStatus(statusOne.PENDING);
+          const url = `https://ttbackone-v48h.onrender.com/getMenuItems/${restaurantId}`;
+          const response = await fetch(url);
+          if(response.ok){
+            const jsonOne = await response.json();
+            setMenuData(jsonOne);
+            setMenuDataStatus(statusOne.SUCCESS);
+          }else{
+            setMenuDataStatus(statusOne.FAILED);
+          }
+        } 
+        catch(error){
+          setMenuDataStatus(statusOne.FAILED);
+        }
+      }
+      getMenuData();
+
+
+      const getAreasData = async () => {
+        try{
+          setAreasDataStatus(statusOne.PENDING);
+          const url = `http://localhost:8000/getAreas/${restaurantId}`;
+          const response = await fetch(url);
+          if(response.ok){
+            const jsonOne = await response.json();
+            setAreasData(jsonOne);
+            setAreasDataStatus(statusOne.SUCCESS);
+          }else{
+            setAreasDataStatus(statusOne.FAILED);
+          }
+        }
+        catch(error){
+          setAreasDataStatus(statusOne.FAILED);
+        }
+      }
+      getAreasData();
+
+      
+
     }, [])
   
     const onClickRetry = () => {
@@ -175,7 +223,7 @@ const RestaurantDashboard = () => {
         }else if(currentMenu === 3){
           return <MenuPage />
         }else if(currentMenu === 4){
-          // return <Tables />
+          return <Tables />
         }else if(currentMenu === 5){
           // return <WaiterRequests />
         }else if(currentMenu === 6){
@@ -195,7 +243,7 @@ const RestaurantDashboard = () => {
       
 
   return (
-    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData}}>
+    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus}}>
       <div className='dash-initial-cont'>
         <Header />
         <div className='dash-m-main-c'>

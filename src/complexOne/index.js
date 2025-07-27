@@ -2,7 +2,13 @@ import react from 'react'
 
 const AllInOne = react.createContext({
     userId:'',
-    restaurantDetails: ''
+    restaurantDetails: '',
+    menuData: '',
+    menuDataStatus: '',
+    tablesData: '',
+    tablesDataStatus: '',
+    areasData: '',
+    areasDataStatus: ''
 })
 
 export default AllInOne

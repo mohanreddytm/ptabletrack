@@ -69,6 +69,8 @@ const GetMoreInforRest = () => {
     const [imageFile, setImageFile] = useState(null);   
     const [restaurantId, setRestaurantId] = useState('');
 
+    const [menuImageLoading, setMenuImageLoading] = useState(false);
+
     useEffect(() => {
         const isAuth = cookies.get('t_user');
         if (!isAuth) {
@@ -194,6 +196,7 @@ const GetMoreInforRest = () => {
     } 
 
     const onChangeFileName = async (event) => {
+        setMenuImageLoading(true);
         const file = event.target.files[0];
         if (!file) return;
 
@@ -209,6 +212,7 @@ const GetMoreInforRest = () => {
         console.log(data.secure_url); // This is your image URL
         setImageURL(data.secure_url);
         console.log("data", data)
+        setMenuImageLoading(false);
       };
     
 
@@ -504,7 +508,14 @@ const GetMoreInforRest = () => {
 
     const onSubmitMenuItem = (e) => {
         e.preventDefault();
+        console.log(menuImageLoading);
+        if(menuImageLoading === true){
+            return;
+        }
         if(menuItemName.trim() != '' && itemDes.trim() != '' && itemMenuCategory.trim() != '' && itemCategory .trim() != '' && itemPreparationTime.trim() != '' && price.trim() != ''){
+            const categoryOne = menuCategories.filter(each => {
+                return each.menu_category_id === itemMenuCategory;
+            })
             const newItem = {
                 item_id: uuidv4(),
                 item_name: menuItemName,
@@ -515,7 +526,8 @@ const GetMoreInforRest = () => {
                 item_availabiliy:itemAvailability,
                 item_price:price,
                 item_url:imageUrl,
-                restaurant_id:restaurantId
+                restaurant_id:restaurantId,
+                category_name:categoryOne[0].menu_category_name
             }
             setMenuItems([...menuItems, newItem])
             setMenuItemName('');
@@ -534,7 +546,7 @@ const GetMoreInforRest = () => {
         if(menuItems.length > 0){
             setMenuItemLoading(true);
             console.log("menuItems", menuItems)
-            const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuItems"
+            const url = "http://localhost:8000/restaurant_details/addMenuItems"
             const options = 
             {
                 method: "POST",
@@ -616,7 +628,13 @@ const GetMoreInforRest = () => {
                             <input value={imageFile} onChange={onChangeFileName} className='gm-input-area file-input' type='file' accept='image/*' />
                         </div>
                         <FileImage image={imageUrl} className='file-image'>
-                            
+                            <ClipLoader
+                                color="#ffffff"
+                                loading={menuImageLoading}
+                                size={20}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                            />
                         </FileImage>
                     </div>
 
