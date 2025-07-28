@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom'
 import Dashboard from '../Dashboard';
 import Tables from '../Tables';
 import Orders from '../Orders';
+import WaiterRequest from '../WaiterRequest/index';
 
 import {jwtDecode} from 'jwt-decode';
 
@@ -99,12 +100,45 @@ const RestaurantDashboard = () => {
     const [areasDataStatus, setAreasDataStatus] = useState(statusOne.INITIAL);
 
 
+
     useEffect(() => {
       const token = cookies.get('t_user');
       if(token === undefined){
         navigate('/login')
       }
     }, [navigate])
+
+    const sayHiOne = (data) => {
+      const getTablesData = async () => {
+        data.map(async each => {
+            const getTablesDataInside = async () => {
+                try{
+                    // console.log("each", each);
+                    const url = `https://ttbackone-v48h.onrender.com/getTables/${each.id}`;
+                    const response = await fetch(url);
+                    // console.log("response", response);
+                    if(response.ok){
+                        const jsonOne = await response.json();
+                        // console.log(jsonOne);
+                        setTablesData(prev => [...prev, {
+                            name: each.area_name,
+                            tables: jsonOne
+                        }]);
+                        setTablesDataStatus(statusOne.SUCCESS);
+                    }else{
+                        console.log("error");
+                        setTablesDataStatus(statusOne.FAILED);
+                    }
+                }
+                catch(error){
+                    setTablesDataStatus(statusOne.FAILED);
+                }
+            }
+            getTablesDataInside();
+        })
+      }
+      getTablesData();
+    }
   
   
     useEffect(() => 
@@ -114,6 +148,7 @@ const RestaurantDashboard = () => {
         navigate('/login')
       }
       setDataStatus(statusOne.PENDING);
+
       const data = jwtDecode(token);
       const restaurantId = data.userId;
       setUserId(restaurantId);
@@ -166,6 +201,7 @@ const RestaurantDashboard = () => {
           const response = await fetch(url);
           if(response.ok){
             const jsonOne = await response.json();
+            sayHiOne(jsonOne);
             setAreasData(jsonOne);
             setAreasDataStatus(statusOne.SUCCESS);
           }else{
@@ -177,9 +213,6 @@ const RestaurantDashboard = () => {
         }
       }
       getAreasData();
-
-      
-
     }, [])
   
     const onClickRetry = () => {
@@ -225,7 +258,7 @@ const RestaurantDashboard = () => {
         }else if(currentMenu === 4){
           return <Tables />
         }else if(currentMenu === 5){
-          // return <WaiterRequests />
+          return <WaiterRequest />
         }else if(currentMenu === 6){
           // return <POS />
         }else if(currentMenu === 7){
@@ -240,7 +273,6 @@ const RestaurantDashboard = () => {
         return <Dashboard />
 
       }
-      
 
   return (
     <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus}}>

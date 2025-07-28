@@ -8,7 +8,9 @@ const AllInOne = react.createContext({
     tablesData: '',
     tablesDataStatus: '',
     areasData: '',
-    areasDataStatus: ''
+    areasDataStatus: '',
+    waiterData: '',
+    waiterDataStatus: ''
 })
 
 export default AllInOne

@@ -12,46 +12,10 @@ const statusOne = {
   }
 
 const Tables = () => {
-    const {areasData, areasDataStatus} = useContext(AllInOne);
-    const [tablesData, setTablesData] = useState([]);
-    const [tablesDataStatus, setTablesDataStatus] = useState(statusOne.INITIAL);
+    const {areasData, areasDataStatus, tablesData, tablesDataStatus} = useContext(AllInOne);
     const [qrCodes, setQrCodes] = useState({});
 
-    
 
-    useEffect(() => {
-        if(areasDataStatus === statusOne.PENDING || areasDataStatus === statusOne.INITIAL){
-            return;
-        }
-        areasData.map(async each => {
-            const getTablesData = async () => {
-                try{
-                    console.log("each", each);
-                    const url = `https://ttbackone-v48h.onrender.com/getTables/${each.id}`;
-                    const response = await fetch(url);
-                    // console.log("response", response);
-                    if(response.ok){
-                        const jsonOne = await response.json();
-                        // console.log(jsonOne);
-                        setTablesData(prev => [...prev, {
-                            name: each.area_name,
-                            tables: jsonOne
-                        }]);
-                        setTablesDataStatus(statusOne.SUCCESS);
-                    }else{
-                        console.log("error");
-                        setTablesDataStatus(statusOne.FAILED);
-                    }
-                }
-                catch(error){
-                    setTablesDataStatus(statusOne.FAILED);
-                }
-            }
-            getTablesData();
-        })
-    }, [areasDataStatus]);
-
-    // console.log(tablesData);
 
     const generateQRCode = async (table) => {
         if (qrCodes[table.id]) return; // Already generated
@@ -98,11 +62,13 @@ const Tables = () => {
 
 
     useEffect(() => {
+        if(tablesDataStatus === statusOne.SUCCESS && tablesData.length > 0){
         tablesData.map((each) => {
             each.tables.map((eachTable) => {
-                generateQRCode(eachTable);
+                    generateQRCode(eachTable);
+                })
             })
-        })
+        }
     }, [tablesData]);
     
     return(
@@ -128,10 +94,6 @@ const Tables = () => {
                                     if(tablesData.length === 0){
                                         return <li key={each.area_id}>{each.area_name} - 0</li>
                                     }
-                                    const getTheCountOfActiveTables = tablesData.filter((eachTable) => eachTable.area_name === each.area_name);
-                                    console.log("getTheCountOfActiveTables",getTheCountOfActiveTables)
-                                    const getTheCountOfInactiveTables = tablesData.filter((eachTable) => eachTable.area_name === each.area_name && eachTable.is_active === false);
-                                    console.log("getTheCountOfInactiveTables",getTheCountOfInactiveTables)
                                     return (
                                         <li key={each.id}>{each.area_name}</li>
                                     )

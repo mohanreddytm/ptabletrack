@@ -13,7 +13,6 @@ const Header = () => {
         value => {
           const {userId, restaurantDetails} = value;
           const {restaurentname} = restaurantDetails;
-          console.log(restaurantDetails)
           return (
             <header className='dash-header-initial-cont'>
               <div className='dash-header-main-c'>

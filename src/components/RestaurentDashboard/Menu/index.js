@@ -2,6 +2,11 @@ import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { IoIosSearch } from "react-icons/io";
 import AllInOne from "../../../complexOne";
+import noImage from '../../../images/noimage.png'
+import { IoMdTime } from "react-icons/io";
+
+import { FaIceCream, FaCoffee, FaHamburger, FaStar, FaUtensils } from "react-icons/fa";
+
 
 
 import { MdDeleteForever } from "react-icons/md";
@@ -30,7 +35,7 @@ const MenuPage = () => {
             </div>
             <div className="menu-page-main-cont-one-select-cont-main">
                 <div className="menu-page-main-cont-one-select-cont-one">
-                <h1 className="menu-page-main-cont-one-select-cont-one-head">Sort By</h1>
+                    <h1 className="menu-page-main-cont-one-select-cont-one-head">Sort By</h1>
                     <select className="menu-page-main-cont-one-select-cont-one-select">
                         <option>Sort By</option>
                         <option>Price - Low to High</option>
@@ -62,33 +67,54 @@ const MenuPage = () => {
 
                 </div>
                 <div className="menu-page-main-cont-one-select-cont-two">
-                    <table className="menu-page-main-cont-one-select-cont-two-table">
-                        <thead>
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Price - ₹</th>
-                                <th>Is Available</th>
-                                <th>Category</th>
-                                <th>Item Type</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {menuData.map((eachItem) => (
-                                <tr>
-                                    <td className="menu-page-main-cont-one-select-cont-two-table-td"><img className="menu-page-main-cont-one-select-cont-two-table-img" src={eachItem.image_url} alt="item" /> <h1 className="menu-page-main-cont-one-select-cont-two-table-h1">{eachItem.item_name}</h1></td>
-                                    <td>{eachItem.price}</td>
-                                    <td>{eachItem.availability}</td>
-                                    <td>{eachItem.category_name}</td>
-                                    <td>{eachItem.item_category}</td>
-                                    <td className="menu-page-main-cont-one-select-cont-two-table-td-button-cont">
-                                        <button className="menu-page-main-cont-one-select-cont-two-table-button">Edit</button>
-                                        <button className="menu-page-main-cont-one-select-cont-two-table-delete-button"><MdDeleteForever /></button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <ul className="menu-page-main-cont-one-select-cont-two-ul">
+                        {menuData.map((eachItem) => {
+                            const itemType = eachItem.category_name === 'Desserts' ? <FaIceCream /> : eachItem.category_name === 'Beverage' ? <FaCoffee /> : eachItem.category_name === 'Snacks' ? <FaHamburger /> : eachItem.category_name === 'Starters' ? <FaStar /> : eachItem.category_name === 'Main Course' ? <FaUtensils /> : <FaUtensils />;
+                            if(!eachItem.image_url){
+                                return (
+                                <li key={eachItem.id}>
+                                                                    <div className="menu-page-main-cont-one-select-cont-two-img-cont">
+                                    <p className="menu-page-main-cont-one-select-cont-two-img-icon">{itemType}</p>
+                                </div>
+                                    <div className="menu-page-main-cont-one-select-no-image-cont">
+                                        <img className="menu-page-main-cont-one-select-no-image" src={noImage} alt="item" />
+                                    </div>
+                                    <h1 className="menu-page-main-cont-one-select-cont-two-h1">{eachItem.item_name}</h1>
+                                    <p className="menu-page-main-cont-one-select-cont-two-p"> Price: ₹ {eachItem.price}</p>
+                                    <p className="menu-page-main-cont-one-select-cont-two-p">Category: {eachItem.category_name} {itemType}</p>
+                                    <p className="menu-page-main-cont-one-select-cont-two-p">Item Type: {eachItem.item_category}</p>
+                                    <div className="menu-page-main-cont-one-select-cont-two-p-cont">
+                                        <h1 className="menu-page-main-cont-one-select-cont-two-p-cont-h1">{eachItem.availability === "Yes" ? "Available" : "Not Available"}</h1>
+                                        <p className="menu-page-main-cont-one-select-cont-two-p-cont-p"><IoMdTime /> {eachItem.preparation_time} m</p>
+                                    </div>
+                                    <div className="menu-page-main-cont-one-select-cont-two-button-cont">
+                                        <button className="menu-page-main-cont-one-select-cont-two-button">Edit</button>
+                                        <button className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
+                                    </div>
+
+                                </li>
+                                )
+                            }
+                            return <li key={eachItem.id}>
+                                <div className="menu-page-main-cont-one-select-cont-two-img-cont">
+                                    <p className="menu-page-main-cont-one-select-cont-two-img-icon">{itemType}</p>
+                                </div>
+                                <img className="menu-page-main-cont-one-select-cont-two-img" src={eachItem.image_url} alt="item" />
+                                <h1 className="menu-page-main-cont-one-select-cont-two-h1">{eachItem.item_name}</h1>
+                                <p className="menu-page-main-cont-one-select-cont-two-p"> Price: ₹ {eachItem.price}</p>
+                                <p className="menu-page-main-cont-one-select-cont-two-p">Category: {eachItem.category_name} {itemType}</p>
+                                <p className="menu-page-main-cont-one-select-cont-two-p">Item Type: {eachItem.item_category}</p>
+                                <div className="menu-page-main-cont-one-select-cont-two-p-cont">
+                                        <h1 className="menu-page-main-cont-one-select-cont-two-p-cont-h1">{eachItem.availability === "Yes" ? "Available" : "Not Available"}</h1>
+                                        <p className="menu-page-main-cont-one-select-cont-two-p-cont-p"><IoMdTime /> {eachItem.preparation_time} m</p>
+                                    </div>
+                                <div className="menu-page-main-cont-one-select-cont-two-button-cont">
+                                    <button className="menu-page-main-cont-one-select-cont-two-button">Edit</button>
+                                    <button className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
+                                </div>
+                            </li>
+                        })}
+                    </ul>
                 </div>
             </div>
 
