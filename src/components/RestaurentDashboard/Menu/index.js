@@ -68,7 +68,10 @@ const MenuPage = () => {
                 </div>
                 <div className="menu-page-main-cont-one-select-cont-two">
                     <ul className="menu-page-main-cont-one-select-cont-two-ul">
-                        {menuData.map((eachItem) => {
+                        {menuDataStatus === "loading" && <h1>Loading...</h1>}
+                        {menuDataStatus === "error" && <h1>Error</h1>}
+                        {menuDataStatus === "success" && menuData.length === 0 && <h1>No data found</h1>}
+                        {menuData.length > 0 && menuData.map((eachItem) => {
                             const itemType = eachItem.category_name === 'Desserts' ? <FaIceCream /> : eachItem.category_name === 'Beverage' ? <FaCoffee /> : eachItem.category_name === 'Snacks' ? <FaHamburger /> : eachItem.category_name === 'Starters' ? <FaStar /> : eachItem.category_name === 'Main Course' ? <FaUtensils /> : <FaUtensils />;
                             if(!eachItem.image_url){
                                 return (

@@ -23,6 +23,8 @@ import Dashboard from '../Dashboard';
 import Tables from '../Tables';
 import Orders from '../Orders';
 import WaiterRequest from '../WaiterRequest/index';
+import POSPage from '../POS';
+
 
 import {jwtDecode} from 'jwt-decode';
 
@@ -161,6 +163,7 @@ const RestaurantDashboard = () => {
           if(response.ok){
             const jsonOne = await response.json();
             setRestaurantData(jsonOne[0]);
+
             setDataStatus(statusOne.SUCCESS);
           }else{
             setDataStatus(statusOne.FAILED);
@@ -213,6 +216,7 @@ const RestaurantDashboard = () => {
         }
       }
       getAreasData();
+
     }, [])
   
     const onClickRetry = () => {
@@ -235,6 +239,8 @@ const RestaurantDashboard = () => {
         }
       getRestaurantData();
     }
+
+
   
 
     if(dataStatus === statusOne.FAILED){
@@ -260,7 +266,7 @@ const RestaurantDashboard = () => {
         }else if(currentMenu === 5){
           return <WaiterRequest />
         }else if(currentMenu === 6){
-          // return <POS />
+          return <POSPage />
         }else if(currentMenu === 7){
           // return <Staff />
         }else if(currentMenu === 8){
@@ -278,6 +284,17 @@ const RestaurantDashboard = () => {
     <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus}}>
       <div className='dash-initial-cont'>
         <Header />
+        {(dataStatus === statusOne.PENDING || menuDataStatus === statusOne.PENDING || tablesDataStatus === statusOne.PENDING || areasDataStatus === statusOne.PENDING) && (
+          <div className='dash-header-loading-cont'>
+            <div className='dash-header-loading-bar'>
+              <div className='dash-header-loading-segment dash-header-loading-data' style={{width: dataStatus === statusOne.SUCCESS ? '25%' : '0%'}}></div>
+              <div className='dash-header-loading-segment dash-header-loading-menu' style={{width: menuDataStatus === statusOne.SUCCESS ? '25%' : '0%'}}></div>
+              <div className='dash-header-loading-segment dash-header-loading-tables' style={{width: tablesDataStatus === statusOne.SUCCESS ? '25%' : '0%'}}></div>
+              <div className='dash-header-loading-segment dash-header-loading-areas' style={{width: areasDataStatus === statusOne.SUCCESS ? '25%' : '0%'}}></div>
+            </div>
+          </div>
+        )}
+
         <div className='dash-m-main-c'>
           <div className='dash-m-menu-main'>
             <div className='dash-m-menu-c'>
