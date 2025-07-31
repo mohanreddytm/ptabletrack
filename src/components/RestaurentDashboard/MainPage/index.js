@@ -24,6 +24,9 @@ import Tables from '../Tables';
 import Orders from '../Orders';
 import WaiterRequest from '../WaiterRequest/index';
 import POSPage from '../POS';
+import Staff from '../Staff';
+import Reservations from '../Reservations';
+import Payments from '../Payments';
 
 
 import {jwtDecode} from 'jwt-decode';
@@ -268,11 +271,11 @@ const RestaurantDashboard = () => {
         }else if(currentMenu === 6){
           return <POSPage />
         }else if(currentMenu === 7){
-          // return <Staff />
-        }else if(currentMenu === 8){
-          // return <Reservations />
-        }else if(currentMenu === 9){
-          // return <Payments />
+          return <Staff />
+                  }else if(currentMenu === 8){
+            return <Reservations />
+          }else if(currentMenu === 9){
+            return <Payments />
         }else if(currentMenu === 10){
           // return <Settings />
         }

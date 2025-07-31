@@ -45,7 +45,7 @@
 }
 
 .pos-page-main-cont-one-search-button:hover{
-    box-shadow:2px 2px 5px 2px rgba(149, 42, 136, 0.3);
+    box-shadow:2px 2px 5px 2px rgba(149, 42, 136, 0.4);
 }
 
 .pos-page-main-cont-one-search-ul
@@ -168,7 +168,7 @@
     border-radius: 0px 0px 5px 5px;
     text-align: center;
     display: none;
-    color:var(--sp-c);
+    color: #A78BFA;
     font-size: 12px;
     font-weight: 600;
     margin: 0px;
@@ -482,7 +482,7 @@ cursor: pointer;
 
 
 .pos-page-b-c-two:hover{
-    background-color: #a14696 !important;
+    background: linear-gradient(135deg, #952a88, #A78BFA) !important;
     border-radius: 10px;
     color: #fff !important;
 }

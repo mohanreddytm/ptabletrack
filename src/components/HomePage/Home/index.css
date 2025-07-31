@@ -29,7 +29,7 @@
 }
 
 .start-trail-button{
-    background-color: #A78BFA;
+    background-color: var(--main-theme-c);
     border: none;
     color: #ffffff;
     font-size: 16px;
@@ -45,7 +45,7 @@
 }
 
 .start-trail-button:hover{
-    background-color: #7f5eeb;
+    background-color: var(--main-theme-hover-c);
 }
 
 .home-right-arrow{
@@ -98,7 +98,7 @@
 }
 
 .home-res-quote{
-    color: #A78BFA;
+    color: var(--main-theme-c);
     font-size: 16px;
     font-weight: 500;
     margin-right: 20px;
@@ -175,7 +175,7 @@
 
 .home-main-content-cont-details-button:hover{
      text-decoration: underline;
-     color: #A78BFA;
+     color: var(--main-theme-c);
 }
 
 .home-right-arrow-rest{
@@ -214,7 +214,7 @@
 
 .home-main-features-item-logo{
     font-size: 50px;
-    color: #7f5eeb;
+    color: var(--main-theme-c);
     background-color: #100e16;
     padding: 10px;
     border-radius: 8px;
@@ -359,7 +359,7 @@ min-height: 100%;
 }
 
 .price-cont-item-one-price{
-    color: #7f5eeb;
+    color: var(--main-theme-c);
     display: flex;
 
     padding: 0px;
@@ -476,7 +476,7 @@ min-height: 100%;
 }
 
 .copy-right-up-arrow{
-    background-color: #A78BFA;
+    background-color: var(--main-theme-c);
     padding: 10px;
     font-size: 16px;
     font-weight: 500;
@@ -488,7 +488,7 @@ min-height: 100%;
 }
 
 .copy-right-up-arrow:hover{
-    box-shadow: 0px 0px 5px 0px #7f5eeb;
+    box-shadow: 0px 0px 5px 0px var(--main-theme-c);
 }
 
 
@@ -572,7 +572,7 @@ min-height: 100%;
     margin: 0px;
 }
 .home-detailed-infor-main-head span{
-    background-color: #A78BFA;
+    background-color: var(--main-theme-c);
     padding: 4px 8px;
     border-radius: 4px;
 }
@@ -614,7 +614,7 @@ min-height: 100%;
     align-items: center;
     margin-bottom: 4px;
 }.home-detailed-infor-second-list li p span{
-    color: #A78BFA;
+    color: var(--main-theme-c);
     font-size: 18px;
     margin-right: 8px;
         min-width: 26% !important;
