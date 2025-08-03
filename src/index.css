@@ -14,7 +14,9 @@ body {
   --main-head-dark-c: #ffffff;
   --text-color: #bcb6b6;
   --main-theme-c: #A78BFA;
-  --main-theme-hover-c:#7f5eeb;
+  --main-theme-c-2:#952a88;
+  --main-theme-c-2-hover:#6b1962;
+  --main-theme-hover-c:#886be9;
   --glass-c:rgba(255, 255, 255, 0.1);
   --glass-br-c:rgba(255, 255, 255, 0.2);
   --red-c:#dc3545;

@@ -20,11 +20,11 @@ const Header = () => {
                   <img src={logo} className='dash-h-logo' alt='dashboard logo' />
                   <h1 className='dash-header-main-head'>{restaurentname}</h1>
                 </div>
-                <div className='dash-h-middle-c'>
+                {/* <div className='dash-h-middle-c'>
                   <button type='button'>Current Orders <span className='dash-h-btn-span'>3</span></button>
                   <button type='button'>Payment Issue <span className='dash-h-btn-span'>1</span></button>
                   <button type='button'>Waiter's Call <span className='dash-h-btn-span'>0</span></button>
-                </div>
+                </div> */}
                 <div className='dash-h-right-c'>
                   <button className='dash-h-btn' type='button'>First</button>
                   <h1 className='dash-h-profile'>MR</h1>
