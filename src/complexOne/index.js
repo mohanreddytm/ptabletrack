@@ -10,7 +10,9 @@ const AllInOne = react.createContext({
     areasData: '',
     areasDataStatus: '',
     waiterData: '',
-    waiterDataStatus: ''
+    waiterDataStatus: '',
+    menuCategories: '',
+    menuCategoriesStatus: '',
 })
 
 export default AllInOne

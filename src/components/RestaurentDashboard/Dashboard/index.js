@@ -1,6 +1,10 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 
+// import React from 'react';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
+
+
 import { FaCaretDown, FaAngleDown,FaRegBell, FaAngleDoubleUp, FaThumbsUp, FaThumbsDown  } from "react-icons/fa";
 
 import { MdBlock, MdFrontHand } from "react-icons/md";
@@ -17,7 +21,10 @@ import './index.css'
 
 import { useNavigate } from 'react-router-dom'
 
-import { FaArrowUpLong } from "react-icons/fa6";
+import { FaArrowUpLong, FaCircleCheck } from "react-icons/fa6";
+import { GiCash } from "react-icons/gi";
+
+import { CiCircleAlert } from "react-icons/ci";
 
 
 
@@ -105,24 +112,50 @@ const Dashboard = () => {
       const hours12 = newDate.getHours() % 12 || 12;
       return `${dayText}, ${date} ${MonthText}, ${hours12}:${minutes} ${ampm}`;
     }
+
+    const generateData = () => {
+      const data = [];
+      for (let i = 1; i <= 30; i++) {
+        data.push({
+          day: `Day ${i}`,
+          amount: Math.floor(Math.random() * 10001), // Random ₹0 - ₹10000
+        });
+      }
+      return data;
+    };
+
+    const data = generateData();
+
+    // console.log(data)
   
     return(
 
           <div className='dash-main-m'>
             <div className='dash-main-dashboard-cont'>
-              <h1 className='dash-dash-head'>DashBoard</h1>
-              <p className='dash-dash-time'>{getTime()}</p>
+              <div>
+                <h1 className='dash-dash-head'>DashBoard</h1>
+                <p className='dash-dash-time'>{getTime()}</p>
+              </div>
+              <ul className='dash-dash-waiter-container'>
+                <li>
+                  <h1>Waiter Requests</h1>
+                  <h1>3</h1>
+                </li>
+                <li>
+                  <h1>Current Orders</h1>
+                  <h1>2</h1>
+                </li>
+              </ul>
+
             </div>
             <div className='dash-middle-m-cont'>
                 <div className='dash-middle-m-left-cont'>
                   <h1 className='dash-middle-m-left-main-head'>Statistics</h1>
                   <div className='dash-stats-cont'>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
+                    <div className='dash-stats-parts dash-stats-parts-one'>
+
                       <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>Today's Orders</h1>
+                        <h1 className='dash-stats-parts-heads dash-stats-parts-head-orders' >Today's Orders</h1>
                       </div>
 
                       <p className='dash-stats-parts-count'>10</p>
@@ -130,13 +163,12 @@ const Dashboard = () => {
                           <p className='dash-stats-parts-percent'><FaArrowUpLong /> 40%</p>
                           <p className='dash-stats-parts-p'>Since Yesterday</p>
                       </div>
+                      <button type='button' className='dash-stats-parts-button'>Current <p>4</p></button>
                     </div>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>Today's Earnings</h1>
+                    <div className='dash-stats-parts dash-stats-parts-two'>
+
+                      <div className='dash-stats-parts-heads-cont dash-stats-parts-head-earnings'>
+                        <h1 className='dash-stats-parts-heads dash-stats-parts-head-earnings'>Today's Earnings</h1>
                       </div>
                       <p className='dash-stats-parts-count'>₹ 5400</p>
                       <div className='dash-stats-parts-inner-cont'>
@@ -144,12 +176,10 @@ const Dashboard = () => {
                           <p className='dash-stats-parts-p'>Since Yesterday</p>
                       </div>
                     </div>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>Average Daily Earnings</h1>
+                    <div className='dash-stats-parts dash-stats-parts-three'>
+
+                      <div className='dash-stats-parts-heads-cont dash-stats-parts-head-avg'>
+                        <h1 className='dash-stats-parts-heads dash-stats-parts-head-avg'>Average Daily Earnings</h1>
                       </div>
                       <p className='dash-stats-parts-count'>₹ 7675</p>
                       <div className='dash-stats-parts-inner-cont'>
@@ -157,12 +187,10 @@ const Dashboard = () => {
                           <p className='dash-stats-parts-p'>This Month - July</p>
                       </div>
                     </div>
-                    <div className='dash-stats-parts'>
-                      <div className='dash-stats-enhance-cont'>
-                          <h1 className='dash-stats-enhance'><FaAngleDoubleUp /> Enhance</h1>
-                      </div>
-                      <div className='dash-stats-parts-heads-cont'>
-                        <h1 className='dash-stats-parts-heads'>#1 Selling Dish</h1>
+                    <div className='dash-stats-parts dash-stats-parts-four'>
+
+                      <div className='dash-stats-parts-heads-cont dash-stats-parts-head-selling'>
+                        <h1 className='dash-stats-parts-heads dash-stats-parts-head-selling'>#1 Selling Dish</h1>
                       </div>
 
                       <p className='dash-stats-parts-count on-sp-count'>Chicken Biryani</p>
@@ -177,8 +205,30 @@ const Dashboard = () => {
                     <div className='dash-payment-inner-cont'>
                       <BsQrCodeScan className='dash-payment-inner-logo' />
                       <h1 className='dash-payment-inner-text'>UPI</h1>
-                      <p className='dash-payment-inner-price'>₹ 5400</p>
+                      <input className='dash-payment-inner-input' type="range" min="0" max='5400' value='3000' />
+                      <p className='dash-payment-inner-price'>₹3000</p>
                     </div>
+                    <hr className='dash-payment-line' />
+                    <div className='dash-payment-inner-cont'>
+                      <GiCash className='dash-payment-inner-logo' />
+                      <h1 className='dash-payment-inner-text'>Cash</h1>
+                      <input className='dash-payment-inner-input' type="range" min="0" max='5400' value='1400' />
+
+                      <p className='dash-payment-inner-price'>₹1400</p>
+                    </div>
+                  </div>
+
+                  <div className="dash-stats-conts">
+                    <h2 className="dash-payment-one">Restaurant Earnings (Day 1 to 300)</h2>
+                    <ResponsiveContainer width="100%" height="75%">
+                      <LineChart data={data}>
+                        {/* <CartesianGrid strokeDasharray="10 10" /> */}
+                        <XAxis dataKey="day" hide />
+                        <YAxis domain={[0, 10000]} tickFormatter={(value) => `₹${value}`} />
+                        <Tooltip formatter={(value) => `₹${value}`} />
+                        <Line type="monotone" dataKey="amount" stroke="#8884d8" dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
                   <div className='dash-payment-cont dash-waiter-availability'>
                     <h1 className='dash-payment-one'>Available Waiters</h1>

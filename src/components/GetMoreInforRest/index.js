@@ -83,6 +83,7 @@ const GetMoreInforRest = () => {
         if(token){
             const data = jwtDecode(token);
             setRestaurantId(data.userId);
+            console.log("restaurantId", data.userId)
             const preDefinedMenuCategories = [  
                 {
                     menu_category_id: uuidv4(),
@@ -110,6 +111,7 @@ const GetMoreInforRest = () => {
                     restaurant_id: data.userId
                 }
             ]
+            console.log("preDefinedMenuCategories", preDefinedMenuCategories)
             setMenuCategories(preDefinedMenuCategories)
         }else{
             navigate('/login');
@@ -246,7 +248,7 @@ const GetMoreInforRest = () => {
         if(menuCategories.length > 0){
             setMenuCategoryLoading(true);
             const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuCategory"
-            console.log(menuCategories)
+            console.log("menuCategories - final", menuCategories)
             const options = 
             {
                 method: "POST",
@@ -255,6 +257,8 @@ const GetMoreInforRest = () => {
                 },
                 body:JSON.stringify(menuCategories)
             }
+
+            console.log("menuCategories", menuCategories)
 
             const response = await fetch(url, options);
             if(response.ok){

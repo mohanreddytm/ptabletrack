@@ -26,6 +26,7 @@ import WaiterRequest from '../WaiterRequest/index';
 import POSPage from '../POS';
 import Staff from '../Staff';
 import Reservation from '../Reservation';
+import Payment from '../Payment';
 
 import {jwtDecode} from 'jwt-decode';
 
@@ -94,6 +95,8 @@ const RestaurantDashboard = () => {
     const [restaurantData, setRestaurantData] = useState('');
     const [dataStatus, setDataStatus] = useState(statusOne.INITIAL);
     const [userId, setUserId] = useState('') 
+    const [menuCategories, setMenuCategories] = useState('');
+    const [menuCategoriesStatus, setMenuCategoriesStatus] = useState(statusOne.INITIAL);
     const [currentMenu, setCurrentMenu] = useState(1);
     const [menuData, setMenuData] = useState('');
     const [menuDataStatus, setMenuDataStatus] = useState(statusOne.INITIAL);
@@ -168,15 +171,36 @@ const RestaurantDashboard = () => {
             setDataStatus(statusOne.SUCCESS);
           }else{
             setDataStatus(statusOne.FAILED);
-            console.log('failed')
+            // console.log('failed')
           }
         }
         catch(error){
           setDataStatus(statusOne.FAILED);
-          console.log('failed')
+          // console.log('failed')
         }
       }
       getRestaurantData()
+
+      const getMenuCategories = async () => {
+        try{
+          setMenuCategoriesStatus(statusOne.PENDING);
+          const url = `https://ttbackone-v48h.onrender.com/restaurant_details/getMenuCategory/${restaurantId}`;
+          const response = await fetch(url);
+          if(response.ok){
+            const jsonOne = await response.json();
+            console.log("menu categories x - old", jsonOne);
+            setMenuCategories(jsonOne);
+            setMenuCategoriesStatus(statusOne.SUCCESS);
+          }else{
+            setMenuCategoriesStatus(statusOne.FAILED);
+          }
+        }
+        catch(error){
+          setMenuCategoriesStatus(statusOne.FAILED);
+        }
+      }
+
+      getMenuCategories();
 
       const getMenuData = async () => {
         try{
@@ -273,7 +297,7 @@ const RestaurantDashboard = () => {
         }else if(currentMenu === 8){
           return <Reservation />
         }else if(currentMenu === 9){
-          // return <Payments />
+          return <Payment />
         }else if(currentMenu === 10){
           // return <Settings />
         }
@@ -282,7 +306,7 @@ const RestaurantDashboard = () => {
       }
 
   return (
-    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus}}>
+    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus}}>
       <div className='dash-initial-cont'>
         <Header />
         {(dataStatus === statusOne.PENDING || menuDataStatus === statusOne.PENDING || tablesDataStatus === statusOne.PENDING || areasDataStatus === statusOne.PENDING) && (

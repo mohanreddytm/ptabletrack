@@ -8,6 +8,7 @@
     background-color:var(--header-dark-bc);
     height: max(70px, 10vh);
     z-index: 10;
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0, 0.3);
 }
 
 
