@@ -244,6 +244,35 @@ const RestaurantDashboard = () => {
 
     }, [])
   
+
+    const dupeAddMenuFun = (newItem) => {
+      const convinceItem = {
+        id: newItem.item_id,
+        item_name: newItem.item_name,
+        price: newItem.item_price,
+        category_name: newItem.category_name,
+        item_category: newItem.item_category,
+        item_dec: newItem.item_dec,
+        preparation_time: newItem.item_preparation_time,
+        availability: newItem.item_availabiliy,
+        image_url: newItem.item_url,
+        menu_category_id: newItem.item_menu_category_id,
+        restaurant_id: newItem.restaurant_id,
+      }
+      setMenuData(prevData => [...prevData, convinceItem]);
+      setMenuDataStatus(statusOne.SUCCESS);
+    }
+
+    const dupeUpdateMenuItem = (item) => {
+      setMenuData(prevData => prevData.map(menuItem => menuItem.id === item.id ? item : menuItem));
+      setMenuDataStatus(statusOne.SUCCESS);
+    }
+
+    const dupeDeleteMenuItem = (id) => {
+      setMenuData(prevData => prevData.filter(menuItem => menuItem.id !== id));
+      setMenuDataStatus(statusOne.SUCCESS);
+    }
+
     const onClickRetry = () => {
       setDataStatus(statusOne.PENDING);
       const getRestaurantData = async () => {
@@ -306,7 +335,7 @@ const RestaurantDashboard = () => {
       }
 
   return (
-    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus}}>
+    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus, addingMenuFun: dupeAddMenuFun, updateMenuItem: dupeUpdateMenuItem, deleteMenuItem: dupeDeleteMenuItem }}>
       <div className='dash-initial-cont'>
         <Header />
         {(dataStatus === statusOne.PENDING || menuDataStatus === statusOne.PENDING || tablesDataStatus === statusOne.PENDING || areasDataStatus === statusOne.PENDING) && (

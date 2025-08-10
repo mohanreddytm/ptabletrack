@@ -4,26 +4,12 @@ import { IoIosSearch } from "react-icons/io";
 import AllInOne from "../../../complexOne";
 import noImage from '../../../images/noimage.png'
 import { IoMdTime } from "react-icons/io";
-
-
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from 'uuid'
 import { FaIceCream, FaCoffee, FaHamburger, FaStar, FaUtensils } from "react-icons/fa";
-
 import { MdEdit } from "react-icons/md";
-
-
 import FileImage from '../../GetMoreInforRest/style'
-
-import { ClipLoader } from "react-spinners";
-
-
-
-
+import { ClipLoader, MoonLoader } from "react-spinners";
 import { MdDeleteForever } from "react-icons/md";
-
-import ChickenBurger from '../../../images/burger.jpg'
-
 import './index.css'
 
 const categories = [
@@ -36,22 +22,14 @@ const categories = [
 ]
 
 const MenuPage = () => {
-    const {menuData, menuDataStatus, menuCategories, menuCategoriesStatus, userId} = useContext(AllInOne);
-
-    console.log("menu cats",menuCategories);
-    console.log(menuCategoriesStatus);
-
+    let {menuData, menuDataStatus, menuCategories, menuCategoriesStatus, userId, addingMenuFun, updateMenuItem, deleteMenuItem} = useContext(AllInOne);
+    // menuData = [];
     const [toAddNewOne , setToAddNewOne] = useState(false);
-
+    const [addingLoading, setAddingLoading] = useState(false);
 
     const [currentTab, setCurrentTab] = useState("text");
-    console.log(menuData);
-
     const [editItem, setEditItem] = useState(null);
-
     const [imageLoading, setImageLoading] = useState(false);
-
-
     const [newItemName, setNewItemName] = useState('');
     const [newItemPrice, setNewItemPrice] = useState('');
     const [newItemCategory, setNewItemCategory] = useState('');
@@ -104,12 +82,62 @@ const MenuPage = () => {
  
       };
 
-    const onSubmitEditItem = (e) => {
+    const onSubmitEditItem = async (e) => {
         e.preventDefault();
+        const newEditItem = {
+            item_id: editItem.id,
+            item_name: editItem.item_name,
+            item_price: editItem.price,
+            item_category: editItem.item_category,
+            item_dec: editItem.item_dec,
+            item_preparation_time: editItem.preparation_time,
+            item_availabiliy: editItem.availability,
+            item_url: editItem.image_url,
+            item_menu_category_id: editItem.menu_category_id,
+            category_name: editItem.category_name,
+            restaurant_id: userId
+        }
+
+        const url = "https://ttbackone-v48h.onrender.com/restaurant_details/updateMenuItem"
+        const options = {
+            method:"PUT",
+            headers:{
+                "Content-type": "application/json",
+            },
+            body:JSON.stringify(newEditItem)
+        }
+
+        const response = await fetch(url, options);
+
+        if(response.ok){
+            updateMenuItem(editItem);
+            setEditItem(null);
+        }else{
+            console.log("Failed to update item");
+        }
+    }
+
+    const onClickdeleteBtn = async (id, restaurant_id) => {
+        const url = `https://ttbackone-v48h.onrender.com/deleteMenuItem/${id}/${restaurant_id}`;
+        const options = {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+            },
+        }
+
+        const response = await fetch(url, options);
+
+        if (response.ok) {
+            deleteMenuItem(id);
+        } else {
+            console.log("Failed to delete item");
+        }
     }
 
     const onSubmitAddItem = async (e) => {
         e.preventDefault();
+        setAddingLoading(true);
         const catergoryName = menuCategories.filter((each) => each.id === newItemCategory);
         const newItem = [{
             item_id: uuidv4(),
@@ -136,8 +164,17 @@ const MenuPage = () => {
         }
 
         const response = await fetch(url, options);
-        console.log('not here')
+
+        // const url2 = `https://ttbackone-v48h.onrender.com/getMenuItems/${userId}`
+        // const response = await fetch(url2);
+
+        // const jsondata = await response.json();
+        // setMainMenuData(jsondata);
+
         if(response.ok){
+            addingMenuFun(newItem[0]);
+
+            setAddingLoading(false);
             setToAddNewOne(false);
             setNewItemName('');
             setNewItemPrice('');
@@ -150,8 +187,6 @@ const MenuPage = () => {
         }else{
             console.error("Failed to add new item");
         }
-        const jsondata = await response.json();
-        console.log(jsondata);
     }
 
     return(
@@ -210,12 +245,16 @@ const MenuPage = () => {
                         </div>
                         { currentTab === "text" ? <button onClick={() => setToAddNewOne(true)} className="add-menu-item-button">Add Item</button>: <button className="add-menu-item-button">Add Category</button>}
                     </div>
-                    {currentTab === "text" ?                     <ul className="menu-page-main-cont-one-select-cont-two-ul">
+                    {currentTab === "text" ?                     
+                    <ul className="menu-page-main-cont-one-select-cont-two-ul">
                         {menuDataStatus === "loading" && <h1>Loading...</h1>}
                         {menuDataStatus === "error" && <h1>Error</h1>}
                         {menuDataStatus === "success" && menuData.length === 0 && <h1>No data found</h1>}
-                        {menuData.length > 0 && menuData.map((eachItem) => {
-                            const itemType = eachItem.category_name === 'Desserts' ? <FaIceCream /> : eachItem.category_name === 'Beverage' ? <FaCoffee /> : eachItem.category_name === 'Snacks' ? <FaHamburger /> : eachItem.category_name === 'Starters' ? <FaStar /> : eachItem.category_name === 'Main Course' ? <FaUtensils /> : <FaUtensils />;
+                        {menuData.length == 0 ? 
+                            <div  className="menu-data-loading-cont">
+                                <MoonLoader color="#fff" size={20} />
+                            </div> : menuData.map((eachItem) => {
+                            const itemType = eachItem.category_name === 'Desserts' ? <FaIceCream /> : eachItem.category_name === 'Beverages' ? <FaCoffee /> : eachItem.category_name === 'Snacks' ? <FaHamburger /> : eachItem.category_name === 'Starters' ? <FaStar /> : eachItem.category_name === 'Main Course' ? <FaUtensils /> : <FaUtensils />;
                             if(!eachItem.image_url){
                                 return (
                                 <li key={eachItem.id}>
@@ -230,12 +269,12 @@ const MenuPage = () => {
                                     <p className="menu-page-main-cont-one-select-cont-two-p">Category: {eachItem.category_name} {itemType}</p>
                                     <p className="menu-page-main-cont-one-select-cont-two-p">Item Type: {eachItem.item_category}</p>
                                     <div className="menu-page-main-cont-one-select-cont-two-p-cont">
-                                        <h1 className="menu-page-main-cont-one-select-cont-two-p-cont-h1">{eachItem.availability === "Yes" ? "Available" : "Not Available"}</h1>
+                                        <h1 className={`menu-page-main-cont-one-select-cont-two-p-cont-h1 ${eachItem.availability === "No" && "not-available-showing-border-c"}`}>{eachItem.availability === "Yes" ? "Available" : "Not Available"}</h1>
                                         <p className="menu-page-main-cont-one-select-cont-two-p-cont-p"><IoMdTime /> {eachItem.preparation_time} m</p>
                                     </div>
                                     <div className="menu-page-main-cont-one-select-cont-two-button-cont">
                                         <button onClick={() => onClickEditButton(eachItem)} className="menu-page-main-cont-one-select-cont-two-button">Edit</button>
-                                        <button className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
+                                        <button onClick={() => onClickdeleteBtn(eachItem.id, eachItem.restaurant_id)} className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
                                     </div>
 
                                 </li>
@@ -251,24 +290,24 @@ const MenuPage = () => {
                                 <p className="menu-page-main-cont-one-select-cont-two-p">Category: {eachItem.category_name} {itemType}</p>
                                 <p className="menu-page-main-cont-one-select-cont-two-p">Item Type: {eachItem.item_category}</p>
                                 <div className="menu-page-main-cont-one-select-cont-two-p-cont">
-                                        <h1 className="menu-page-main-cont-one-select-cont-two-p-cont-h1">{eachItem.availability === "Yes" ? "Available" : "Not Available"}</h1>
+                                        <h1 className={`menu-page-main-cont-one-select-cont-two-p-cont-h1 ${eachItem.availability === "No" && "not-available-showing-border-c"}`}>{eachItem.availability === "Yes" ? "Available" : "Not Available"}</h1>
                                         <p className="menu-page-main-cont-one-select-cont-two-p-cont-p"><IoMdTime /> {eachItem.preparation_time} m</p>
                                     </div>
                                 <div className="menu-page-main-cont-one-select-cont-two-button-cont">
                                     <button onClick={() => onClickEditButton(eachItem)} className="menu-page-main-cont-one-select-cont-two-button">Edit</button>
-                                    <button className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
+                                    <button onClick={() => onClickdeleteBtn(eachItem.id, eachItem.restaurant_id)} className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
                                 </div>
                             </li>
                         })}
                     </ul> : 
                     <ul className="menu-page-main-cont-one-select-cont-two-category-ul">
-                        {categories.map((category) => (
+                        {menuCategories.map((category) => (
                             <li key={category.id}>
                                 <div className="menu-page-main-cont-one-select-cont-two-category-icon">
-                                    {category.name === "Starters" ? <FaStar /> : category.name === "Main Course" ? <FaUtensils /> : category.name === "Desserts" ? <FaIceCream /> : category.name === "Beverages" ? <FaCoffee /> : category.name === "Snacks" ? <FaHamburger /> : <FaUtensils />}
-                                    <h1 className="menu-page-main-cont-one-select-cont-two-category-name">{category.name}</h1>
+                                    {category.menu_category_name === "Starters" ? <FaStar /> : category.menu_category_name === "Main Course" ? <FaUtensils /> : category.menu_category_name === "Desserts" ? <FaIceCream /> : category.menu_category_name === "Beverages" ? <FaCoffee /> : category.menu_category_name === "Snacks" ? <FaHamburger /> : <FaUtensils />}
+                                    <h1 className="menu-page-main-cont-one-select-cont-two-category-name">{category.menu_category_name}</h1>
                                 </div>
-                                <h1 className="menu-page-main-cont-one-select-cont-two-category-item-count"><span>{category.count}</span> Items</h1>
+                                <h1 className="menu-page-main-cont-one-select-cont-two-category-item-count"><span>{category.item_count}</span> Items</h1>
                                 <div className="menu-page-main-cont-one-select-cont-two-category-button-cont">
                                     <button className="menu-page-main-cont-one-select-cont-two-category-edit-button"><MdEdit /></button>
                                     <button className="menu-page-main-cont-one-select-cont-two-category-delete-button"><MdDeleteForever /></button>
@@ -294,14 +333,14 @@ const MenuPage = () => {
                         <div className="menu-page-main-cont-one-select-cont-two-pop-up-input-cont">
                             <label htmlFor="item-category">Item Category</label>
                             <select id="item-category" value={editItem?.category_name || ""} onChange={(e) => setEditItem({ ...editItem, category_name: e.target.value })}>
-                                {menuCategories.map(category => (
-                                    <option key={category.id} value={category.id}>{category.menu_category_name}</option>
+                                {menuCategories.length > 0 && menuCategories.map(category => (
+                                    <option key={category.id} value={category.menu_category_name}>{category.menu_category_name}</option>
                                 ))}
                             </select>
                         </div>
                         <div className="menu-page-main-cont-one-select-cont-two-pop-up-input-cont">
                             <label htmlFor="item-type">Item Type</label>
-                            <select id="item-type" value={editItem?.item_type || ""} onChange={(e) => setEditItem({ ...editItem, item_type: e.target.value })}>
+                            <select id="item-type" value={editItem?.item_category || ""} onChange={(e) => setEditItem({ ...editItem, item_type: e.target.value })}>
                                 <option value="veg">Veg</option>
                                 <option value="non-veg">Non-Veg</option>
                                 <option value="Vegan">Vegan</option>
@@ -367,7 +406,7 @@ const MenuPage = () => {
                             <label htmlFor="item-category">Category</label>
                             <select id="item-category" required value={newItemCategory} onChange={(e) => setNewItemCategory(e.target.value)}>
                                 <option value="">Select Category</option>
-                                {menuCategories.map(category => (
+                                {menuCategories.length > 0 && menuCategories.map(category => (
                                     <option key={category.id} value={category.id}>{category.menu_category_name}</option>
                                 ))}
                             </select>
@@ -418,8 +457,8 @@ const MenuPage = () => {
                     </div>
 
                     <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-cont">
-                        <button type="submit" className="menu-page-main-cont-one-select-cont-two-pop-up-button">Add Menu Item</button>
-                        <button type="button" onClick={() => setEditItem(null)} className="menu-page-main-cont-one-select-cont-two-pop-up-button cancel-button">Cancel</button>
+                        <button type="submit" className="menu-page-main-cont-one-select-cont-two-pop-up-button">Add Menu Item {addingLoading && <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-loader"><ClipLoader color="#952a88" loading={addingLoading} size={20} aria-label="Loading Spinner" data-testid="loader" /></div>}</button>
+                        <button type="button" onClick={() => setToAddNewOne(false)} className="menu-page-main-cont-one-select-cont-two-pop-up-button cancel-button">Cancel</button>
                     </div>
 
                 </form>

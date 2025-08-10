@@ -13,6 +13,9 @@ const AllInOne = react.createContext({
     waiterDataStatus: '',
     menuCategories: '',
     menuCategoriesStatus: '',
+    addingMenuFun: () => {},
+    updateMenuItem:() => {},
+    deleteMenuItem: () => {},
 })
 
 export default AllInOne
