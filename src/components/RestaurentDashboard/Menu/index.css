@@ -818,3 +818,114 @@ textarea{
     border-left: 2px solid var(--red-c) !important;
     background:linear-gradient(to right, rgba(220, 53, 69, 0.3), rgba(220, 53, 69, 0));
 }
+
+.add-new-category-title{
+    font-size: 20px;
+    margin: 0px;
+    color: var(--main-theme-c);
+}
+
+.add-new-category-form{
+    height: auto !important;
+}
+
+.add-new-category-input{
+    background-color: transparent;
+    color: #d9d5d5;
+    border: 1px solid #a7a2a2;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    outline: none;
+    margin: 20px 0px;
+}
+
+.add-new-category-button{
+    background-color: rgb(33, 136, 56, 0.2);
+    color: #ffffff;
+    border: 1px solid rgb(33, 136, 56);
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.add-new-category-cancel-button{
+    background-color: transparent;
+    border: 1px solid #a7a2a2;
+    color: #d9d5d5;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.add-new-category-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    /* margin-top: 20px; */
+}
+
+.empty-menu-cont{
+    display: flex;
+    flex-direction: column;
+    /* background-color: pink; */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.empty-menu-cont button{
+    background-color: rgb(33, 136, 56, 0.2);
+    color: #ffffff;
+    border: 1px solid rgb(33, 136, 56);
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    align-self: center !important;
+    margin-left: 10px !important;
+    margin-top: 10px;
+}
+
+.empty-menu-cont p{
+    color: #d9d5d5;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 20px 0px;
+
+}
+
+.empty-menu-cont img{
+    width: 20%;
+    border-radius: 20%;
+}
+
+.error-menu-cont img{
+    width: 30%;
+    border-radius: 30px;
+}
+
+.error-menu-cont button{
+    background-color: rgb(220, 53, 69, 0.2);
+    color: #ffffff;
+    border: 1px solid rgb(220, 53, 69);
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    align-self: center !important;
+    margin-left: 10px !important;
+    margin-top: 10px;
+}

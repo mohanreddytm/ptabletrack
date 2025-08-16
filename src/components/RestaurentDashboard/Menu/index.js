@@ -10,25 +10,20 @@ import { MdEdit } from "react-icons/md";
 import FileImage from '../../GetMoreInforRest/style'
 import { ClipLoader, MoonLoader } from "react-spinners";
 import { MdDeleteForever } from "react-icons/md";
+import emptyone from '../../../images/empty-res.jpg'
+import errorone from '../../../images/404error.jpg'
 import './index.css'
 
-const categories = [
-    { id: 1, name: "Starters", count : 4 },
-    { id: 2, name: "Main Course", count : 6 },
-    { id: 3, name: "Desserts", count : 2 },
-    { id: 4, name: "Beverages", count : 5 },
-    { id: 5, name: "Snacks", count : 3 },
-    { id: 6, name: "Other", count : 1 }
-]
 
 const MenuPage = () => {
-    let {menuData, menuDataStatus, menuCategories, menuCategoriesStatus, userId, addingMenuFun, updateMenuItem, deleteMenuItem} = useContext(AllInOne);
+    let {menuData, menuDataStatus,menuCategoriesStatus , menuCategories, userId, updateMenuItem, deleteMenuItem, addingMenuFun, addMenuCategory,updateMenuCategory, deleteMenuCategory} = useContext(AllInOne);
     // menuData = [];
     const [toAddNewOne , setToAddNewOne] = useState(false);
     const [addingLoading, setAddingLoading] = useState(false);
 
     const [currentTab, setCurrentTab] = useState("text");
     const [editItem, setEditItem] = useState(null);
+    const [editCategoryInitial, setEditCategoryInitial] = useState(null);
     const [imageLoading, setImageLoading] = useState(false);
     const [newItemName, setNewItemName] = useState('');
     const [newItemPrice, setNewItemPrice] = useState('');
@@ -39,14 +34,15 @@ const MenuPage = () => {
     const [newItemAvailability, setNewItemAvailability] = useState('Yes');
     const [newItemImage, setNewItemImage] = useState('');
 
-    // console.log(editItem);
+    const [editOfCategory, setEditOfCategory] = useState(null);
 
-    const onClickEditButton = (x) => {
-        console.log(x)
-        setEditItem(x)
-    }
+    const [updateMenuItemLoading, setUpdateMenuItemLoading] = useState(false);
 
+    const [isAddNewCategory, setIsAddNewCategory] = useState(false);
 
+    const [newCategoryInput, setNewCategoryInput] = useState('');
+
+    const [editCatLoading, setEditCatLoading] = useState(false);
 
     const handleAvailabilityChange = (isAvailable) => {
         setEditItem((prevItem) => ({    
@@ -84,6 +80,7 @@ const MenuPage = () => {
 
     const onSubmitEditItem = async (e) => {
         e.preventDefault();
+        setUpdateMenuItemLoading(true);
         const newEditItem = {
             item_id: editItem.id,
             item_name: editItem.item_name,
@@ -110,14 +107,15 @@ const MenuPage = () => {
         const response = await fetch(url, options);
 
         if(response.ok){
-            updateMenuItem(editItem);
+            setUpdateMenuItemLoading(false);
+            updateMenuItem(editItem, editCategoryInitial);
             setEditItem(null);
         }else{
             console.log("Failed to update item");
         }
     }
 
-    const onClickdeleteBtn = async (id, restaurant_id) => {
+    const onClickdeleteBtn = async (id, one, restaurant_id) => {
         const url = `https://ttbackone-v48h.onrender.com/deleteMenuItem/${id}/${restaurant_id}`;
         const options = {
             method: "DELETE",
@@ -129,7 +127,7 @@ const MenuPage = () => {
         const response = await fetch(url, options);
 
         if (response.ok) {
-            deleteMenuItem(id);
+            deleteMenuItem(id, one);
         } else {
             console.log("Failed to delete item");
         }
@@ -165,12 +163,6 @@ const MenuPage = () => {
 
         const response = await fetch(url, options);
 
-        // const url2 = `https://ttbackone-v48h.onrender.com/getMenuItems/${userId}`
-        // const response = await fetch(url2);
-
-        // const jsondata = await response.json();
-        // setMainMenuData(jsondata);
-
         if(response.ok){
             addingMenuFun(newItem[0]);
 
@@ -188,6 +180,152 @@ const MenuPage = () => {
             console.error("Failed to add new item");
         }
     }
+
+    const onSubmitNewCategory = async (e) => {
+        e.preventDefault();
+        if(newCategoryInput.trim() === "") {
+            return;
+        }
+
+        const newCategory = [{
+            menu_category_id: uuidv4(),
+            menu_category_name: newCategoryInput,
+            restaurant_id: userId
+        }];
+
+        const url = "https://ttbackone-v48h.onrender.com/restaurant_details/addMenuCategory"
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(newCategory)
+        }
+
+        const response = await fetch(url, options);
+
+        if (response.ok) {
+            addMenuCategory(newCategory[0]);
+            setNewCategoryInput('');
+            setIsAddNewCategory(false);
+        } else {
+            console.error("Error adding new category:", response.statusText);
+        }
+    }
+
+    const onClickTryAgainBtn = () => {
+        window.location.reload();
+    }
+
+    const errorPage = () => {
+        return(
+            <div className="empty-menu-cont error-menu-cont">
+                <img src={errorone} alt="Error" />
+                <p>Something went wrong.</p>
+                <button onClick={onClickTryAgainBtn}>Try Again</button>
+            </div>
+        )
+    }
+
+    const newCategoryPopup = () => {
+        return(
+            <div className={`menu-page-main-cont-one-select-cont-two-pop-up ${isAddNewCategory ? "show-pop-up" : ""}`}>
+                <form className="add-new-category-form" onSubmit={onSubmitNewCategory}>
+                    <h1 className="add-new-category-title">Add New Category</h1>
+                    <input required type="text" value={newCategoryInput} onChange={(e) => setNewCategoryInput(e.target.value)} placeholder="Enter new category name" className="add-new-category-input" />
+                    <div className="add-new-category-buttons">
+                        <button type="submit" className="add-new-category-button">Add Category</button>
+                        <button type="button" onClick={() => setIsAddNewCategory(false)} className="add-new-category-cancel-button" >Cancel</button>
+                    </div>
+                </form>
+            </div>
+        )
+    }
+
+    const onSubmitEditCategoryOne = async (e) => {
+        e.preventDefault()
+        setEditCatLoading(true);
+        if(editOfCategory.menu_category_name.trim() === "") {
+            return;
+        }
+
+        const url = `https://ttbackone-v48h.onrender.com/restaurant_details/updateMenuCategoryName`;
+        const options = {
+            method: "PUT",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(editOfCategory)
+        }
+
+        const response = await fetch(url, options);
+
+        // const url = ""
+        // should start from here
+
+        if (response.ok) {
+            updateMenuCategory(editOfCategory);
+            setEditOfCategory(null);
+        } else {
+            console.error("Error updating category:", response.statusText);
+        }
+
+        setEditCatLoading(false);
+    }
+
+    const onEditCategoryPopup = () => {
+        return(
+            <div className={`menu-page-main-cont-one-select-cont-two-pop-up ${editOfCategory != null ? "show-pop-up" : ""}`}>
+                <form className="add-new-category-form" onSubmit={onSubmitEditCategoryOne}>
+                    <h1 className="add-new-category-title">Edit Category</h1>
+                    <input required type="text" value={editOfCategory?.menu_category_name} onChange={(e) => setEditOfCategory({...editOfCategory, menu_category_name: e.target.value})} placeholder="Enter new category name" className="add-new-category-input" />
+                    <div className="add-new-category-buttons">
+                        <button type="submit" className="add-new-category-button">Update Category {editCatLoading && <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-loader"><ClipLoader color="#952a88" loading={editCatLoading} size={20} aria-label="Loading Spinner" data-testid="loader" /></div>}</button>
+                        <button type="button" onClick={() => setEditOfCategory(null)} className="add-new-category-cancel-button" >Cancel</button>
+                    </div>
+                </form>
+            </div>
+        )
+    }
+
+    const addNewCategory = () => {
+        setIsAddNewCategory(true);
+    }
+
+    const onClickEditButton = (item) => {
+        setEditCategoryInitial(item.menu_category_id);
+        setEditItem(item);
+    }
+
+    const onChangeEditCategory = (e) => {
+        const getName = menuCategories.filter((each) => each.id === e.target.value);
+        setEditItem({ ...editItem, menu_category_id: e.target.value, category_name: getName[0]?.menu_category_name });
+    }
+
+    const onClickEditCategory = (data) => {
+        setEditOfCategory(data)
+        console.log("one")
+    }
+
+    const onClickDeleteCategory = async (one) => {
+        const url = `https://ttbackone-v48h.onrender.com/deleteMenuCategoryCompletly/${one.id}`;
+        const options = {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+            }
+        }
+
+        const response = await fetch(url, options);
+        if(response.ok){
+            deleteMenuCategory(one.id);
+        }else{
+            console.log("not delteed")
+        }
+
+    }
+
+
 
     return(
         <div className="menu-page-main-cont">
@@ -243,17 +381,22 @@ const MenuPage = () => {
                             <button onClick={() => setCurrentTab("text")} className={`${currentTab !== "text" && 'not-current-tab-menu'}`}>Items</button>
                             <button onClick={() => setCurrentTab("category")} className={`${currentTab !== "category" && 'not-current-tab-menu'}`}>Categories</button>
                         </div>
-                        { currentTab === "text" ? <button onClick={() => setToAddNewOne(true)} className="add-menu-item-button">Add Item</button>: <button className="add-menu-item-button">Add Category</button>}
+                        { currentTab === "text" ? <button onClick={() => setToAddNewOne(true)} className="add-menu-item-button">Add Item</button>: <button onClick={addNewCategory} className="add-menu-item-button">Add Category</button>}
                     </div>
                     {currentTab === "text" ?                     
                     <ul className="menu-page-main-cont-one-select-cont-two-ul">
-                        {menuDataStatus === "loading" && <h1>Loading...</h1>}
-                        {menuDataStatus === "error" && <h1>Error</h1>}
-                        {menuDataStatus === "success" && menuData.length === 0 && <h1>No data found</h1>}
-                        {menuData.length == 0 ? 
+                        {menuDataStatus === "PENDING" && 
                             <div  className="menu-data-loading-cont">
                                 <MoonLoader color="#fff" size={20} />
-                            </div> : menuData.map((eachItem) => {
+                            </div>}
+                        {menuDataStatus === "FAILED" && errorPage()}
+                        {menuDataStatus === "SUCCESS" && menuData.length === 0 && 
+                            <div className="empty-menu-cont">
+                                <img src={emptyone} alt="No data" />
+                                <p>No menu items found</p>
+                                <button onClick={() => setToAddNewOne(true)} className="add-menu-item-button">Add Item</button>
+                            </div>}
+                        {menuDataStatus === "SUCCESS" && menuData.length > 0 && menuData.map((eachItem) => {
                             const itemType = eachItem.category_name === 'Desserts' ? <FaIceCream /> : eachItem.category_name === 'Beverages' ? <FaCoffee /> : eachItem.category_name === 'Snacks' ? <FaHamburger /> : eachItem.category_name === 'Starters' ? <FaStar /> : eachItem.category_name === 'Main Course' ? <FaUtensils /> : <FaUtensils />;
                             if(!eachItem.image_url){
                                 return (
@@ -274,7 +417,7 @@ const MenuPage = () => {
                                     </div>
                                     <div className="menu-page-main-cont-one-select-cont-two-button-cont">
                                         <button onClick={() => onClickEditButton(eachItem)} className="menu-page-main-cont-one-select-cont-two-button">Edit</button>
-                                        <button onClick={() => onClickdeleteBtn(eachItem.id, eachItem.restaurant_id)} className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
+                                        <button onClick={() => onClickdeleteBtn(eachItem.id, eachItem.menu_category_id, eachItem.restaurant_id)} className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
                                     </div>
 
                                 </li>
@@ -295,13 +438,25 @@ const MenuPage = () => {
                                     </div>
                                 <div className="menu-page-main-cont-one-select-cont-two-button-cont">
                                     <button onClick={() => onClickEditButton(eachItem)} className="menu-page-main-cont-one-select-cont-two-button">Edit</button>
-                                    <button onClick={() => onClickdeleteBtn(eachItem.id, eachItem.restaurant_id)} className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
+                                    <button onClick={() => onClickdeleteBtn(eachItem.id, eachItem.menu_category_id, eachItem.restaurant_id)} className="menu-page-main-cont-one-select-cont-two-delete-button"><MdDeleteForever /></button>
                                 </div>
                             </li>
                         })}
                     </ul> : 
                     <ul className="menu-page-main-cont-one-select-cont-two-category-ul">
-                        {menuCategories.map((category) => (
+                        {menuCategoriesStatus === "PENDING" && 
+                            <div  className="menu-data-loading-cont">
+                                <MoonLoader color="#fff" size={20} />
+                            </div>}
+                        {menuCategoriesStatus === "FAILED" && 
+                            errorPage()
+                        }
+                        {menuCategoriesStatus === "SUCCESS" && menuCategories.length === 0 &&     <div className="empty-menu-cont">
+                                <img src={emptyone} alt="No data" />
+                                <p>No Categories found</p>
+                                <button onClick={() => addNewCategory(true)} className="add-menu-item-button">Add Category</button>
+                            </div>}
+                        {menuCategoriesStatus === "SUCCESS" && menuCategories.length > 0 && menuCategories.map((category) => (
                             <li key={category.id}>
                                 <div className="menu-page-main-cont-one-select-cont-two-category-icon">
                                     {category.menu_category_name === "Starters" ? <FaStar /> : category.menu_category_name === "Main Course" ? <FaUtensils /> : category.menu_category_name === "Desserts" ? <FaIceCream /> : category.menu_category_name === "Beverages" ? <FaCoffee /> : category.menu_category_name === "Snacks" ? <FaHamburger /> : <FaUtensils />}
@@ -309,8 +464,8 @@ const MenuPage = () => {
                                 </div>
                                 <h1 className="menu-page-main-cont-one-select-cont-two-category-item-count"><span>{category.item_count}</span> Items</h1>
                                 <div className="menu-page-main-cont-one-select-cont-two-category-button-cont">
-                                    <button className="menu-page-main-cont-one-select-cont-two-category-edit-button"><MdEdit /></button>
-                                    <button className="menu-page-main-cont-one-select-cont-two-category-delete-button"><MdDeleteForever /></button>
+                                    <button onClick={() => onClickEditCategory(category)} className="menu-page-main-cont-one-select-cont-two-category-edit-button"><MdEdit /></button>
+                                    <button onClick={() => onClickDeleteCategory(category)} className="menu-page-main-cont-one-select-cont-two-category-delete-button"><MdDeleteForever /></button>
                                 </div>
                             </li>
                         ))}
@@ -318,6 +473,8 @@ const MenuPage = () => {
 
                 </div>
             </div>
+            {newCategoryPopup()}
+            {onEditCategoryPopup()}
             <div className={`menu-page-main-cont-one-select-cont-two-pop-up ${editItem !== null && "show-pop-up"}`}>
                 <form onSubmit={onSubmitEditItem}>
                     <h1 className="menu-page-main-cont-one-select-cont-two-pop-up-head">Edit Item</h1>
@@ -332,9 +489,9 @@ const MenuPage = () => {
                     <div className="menu-page-main-cont-one-select-form-category-cont">
                         <div className="menu-page-main-cont-one-select-cont-two-pop-up-input-cont">
                             <label htmlFor="item-category">Item Category</label>
-                            <select id="item-category" value={editItem?.category_name || ""} onChange={(e) => setEditItem({ ...editItem, category_name: e.target.value })}>
+                            <select id="item-category" value={editItem?.menu_category_id || ""} onChange={onChangeEditCategory}>
                                 {menuCategories.length > 0 && menuCategories.map(category => (
-                                    <option key={category.id} value={category.menu_category_name}>{category.menu_category_name}</option>
+                                    <option key={category.id} value={category.id}>{category.menu_category_name}</option>
                                 ))}
                             </select>
                         </div>
@@ -383,7 +540,7 @@ const MenuPage = () => {
                     </div>
 
                     <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-cont">
-                        <button type="submit" className="menu-page-main-cont-one-select-cont-two-pop-up-button">Save Changes</button>
+                        <button type="submit" className="menu-page-main-cont-one-select-cont-two-pop-up-button">Save Changes  {updateMenuItemLoading && <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-loader"><ClipLoader color="#952a88" loading={updateMenuItemLoading} size={20} aria-label="Loading Spinner" data-testid="loader" /></div>}</button>
                         <button type="button" onClick={() => setEditItem(null)} className="menu-page-main-cont-one-select-cont-two-pop-up-button cancel-button">Cancel</button>
                     </div>
 

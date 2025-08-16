@@ -36,6 +36,7 @@ import AllInOne from '../../../complexOne/index'
 
 
 import cookies from 'js-cookie'
+import { preconnect } from 'react-dom';
 
 
 
@@ -119,20 +120,16 @@ const RestaurantDashboard = () => {
         data.map(async each => {
             const getTablesDataInside = async () => {
                 try{
-                    // console.log("each", each);
                     const url = `https://ttbackone-v48h.onrender.com/getTables/${each.id}`;
                     const response = await fetch(url);
-                    // console.log("response", response);
                     if(response.ok){
                         const jsonOne = await response.json();
-                        // console.log(jsonOne);
                         setTablesData(prev => [...prev, {
                             name: each.area_name,
                             tables: jsonOne
                         }]);
                         setTablesDataStatus(statusOne.SUCCESS);
                     }else{
-                        console.log("error");
                         setTablesDataStatus(statusOne.FAILED);
                     }
                 }
@@ -243,6 +240,15 @@ const RestaurantDashboard = () => {
       getAreasData();
 
     }, [])
+
+    const dupeMenuCategory = (item) => {
+      const newCategory = {
+        id: item.menu_category_id,
+        menu_category_name: item.menu_category_name,
+        item_count:0
+      };
+      setMenuCategories(prevCategories => [...prevCategories, newCategory]);
+    }
   
 
     const dupeAddMenuFun = (newItem) => {
@@ -261,17 +267,90 @@ const RestaurantDashboard = () => {
       }
       setMenuData(prevData => [...prevData, convinceItem]);
       setMenuDataStatus(statusOne.SUCCESS);
+      setMenuCategories(prevCategories => {
+        return prevCategories.map(each => {
+          if(each.id === newItem.item_menu_category_id){
+            return {
+              ...each,
+              item_count: JSON.parse(each.item_count) + 1
+            }
+          }
+          return each;
+        })
+      })
     }
 
-    const dupeUpdateMenuItem = (item) => {
+    const addArea = (one) => {
+      const newArea = {
+        id: one.area_id,
+        area_name: one.area_name,
+        restaurant_id: one.restaurant_id
+      };
+      setAreasData(prev => [...prev, newArea]);
+
+      setTablesData(prev => [...prev, {name: one.area_name, tables: []}]);
+    }
+
+    const deleteArea = (id) => {
+      setAreasData(prev => prev.filter(area => area.id !== id));
+      const areaName = areasData.filter(each => each.id === id)[0].area_name;
+      console.log(areaName);
+      setTablesData(prev => prev.filter(table => table.name !== areaName));
+    }
+
+    const dupeUpdateMenuItem = (item, one) => {
       setMenuData(prevData => prevData.map(menuItem => menuItem.id === item.id ? item : menuItem));
       setMenuDataStatus(statusOne.SUCCESS);
+
+      if(item.menu_category_id !== one){
+        setMenuCategories(prevCategories => {
+          return prevCategories.map(each => {
+            if(each.id === item.menu_category_id){
+              return {...each, item_count : JSON.parse(each.item_count) + 1}
+            }
+            else if(each.id === one){
+              return {...each, item_count : JSON.parse(each.item_count) - 1}
+            }
+            else{
+              return each;
+            }
+          })
+        } )
+      }
     }
 
-    const dupeDeleteMenuItem = (id) => {
-      setMenuData(prevData => prevData.filter(menuItem => menuItem.id !== id));
-      setMenuDataStatus(statusOne.SUCCESS);
+    const updateMenuCategory = (updatedCategory) => {
+      setMenuData(prevData => {
+        return prevData.map(menuItem => {
+          if(menuItem.menu_category_id === updatedCategory.id){
+            return {...menuItem, category_name: updatedCategory.menu_category_name}
+          }
+          return menuItem;
+        })
+      });
+      setMenuCategories(prevCategories => {
+        return prevCategories.map(each => {
+          if(each.id === updatedCategory.id){
+            return {...each, menu_category_name: updatedCategory.menu_category_name}
+          }
+          return each;
+        })
+      })
     }
+
+    const dupeDeleteMenuItem = (one, two) => {
+      setMenuData(prevData => prevData.filter(menuItem => menuItem.id !== one));
+      console.log(menuCategories)
+      setMenuCategories(prevCategories => {
+        return prevCategories.map(each => {
+          if(each.id === two){
+            return {...each, item_count : JSON.parse(each.item_count) - 1}
+          }
+          return each;
+        })
+      })
+    }
+
 
     const onClickRetry = () => {
       setDataStatus(statusOne.PENDING);
@@ -294,8 +373,102 @@ const RestaurantDashboard = () => {
       getRestaurantData();
     }
 
+    const deleteTable = (id) => {
+      setTablesData(prev => {
+        return prev.map(each => {
+          return {
+            ...each,
+            tables: each.tables.filter(table => table.id !== id)
+          }
+        })
+      })
+    }
 
-  
+    const deleteMenuCategory = (id) => {
+      setMenuData(prevData => prevData.filter(menuItem => menuItem.menu_category_id !== id));
+      setMenuCategories(prevCategories => prevCategories.filter(category => category.id !== id));
+    }
+
+    const addTableFromOne = (one) => {
+      const areaname = areasData.filter(each => each.id === one.area_id)[0].area_name;
+      const newTableData = {
+        id: one.table_id,
+        name: one.table_name,
+        seat_capacity: one.table_capacity,
+        area_id: one.area_id,
+        restaurant_id: userId,
+        is_active: one.table_status
+      }
+
+      console.log("area anem" , areaname)
+
+      setTablesData((prev) => {
+        return (prev || []).map(each => {
+          if(each.name === areaname){
+            return {...each, tables: [...each.tables, newTableData]};
+          }
+          return each;
+        })
+      })
+    }
+
+  const updateTable = (one, oldArea) => {
+
+    if(one.area_id === oldArea){
+      const updatedOne = tablesData.map(each => {
+        return {
+          ...each,
+          tables: each.tables.map(table => {
+            if (table.id === one.table_id) {
+                return {
+                  ...table,
+                  name: one.table_name,
+                  is_active: one.table_status,
+                  seat_capacity: one.table_capacity
+                };
+            }
+            return table;
+          })
+        };
+      });
+      setTablesData(updatedOne);
+    }else{
+      const oldAreaName = areasData.filter(each => each.id === oldArea)[0].area_name;
+      // console.log(oldAreaName)
+      const updatedTablesData = tablesData.map(area => {
+        if (area.name === oldAreaName) {
+          return {
+            ...area,
+            tables: area.tables.filter(table => table.id !== one.table_id)
+          };
+        }
+        return area;
+      });
+      setTablesData(updatedTablesData);
+      console.log('fnasdfnlaknl')
+      console.log(one.area_id)
+      const newAreaName = areasData.filter(each => each.id === one.area_id)[0].area_name;
+      const newOne = {
+        id:one.table_id,
+        name: one.table_name,
+        seat_capacity: one.table_capacity,
+        restaurant_id:one.restaurant_id,
+        is_active:one.table_status,
+        area_id:one.area_id
+      }
+      setTablesData(prev => {
+        return prev.map(each => {
+          if(each.name === newAreaName){
+            return{
+              ...each,
+              tables: [...each.tables, newOne]
+            }
+          }
+          return each;
+        })
+      })
+    }
+  };
 
     if(dataStatus === statusOne.FAILED){
         return(
@@ -335,7 +508,7 @@ const RestaurantDashboard = () => {
       }
 
   return (
-    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus, addingMenuFun: dupeAddMenuFun, updateMenuItem: dupeUpdateMenuItem, deleteMenuItem: dupeDeleteMenuItem }}>
+    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus, addingMenuFun: dupeAddMenuFun, updateMenuItem: dupeUpdateMenuItem, deleteMenuItem: dupeDeleteMenuItem, addMenuCategory:dupeMenuCategory, updateMenuCategory, deleteMenuCategory, addTable:addTableFromOne, updateTable, deleteTable, addArea, deleteArea }}>
       <div className='dash-initial-cont'>
         <Header />
         {(dataStatus === statusOne.PENDING || menuDataStatus === statusOne.PENDING || tablesDataStatus === statusOne.PENDING || areasDataStatus === statusOne.PENDING) && (
