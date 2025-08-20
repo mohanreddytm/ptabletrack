@@ -105,6 +105,7 @@ const RestaurantDashboard = () => {
     const [tablesDataStatus, setTablesDataStatus] = useState(statusOne.INITIAL);
     const [areasData, setAreasData] = useState('');
     const [areasDataStatus, setAreasDataStatus] = useState(statusOne.INITIAL);
+    const [openAddMenuForPOSInMenuPage, setOpenAddMenuForPOSInMenuPage] = useState(false);
 
 
 
@@ -410,6 +411,30 @@ const RestaurantDashboard = () => {
           return each;
         })
       })
+    } 
+
+    const addMenuInPOS = () =>{
+      setCurrentMenu(3);
+      setOpenAddMenuForPOSInMenuPage(true);
+    } 
+
+    const updateArea = (one, onEditAreaOldName) => {
+      setTablesData(prev => {
+        return prev.map(each => {
+          if(each.name === onEditAreaOldName){
+            return {...each, name: one.area_name}
+          }
+          return each;
+        })
+      })
+      setAreasData(prev => {
+        return prev.map(each => {
+          if(each.id === one.area_id){
+            return {...each, area_name: one.area_name}
+          }
+          return each;
+        })
+      })
     }
 
   const updateTable = (one, oldArea) => {
@@ -470,6 +495,10 @@ const RestaurantDashboard = () => {
     }
   };
 
+    const onChangeTheMenuAddOne = (one) => {
+        setOpenAddMenuForPOSInMenuPage(one);
+    }
+
     if(dataStatus === statusOne.FAILED){
         return(
           <div className='dash-initial-cont dash-error-cont'>
@@ -508,7 +537,7 @@ const RestaurantDashboard = () => {
       }
 
   return (
-    <AllInOne.Provider value = {{userId, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus, addingMenuFun: dupeAddMenuFun, updateMenuItem: dupeUpdateMenuItem, deleteMenuItem: dupeDeleteMenuItem, addMenuCategory:dupeMenuCategory, updateMenuCategory, deleteMenuCategory, addTable:addTableFromOne, updateTable, deleteTable, addArea, deleteArea }}>
+    <AllInOne.Provider value = {{userId, addMenuInPOS, fncOpenAddMenuForPOSInMenuPage:onChangeTheMenuAddOne, openAddMenuForPOSInMenuPage, restaurantDetails: restaurantData, menuData, menuDataStatus, tablesData, tablesDataStatus, areasData, areasDataStatus, menuCategories, menuCategoriesStatus, addingMenuFun: dupeAddMenuFun, updateMenuItem: dupeUpdateMenuItem, deleteMenuItem: dupeDeleteMenuItem, addMenuCategory:dupeMenuCategory, updateMenuCategory, deleteMenuCategory, addTable:addTableFromOne, updateTable, deleteTable, addArea, deleteArea, updateArea }}>
       <div className='dash-initial-cont'>
         <Header />
         {(dataStatus === statusOne.PENDING || menuDataStatus === statusOne.PENDING || tablesDataStatus === statusOne.PENDING || areasDataStatus === statusOne.PENDING) && (

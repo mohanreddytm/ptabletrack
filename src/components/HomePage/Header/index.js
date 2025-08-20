@@ -24,11 +24,11 @@ const Header = () => {
     <div className='header-initial-cont'>
       <div className='header-logo-cont' onClick={onClickAppLogo}>
         <div className='header-logo-mini-cont'>
-            <h1 className='header-logo-t'>T</h1>
-            <h1 className='header-logo-tt'>T</h1>
+            <h1 className='header-logo-t'>E</h1>
+            <h1 className='header-logo-tt'>H</h1>
         </div>
 
-        <p className='header-logo-text'>TableTrack</p>
+        <p className='header-logo-text'>EatHub</p>
       </div>
       <nav>
         <a 

@@ -1,12 +1,13 @@
 import './index.css'
 import AllInOne from '../../../complexOne'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 import QRCode from 'qrcode';
 import { BsQrCodeScan, BsDownload } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { v4 as uuidv4 } from 'uuid'
 import { FaEdit } from 'react-icons/fa'
 import { ClipLoader, PacmanLoader } from "react-spinners";
+import { MdDone } from "react-icons/md";
 
 import { FaTrash } from 'react-icons/fa'
 
@@ -20,7 +21,7 @@ const statusOne = {
   }
 
 const Tables = () => {
-    const {areasData, areasDataStatus, tablesData, tablesDataStatus, userId, addTable, updateTable, deleteTable, addArea, deleteArea} = useContext(AllInOne);
+    const {areasData, areasDataStatus, tablesData, tablesDataStatus, userId, addTable, updateTable, deleteTable, addArea, deleteArea, updateArea} = useContext(AllInOne);
     const [qrCodes, setQrCodes] = useState({});
     const [addTableLoading, setAddTableLoading] = useState(false);
     const [newTable, setNewTable] = useState(false);
@@ -35,8 +36,28 @@ const Tables = () => {
     const [deleteAreaId, setDeleteAreaId] = useState(null); 
     const [deleteAreaLoading, setDeleteAreaLoading] = useState(false);
     const [newAreaName, setNewAreaName] = useState('');
+    const [onEditAreaLoading, setOnEditAreaLoading] = useState(false);
 
+    const [onEditAreaOne, setOnEditAreaOne] = useState(null);
+    const [onEditAreaOldName, setOnEditAreaOldName] = useState('');
+
+
+    const [updateAreaMade, setUpdateAreaMade] = useState(false);
+    const [deleteMade, setDeleteMade] = useState(false);
+    const dropdownRef = useRef(null);
     const [oldTableEdit, setOldEditTable] = useState('')
+
+    useEffect(() => {
+        function handleClickOutside(e) {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setDeleteMade(false);
+            setUpdateAreaMade(false);
+        }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
 
     useEffect(() => {
         if(tablesDataStatus === "SUCCESS" && tablesData.length === areasData.length){
@@ -310,11 +331,59 @@ const Tables = () => {
             }
         }
     }
-    
+
+
+    const onClickEditAreaFun = async () => {
+        if(onEditAreaOne !== null){
+            setOnEditAreaLoading(true);
+            const areaOne = {
+                area_id: onEditAreaOne.id,
+                area_name: onEditAreaOne.area_name,
+                restaurant_id: onEditAreaOne.restaurant_id
+            };
+            console.log(areaOne)
+            const url = `https://ttbackone-v48h.onrender.com/restaurant_details/updateArea`;
+            const options = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(areaOne),
+            };
+
+            const response = await fetch(url, options);
+            setOnEditAreaLoading(false);
+            const json = await response.json()
+            console.log(json)
+
+            if(response.ok){
+                updateArea(areaOne, onEditAreaOldName);
+                setOnEditAreaOne(null);
+            }else{
+                console.log("got error in updating area")
+            }
+        }
+    }
+
+    const onClickEditOneArea = (area) => {
+        setOnEditAreaOne(area);
+        setOnEditAreaOldName(area.area_name);
+    }
+
+    const onClickEditAreaMade = () => {
+        setUpdateAreaMade(true);
+        setDeleteMade(false);
+    }
+
+    const onClickDeleteAreaMade = () =>{
+        setDeleteMade(true);
+        setUpdateAreaMade(false);
+    }
+
     return(
         <>
             {deleteAreaId !== null && (
-                <div className='tables-page-main-confirmation-delete '>
+                <div className='tables-page-main-confirmation-delete'>
                     <div className='tables-page-main-confirmation-delete-inner delete-one-warning'>
                         <h1 className='tables-page-main-confirmation-delete-inner-head'>Do You Want To Delete This Area?</h1>
                         <div className='tables-page-main-confirmation-delete-inner-head-cont'>
@@ -366,28 +435,50 @@ const Tables = () => {
                                 })}
                             </ul>
                         </div>
-                        <div className='tables-page-main-cont-three-li-name-edit-and-del'>
+                        <div className='tables-page-main-cont-three-li-name-edit-and-del' ref={dropdownRef}>
                             <div className='tables-page-main-cont-three-li-name-edit-and-del-inner'>
-                                <p>Edit</p>
+                                <p onClick={onClickEditAreaMade}>Edit</p>
                                 <hr className='tables-page-main-cont-three-li-name-edit-and-del-hr' />   
-                                <p>Delete</p>
+                                <p onClick={onClickDeleteAreaMade}>Delete</p>
                             </div>
+                            {updateAreaMade &&
                             <div className='tables-page-main-cont-three-li-name-edit-and-del-inner-2'>
                                 <div>
-                                    <p className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text'>Click To Delete the Area</p>
-                                </div>
-                                {areasDataStatus === statusOne.SUCCESS && areasData.map((area) => {
-                                    let tablesCount = 0;
-                                    if(tablesDataStatus === "SUCCESS" && tablesData.length === areasData.length){
-                                        tablesCount = tablesData?.filter(table => table.name === area.area_name)[0].tables.length;
-                                    }
-                                    return (
-                                        <div className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text-cont' key={area.id}>
-                                            <p className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text-cont' onClick={() => setDeleteAreaId({area, count:tablesCount})}>{area.area_name}  <span>{tablesCount}</span></p>
-                                        </div>
-                                    )
-                                })}
+                                    <p className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text'>Click To Edit the Area</p>
+                                    </div>
+                                    {areasDataStatus === statusOne.SUCCESS && areasData.map((area) => {
+                                        return (
+                                            <div onClick={() => onClickEditOneArea(area)} className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text-cont' key={area.id}>
+                                                {onEditAreaOne !== null && onEditAreaOne.id === area.id ? 
+                                                <div className='tables-page-main-cont-three-li-edit-area-input-cont'>
+                                                    <input value={onEditAreaOne.area_name} onChange={(e) => setOnEditAreaOne({...onEditAreaOne, area_name: e.target.value})} type='text' className='tables-page-main-update-area-input' />  
+                                                {onEditAreaLoading ? <ClipLoader size={14} color='#fff' className='tables-page-main-text-cont-done-icon' /> : <MdDone onClick={onClickEditAreaFun} className='tables-page-main-text-cont-done-icon' /> }</div> : 
+                                                <p className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text-cont tables-edit-name-modifier' >{area.area_name}</p>}
+                                            </div>
+                                        )
+                                    })}
+
                             </div>
+                            }
+                            {deleteMade &&
+                                <div className='tables-page-main-cont-three-li-name-edit-and-del-inner-2'>
+                                    <div>
+                                        <p className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text'>Click To Delete the Area</p>
+                                    </div>
+                                    {areasDataStatus === statusOne.SUCCESS && areasData.map((area) => {
+                                        let tablesCount = 0;
+                                        if(tablesDataStatus === "SUCCESS" && tablesData.length === areasData.length){
+                                            tablesCount = tablesData?.filter(table => table.name === area.area_name)[0].tables.length;
+                                        }
+                                        return (
+                                            <div className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text-cont' key={area.id}>
+                                                <p className='tables-page-main-cont-three-li-name-edit-and-del-inner-2-text-cont' onClick={() => setDeleteAreaId({area, count:tablesCount})}>{area.area_name}  <span>{tablesCount}</span></p>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            } 
+                            
                         </div>
                     </div>
                 </div>

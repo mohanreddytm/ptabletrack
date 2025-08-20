@@ -97,14 +97,15 @@
 
 .pos-page-main-cont-one-search-ul-two li{
     background-color: var(--header-dark-bc);
-    max-width: 14%;
+    min-width: 16% !important;
+    max-width: 16% !important;
     position: relative;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     transition: all 0.3s ease;
     color: var(--text-color);
-    /* padding-bottom: 10px; */
+    
 }
 
 .pos-page-main-cont-one-search-ul-two li:hover{
@@ -120,23 +121,30 @@
 .pos-page-main-cont-one-search-ul-img{
     width: 100%;
     border-radius: 5px 5px 0px 0px;
-
     height: 80px;
 }
 
 .pos-page-main-cont-one-search-ul-h1{
-    font-size: 16px;
+    font-size: 14px;
     color: #efeeee;
     margin: 0px;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin: 10px;
     /* margin-bottom: 10px; */
 }
 
+.pos-page-main-cont-one-search-ul-h1:hover{
+    overflow: visible;
+    text-overflow: clip;
+}
+
 .pos-page-main-cont-one-search-ul-p{
     font-size: 14px;
-    color: var(--text-color);
+    color: #fff;
     margin: 0px;
+    text-align: center;
     font-weight: 600;
     margin: 10px;
 
@@ -186,8 +194,11 @@
     border-radius: 10px;
     padding: 10px;
     overflow-y: auto;
-    flex-grow: 3;
+    flex-grow: 0;
     overflow-x: hidden;
+    flex-grow: 1;
+    width: auto;
+    /* max-width: 400px; */
 
     /* height: 100%; */
 
@@ -237,7 +248,12 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
+    transition: all 0.2s ease;
     font-weight: 600;
+}
+
+.pos-page-main-cont-two-h1-two-button:hover{
+    scale: 1.01;
 }
 
 .pos-page-main-cont-two-h1-two-button-two{
@@ -249,7 +265,13 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
+    transition: all 0.2s ease;
+
     font-weight: 600;
+}
+
+.pos-page-main-cont-two-h1-two-button-two:hover{
+    scale: 1.01;
 }
 
 .pos-page-main-cont-two-h1-two-button-icon{
@@ -272,6 +294,7 @@ cursor: pointer;
 .pos-page-main-cont-two-table{
     width: 100%;
     border-collapse: collapse;
+    margin-left: 0px;
 }
 
 /* Custom tooltip styles */
@@ -342,10 +365,11 @@ cursor: pointer;
     color: var(--text-color);
     padding: 10px;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: default;
     font-size: 14px;
     font-weight: 600;
     text-align: left;
+
 }
 
 .pos-page-main-cont-two-table-tbody{
@@ -506,4 +530,198 @@ cursor: pointer;
     font-weight: 600;
     text-align: center;
     min-height: 70px;
+}
+
+.present-one{
+    background-color: rgb(149, 42, 136, 0.4) !important;
+    color: #e8e4e4 !important;
+}
+
+.pos-page-main-cont-one-search-ul-no-items{
+    /* background-color: pink !important; */
+    min-width: 90% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pos-page-main-cont-one-search-ul-no-items h1{
+    margin: 0;
+    padding: 10px;
+    font-size: 22px;
+    color: #efeeee;
+    font-weight: 600;
+    text-align: center;
+}
+
+.pos-page-main-cont-one-search-ul-no-items button{
+    margin: 0;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    background-color: var(--sp-c);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.select-table-popup-in-pos{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+
+.select-table-popup-content{
+    background-color: var(--glass-c);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--glass-br-c);
+}
+
+.main-head-select-tables{
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0px 0px 20px 0px;
+    color: #e8e4e4;
+}
+
+.select-table-popup-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.select-table-popup-list li{
+    margin: 10px 0px;
+}
+
+.main-head-select-tables-inner{
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0px 0px 8px 0px;
+    color: #d1d1d1;
+}
+
+.select-table-popup-list-inner{
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+}
+
+.select-table-popup-list-inner li{
+    border: 1px solid rgb(149, 42, 136);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #efeeee;
+    margin-right: 16px;
+    transition: all 0.2s ease;
+    background-color: rgba(149, 42, 136, 0.2);
+}
+
+.select-table-popup-list-inner li:hover{
+    background-color: rgba(149, 42, 136, 0.4);
+    transform: translateY(-2px);
+    scale: 1.00001;
+}
+
+.main-head-select-tables-inner-seat-capacity{
+    margin: 0px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.main-head-select-tables-inner-seat-capacity span{
+    background-color: #d9d7d7;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: rgb(149, 42, 136);
+}
+
+.select-table-popup-cancel-button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #efeeee;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-end;
+}
+
+.select-table-popup-cancel-button:hover{
+    background-color: #d1d1d1;
+}
+
+.show-table-popup-one{
+    display: flex;
+}
+
+.pos-page-main-cont-two-table-tbody-tr-name{
+    width: 100px;   
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    /* flex-wrap: nowrap; */
+    margin: 0px;
+}
+
+.pos-page-main-cont-two-table-tbody-tr-name:hover{
+    overflow: visible;
+    text-overflow: clip;
+}
+
+.pos-page-main-cont-two-table-tbody-tr-qty{
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    border: 2px solid var(--sp-c);
+    /* padding: 2px; */
+    background-color: #1a2a41;
+    border-radius: 2px;
+    width: 100%;
+}
+
+.pos-page-main-cont-two-table-tbody-tr-qty p{
+    margin: 0px;
+    padding: 0px 6px;
+    background-color: #a14696;
+    margin-left: 4px;
+    font-size: 16px;
+    height: 100%;
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.pos-page-main-cont-two-table-tbody-tr-qty p:first-child{
+    margin-right: 4px;
+    /* font-size: 20px; */
+    margin-left: 0px;
+}
+
+.pos-page-main-cont-two-table-tbody-button-cont-one{
+    border: none !important;
+    padding: none !important;
+    display: flex !important;
+    justify-content: space-between !important;
 }

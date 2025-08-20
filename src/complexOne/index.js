@@ -24,7 +24,10 @@ const AllInOne = react.createContext({
     deleteTable: () => {},
     addArea:() => {},
     updateArea:() => {},
-    deleteArea:() => {}
+    deleteArea:() => {},
+    addMenuInPOS: () => {},
+    openAddMenuForPOSInMenuPage: false,
+    fncOpenAddMenuForPOSInMenuPage: () => {},
 })
 
 export default AllInOne

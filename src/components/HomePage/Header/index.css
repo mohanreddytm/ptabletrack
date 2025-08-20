@@ -43,6 +43,8 @@
     font-weight: 600;
     padding: 0px;
     margin: 0px;
+    position: relative;
+    top: -4px;
 }
 
 .header-logo-tt{
@@ -51,6 +53,8 @@
     color: #ffffff;
     font-weight: 600;
     margin: 0px;
+    margin-left: 2px;
+    margin-bottom: 0px;
 }
 
 .header-logo-text

@@ -16,10 +16,11 @@ import './index.css'
 
 
 const MenuPage = () => {
-    let {menuData, menuDataStatus,menuCategoriesStatus , menuCategories, userId, updateMenuItem, deleteMenuItem, addingMenuFun, addMenuCategory,updateMenuCategory, deleteMenuCategory} = useContext(AllInOne);
+    let {menuData, menuDataStatus, menuCategoriesStatus ,menuCategories, userId, updateMenuItem, deleteMenuItem, addingMenuFun, addMenuCategory,updateMenuCategory, deleteMenuCategory, openAddMenuForPOSInMenuPage,fncOpenAddMenuForPOSInMenuPage} = useContext(AllInOne);
     // menuData = [];
     const [toAddNewOne , setToAddNewOne] = useState(false);
     const [addingLoading, setAddingLoading] = useState(false);
+    const [menuDataInMenu, setMenuDataInMenu] = useState([]);
 
     const [currentTab, setCurrentTab] = useState("text");
     const [editItem, setEditItem] = useState(null);
@@ -37,10 +38,16 @@ const MenuPage = () => {
     const [editOfCategory, setEditOfCategory] = useState(null);
 
     const [updateMenuItemLoading, setUpdateMenuItemLoading] = useState(false);
+    const [menuSearchInput, setMenuSearchInput] = useState('');
+
+    const [sortByOne, setSortByOne] = useState('');
+    const [onlyAvailability, setOnlyAvailability] = useState('');
 
     const [isAddNewCategory, setIsAddNewCategory] = useState(false);
 
     const [newCategoryInput, setNewCategoryInput] = useState('');
+    const [catEditsCont, setCatEditsCont] = useState([]);
+    const [itemEditsCont, setItemEditsCont] = useState([]);
 
     const [editCatLoading, setEditCatLoading] = useState(false);
 
@@ -50,6 +57,39 @@ const MenuPage = () => {
             availability: isAvailable ? "Yes" : "No"
         }));
     }
+
+    
+    useEffect(() => {
+        if(openAddMenuForPOSInMenuPage){
+            setToAddNewOne(true);
+        }
+    }, [openAddMenuForPOSInMenuPage]);
+
+
+    useEffect(() => {
+        console.log(sortByOne)
+        if (sortByOne === "Price - Low to High") {
+            console.log("one p1 here")
+            const sorted = [...menuDataInMenu].sort((a, b) => a.price - b.price);
+            console.log(sorted)
+            setMenuDataInMenu(sorted);
+        } else if (sortByOne === "Price - High to Low") {
+            const sorted = [...menuDataInMenu].sort((a, b) => b.price - a.price);
+            setMenuDataInMenu(sorted);
+        } else if (sortByOne === "Name - A to Z") {
+            const sorted = [...menuDataInMenu].sort((a, b) => a.item_name.localeCompare(b.item_name));
+            setMenuDataInMenu(sorted);
+        } else if (sortByOne === "Name - Z to A") {
+            const sorted = [...menuDataInMenu].sort((a, b) => b.item_name.localeCompare(a.item_name));
+            setMenuDataInMenu(sorted);
+        }else{
+            setMenuDataInMenu(menuData);
+        }
+    }, [sortByOne])
+
+    useEffect(() => {
+        setMenuDataInMenu(menuData);
+    }, [menuData]);
 
     const onChangeFileName = async (event) => {
         setImageLoading(true);
@@ -165,7 +205,7 @@ const MenuPage = () => {
 
         if(response.ok){
             addingMenuFun(newItem[0]);
-
+            fncOpenAddMenuForPOSInMenuPage(false);
             setAddingLoading(false);
             setToAddNewOne(false);
             setNewItemName('');
@@ -325,7 +365,54 @@ const MenuPage = () => {
 
     }
 
+    const onClickFilterSort = (id) => {
+        if (catEditsCont.includes(id)) {
+            setCatEditsCont(catEditsCont.filter((catId) => catId !== id));
+        } else {
+            setCatEditsCont([...catEditsCont, id]);
+        }
+    }
 
+    const onClickItemType = (type) => {
+        if (itemEditsCont.includes(type)) {
+            setItemEditsCont(itemEditsCont.filter((itemType) => itemType !== type));
+        } else {
+            setItemEditsCont([...itemEditsCont, type]);
+        }
+    }
+
+    const onClickResetFilterOne = () => {
+        setMenuDataInMenu(menuData);
+        setCatEditsCont([]);
+        setItemEditsCont([]);
+        setOnlyAvailability("");
+        setMenuSearchInput("");
+        setSortByOne("");
+    }
+
+    useEffect(() => {
+        if(menuData.length > 0){
+            const filteredData = menuData.filter(item => {
+                let availability = true;
+                if (onlyAvailability === "Available") {
+                    availability = item.availability === "Yes";
+                } else if (onlyAvailability === "Not Available") {
+                    availability = item.availability === "No";
+                }
+                const searchTerm = menuSearchInput.toLowerCase();
+                const isInCategory = catEditsCont.length === 0 || catEditsCont.includes(item.menu_category_id);
+                const isInItemType = itemEditsCont.length === 0 || itemEditsCont.includes(item.item_category);
+                return isInCategory && isInItemType && availability && item.item_name.toLowerCase().includes(searchTerm);
+            });
+            setMenuDataInMenu(filteredData);
+        }
+
+    }, [catEditsCont, itemEditsCont, onlyAvailability, menuSearchInput]);
+
+    const onClickCloseInAddNewMenu = () => {
+        setToAddNewOne(false);
+        fncOpenAddMenuForPOSInMenuPage(false);
+    }
 
     return(
         <div className="menu-page-main-cont">
@@ -334,9 +421,13 @@ const MenuPage = () => {
                 {/* <button className="menu-page-main-cont-one-button">Add Menu</button> */}
             </div>
             <div className="menu-page-main-cont-one-select-cont">
-                <h1 className="menu-page-main-cont-one-select-cont-head">Filter</h1>
+                <div className="menu-page-main-cont-one-select-cont-head-cont">
+                    <h1 className="menu-page-main-cont-one-select-cont-head">Filter</h1>
+                    <button onClick={onClickResetFilterOne}>Reset</button>
+                </div>
+
                 <div className="menu-page-main-cont-one-input-cont">
-                    <input type="search" placeholder="Search" className="menu-page-main-cont-one-input" />
+                    <input type="search" value={menuSearchInput} onChange={(e) => setMenuSearchInput(e.target.value)} placeholder="Search" className="menu-page-main-cont-one-input" />
                     <div className="menu-page-main-cont-one-input-icon-cont">
                         <IoIosSearch className="menu-page-main-cont-one-input-icon" />
                     </div>
@@ -345,34 +436,43 @@ const MenuPage = () => {
             <div className="menu-page-main-cont-one-select-cont-main">
                 <div className="menu-page-main-cont-one-select-cont-one">
                     <h1 className="menu-page-main-cont-one-select-cont-one-head">Sort By</h1>
-                    <select className="menu-page-main-cont-one-select-cont-one-select">
-                        <option>Sort By</option>
-                        <option>Price - Low to High</option>
-                        <option>Price - High to Low</option>
-                        <option>Rating - Low to High</option>
-                        <option>Rating - High to Low</option>
-                        <option>Name - A to Z</option>
-                        <option>Name - Z to A</option>
-                        <option>Newest First</option>
-                        <option>Oldest First</option>
+                    <select value={sortByOne} onChange={(e) => setSortByOne(e.target.value)} className="menu-page-main-cont-one-select-cont-one-select">
+                        <option id="">Sort By</option>
+                        <option id="p1">Price - Low to High</option>
+                        <option id="p2">Price - High to Low</option>
+                        <option id="n1">Name - A to Z</option>
+                        <option id="n2">Name - Z to A</option>
                     </select>
                     <h1 className="menu-page-main-cont-one-select-cont-one-head">Category</h1>
                     <ul className="menu-page-main-cont-one-select-cont-one-ul">
-                        <li> <input type="checkbox" /> Starters</li>
-                        <li> <input type="checkbox" /> Main Course</li>
-                        <li> <input type="checkbox" /> Desserts</li>
-                        <li> <input type="checkbox" /> Beverages</li>
-                        <li> <input type="checkbox" /> Snacks</li>
-                        <li> <input type="checkbox" /> Other</li>
+                        {menuCategories.length > 0 ? menuCategories.map((category) => (
+                            <li key={category.id}>
+                                <input 
+                                onClick={() => onClickFilterSort(category.id)}
+                                id={`category-${category.id}`}
+                                type="checkbox"
+                                checked={catEditsCont.includes(category.id)}
+                                />
+
+                                <label htmlFor={`category-${category.id}`}>{category.menu_category_name}</label>
+                            </li>
+                        )) : (
+                            <li>No categories available</li>
+                        )}
                     </ul>
                     <h1 className="menu-page-main-cont-one-select-cont-one-head">Item Type</h1>
                     <ul className="menu-page-main-cont-one-select-cont-one-ul">
-                        <li> <input type="checkbox" /> Veg</li>
-                        <li> <input type="checkbox" /> Non-Veg</li>
-                        <li> <input type="checkbox" /> Vegan</li>
-
-                        <li> <input type="checkbox" /> Dairy-Free</li>
+                        <li> <input onClick={() => onClickItemType("veg")} type="checkbox" id="item-type-veg" /> <label htmlFor="item-type-veg">Veg</label></li>
+                        <li> <input onClick={() => onClickItemType("non-veg")} type="checkbox" id="item-type-non-veg" /> <label htmlFor="item-type-non-veg">Non-Veg</label></li>
+                        <li> <input onClick={() => onClickItemType("vegan")} type="checkbox" id="item-type-vegan" /> <label htmlFor="item-type-vegan">Vegan</label></li>
+                        <li> <input onClick={() => onClickItemType("dairy-free")} type="checkbox" id="item-type-dairy-free" /> <label htmlFor="item-type-dairy-free">Dairy-Free</label></li>
                     </ul>
+                    <h1 className="menu-page-main-cont-one-select-cont-one-head">Availability</h1>
+                    <select value={onlyAvailability} onChange={(e) => setOnlyAvailability(e.target.value)} className="menu-page-main-cont-one-select-cont-one-select">
+                        <option id="">Select Availability</option>
+                        <option id="Available">Available</option>
+                        <option id="Not Available">Not Available</option>
+                    </select>
 
                 </div>
                 <div className="menu-page-main-cont-one-select-cont-two">
@@ -390,13 +490,13 @@ const MenuPage = () => {
                                 <MoonLoader color="#fff" size={20} />
                             </div>}
                         {menuDataStatus === "FAILED" && errorPage()}
-                        {menuDataStatus === "SUCCESS" && menuData.length === 0 && 
+                        {menuDataStatus === "SUCCESS" && menuDataInMenu.length === 0 && 
                             <div className="empty-menu-cont">
                                 <img src={emptyone} alt="No data" />
                                 <p>No menu items found</p>
                                 <button onClick={() => setToAddNewOne(true)} className="add-menu-item-button">Add Item</button>
                             </div>}
-                        {menuDataStatus === "SUCCESS" && menuData.length > 0 && menuData.map((eachItem) => {
+                        {menuDataStatus === "SUCCESS" && menuDataInMenu.length > 0 && menuDataInMenu.map((eachItem) => {
                             const itemType = eachItem.category_name === 'Desserts' ? <FaIceCream /> : eachItem.category_name === 'Beverages' ? <FaCoffee /> : eachItem.category_name === 'Snacks' ? <FaHamburger /> : eachItem.category_name === 'Starters' ? <FaStar /> : eachItem.category_name === 'Main Course' ? <FaUtensils /> : <FaUtensils />;
                             if(!eachItem.image_url){
                                 return (
@@ -615,7 +715,7 @@ const MenuPage = () => {
 
                     <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-cont">
                         <button type="submit" className="menu-page-main-cont-one-select-cont-two-pop-up-button">Add Menu Item {addingLoading && <div className="menu-page-main-cont-one-select-cont-two-pop-up-button-loader"><ClipLoader color="#952a88" loading={addingLoading} size={20} aria-label="Loading Spinner" data-testid="loader" /></div>}</button>
-                        <button type="button" onClick={() => setToAddNewOne(false)} className="menu-page-main-cont-one-select-cont-two-pop-up-button cancel-button">Cancel</button>
+                        <button type="button" onClick={onClickCloseInAddNewMenu} className="menu-page-main-cont-one-select-cont-two-pop-up-button cancel-button">Cancel</button>
                     </div>
 
                 </form>
