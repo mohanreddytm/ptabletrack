@@ -2,6 +2,7 @@ import { useEffect, useContext, useState } from "react";
 import './index.css';
 import AllInOne  from "../../../complexOne";
 import noImage from '../../../images/noimage.png'
+import waiterlogo from '../../../images/waiter.png';
 import { MdNoteAlt, MdDiscount, MdDeleteForever } from "react-icons/md";
 const POSPage = () => {
 
@@ -19,6 +20,16 @@ const POSPage = () => {
     const [showSelectTable, setShowSelectTable] = useState(false);
     const [showAssignPopup, setShowAssignPopup] = useState(false);
     const [orderItems, setOrderItems] = useState([]);
+
+    const [selectedWaiter, setSelectedWaiter] = useState(null);
+    const [selectedTable, setSelectedTable] = useState(null);
+
+    const [isOpenNoteOne, setIsOpenNoteOne] = useState(false);
+    const [noteText, setNoteText] = useState('');
+
+    const [isOpenPopupDiscount, setIsOpenPopupDiscount] = useState(false);
+    const [finalDiscountNumber, setFinalDiscountNumber] = useState('');
+    const [finalDiscountType, setFinalDiscountType] = useState('Percentage');
 
     useEffect(() => {
         if(menuData.length > 0){
@@ -58,21 +69,39 @@ const POSPage = () => {
         setShowSelectedOne('all');
     }
 
+    const onClickWaiter = (waiter) => {
+        setSelectedWaiter(waiter);
+        setShowAssignPopup(false);
+    }
+
     const assignPopup = () => {
         const waitersDefault = [
             {
                 id:1,
-                name: "John Doe"
+                name: "John Doe",
+                status:"Available"
+            },
+            {
+                id:2,
+                name: "Jane Smith",
+                status:"Serving"
+            },
+            {
+                id:3,
+                name: "Alice Johnson",
+                status:"Available"
             }
         ]
         return (
             <div className={`select-table-popup-in-pos ${showAssignPopup ? "show-table-popup-one" : ""}`}>
-                <div className="select-table-popup-content">
+                <div className="select-table-popup-content select-waiter-popup-addone">
                     <h1 className="main-head-select-tables">Assign Waiter</h1>
-                    <ul className="select-table-popup-list">
+                    <ul className="select-table-popup-list-assign-waiter">
                         {waitersDefault.map((waiter) => (
-                            <li key={waiter.id}>
+                            <li onClick={() => onClickWaiter(waiter)} key={waiter.id}>
+                                <img src={waiterlogo} alt="waiter" />
                                 {waiter.name}
+                                 <p>- {waiter.status}</p>
                             </li>
                         ))}
                     </ul>
@@ -80,6 +109,11 @@ const POSPage = () => {
                 </div>
             </div>
         )
+    }
+
+    const onClickTable = (table) => {
+        setSelectedTable(table);
+        setShowSelectTable(false)
     }
 
     const selectTablePopUp = () => {
@@ -92,7 +126,7 @@ const POSPage = () => {
                             <h1 className="main-head-select-tables-inner">{each.name} - {each.tables.length}</h1>
                             <ul className="select-table-popup-list-inner">
                                 {each.tables.map((table) => (
-                                    <li key={table.id}>
+                                    <li onClick={() => onClickTable(table)} key={table.id}>
                                         <h1 className="main-head-select-tables-inner">{table.name}</h1>
                                         <p className="main-head-select-tables-inner-seat-capacity"><span>{table.seat_capacity}</span> Seats</p>
                                     </li>
@@ -104,6 +138,39 @@ const POSPage = () => {
                 <button className="select-table-popup-cancel-button" onClick={() => setShowSelectTable(false)}>Cancel</button>
             </div>
         </div>
+    }
+
+    const onClickApplyDiscount = (a,b) => {
+        setFinalDiscountNumber(a)
+        setFinalDiscountType(b)
+        setIsOpenPopupDiscount(false)
+    }
+
+    const DiscountFuc = () => 
+    {
+        const [discountNumber, setDiscountNumber] = useState("");
+        const [discountType, setDiscountType] = useState("Percentage");
+        return (
+            <div className={`discount-popup ${isOpenPopupDiscount ? "show-table-popup-one" : ""}`}>
+                <div className="discount-popup-content">
+                    <h1>Discount</h1>
+                    <p>Apply a discount code to get a special offer!</p>
+                    <div>
+                        <input value={discountNumber} onChange={(e) => setDiscountNumber(e.target.value)} className="discount-input" type="number" placeholder="Enter discount amount"  />
+                        <select value={discountType} onChange={(e) => setDiscountType(e.target.value)} className="discount-select">
+                            <option id="percentage">Percentage</option>
+                            <option id="fixed-amount">Fixed Amount</option>
+                        </select>
+                    </div>
+                    <div className="discount-popup-actions">
+                        <button onClick={() => setIsOpenPopupDiscount(false)} className="discount-cancel-button">Cancel</button>
+                        <button onClick={() => onClickApplyDiscount(discountNumber, discountType)} className="discount-apply-button">Apply</button>
+                    </div>
+
+                </div>
+
+            </div>
+        )
     }
 
 
@@ -123,6 +190,8 @@ const POSPage = () => {
     const onClickMinusMenuItem = (id) => {
         return () => {
             setOrderItems(orderItems.map(item => item.id === id ? {...item, quantity: Math.max(1, item.quantity - 1)} : item));
+
+
         }
     }
 
@@ -132,10 +201,15 @@ const POSPage = () => {
         }
     }
 
+    const onClickAssignTable = () => {
+        setShowSelectTable(true);
+    }
+
     return (
         <div className="menu-page-main-cont pos-page-main-cont">
             {selectTablePopUp()}
             {assignPopup()}
+            {DiscountFuc()}
             <div className="pos-page-main-cont-one">
                 <div className="pos-page-main-cont-one-search-cont">
                     <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search" className="pos-page-main-cont-one-search-input" />
@@ -172,13 +246,18 @@ const POSPage = () => {
             <div className="pos-page-main-cont-two">
                 {/* need to do for the width adapt */}
                 <h1 className="pos-page-main-cont-two-h1">New Order</h1>
-                <div className="pos-page-main-cont-two-h1-two">
-                    <button onClick={() => setShowSelectTable(true)} className="pos-page-main-cont-two-h1-two-button">Assign Table</button>
+                <div className="pos-page-main-cont-two-h1-two" >
+                    <button onClick={onClickAssignTable} className="pos-page-main-cont-two-h1-two-button">{selectedTable === null ? "Assign Table" : selectedTable.name}</button>
                     <div className="tooltip-container">
-                        <MdNoteAlt className="pos-page-main-cont-two-h1-two-button-icon"  />
+                        <MdNoteAlt onClick={() => setIsOpenNoteOne(true)} className="pos-page-main-cont-two-h1-two-button-icon"  />
                         <span className="tooltip">note</span>
                     </div>
-                    <button className="pos-page-main-cont-two-h1-two-button-two" onClick={() => setShowAssignPopup(true)}>Assign Waiter</button>
+                    <button className="pos-page-main-cont-two-h1-two-button-two" onClick={() => setShowAssignPopup(true)}>{selectedWaiter === null ? "Assign Waiter" : selectedWaiter.name}</button>
+                    <div className={`pos-page-main-cont-two-note-cont ${isOpenNoteOne ? 'open-note-input-one' : ''}`}>
+                        <input type="text" placeholder="Enter Note Here" value={noteText} onChange={(e) => setNoteText(e.target.value)} />
+                        <button>Add Note</button>
+                        <p onClick={() => setIsOpenNoteOne(false)}>x</p>
+                    </div>
                 </div>
                 <table className="pos-page-main-cont-two-table">
                     <thead >
@@ -214,7 +293,7 @@ const POSPage = () => {
  
                 <div className="pos-page-main-cont-two-table-tbody">
                     <div className="pos-page-main-cont-two-table-tbody-button-cont-one">
-                        <button className="pos-page-main-cont-two-table-tbody-button"><MdDiscount /> Add Discount</button>
+                        <button onClick={() => setIsOpenPopupDiscount(true)} className="pos-page-main-cont-two-table-tbody-button"><MdDiscount /> Add Discount</button>
                         <button className="pos-page-main-cont-two-table-tbody-button">Tax Mode</button>
                     </div>
 
@@ -228,7 +307,7 @@ const POSPage = () => {
                     </div>
                     <div>
                         <p>Discount</p>
-                        <p>₹ {discountAmount}</p>
+                        <p>₹ {finalDiscountType == "Percentage" ? (orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) * finalDiscountNumber / 100).toFixed(2) : finalDiscountNumber}</p>
                     </div>
                     <div>
                         <p>Tax</p>
@@ -236,7 +315,7 @@ const POSPage = () => {
                     </div>
                     <div className="pos-page-main-cont-two-table-tbody-button-cont-two-total">
                         <p>Total</p>
-                        <p>₹ {(orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + (orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) * 0.1) - discountAmount).toFixed(2)}</p>
+                        <p>₹ {(orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + (orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) * 0.1) - (finalDiscountType == "Percentage" ? (orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0) * finalDiscountNumber / 100).toFixed(2) : finalDiscountNumber)).toFixed(2)}</p>
                     </div>
                 </div>
                 

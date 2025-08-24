@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-
+import {useNavigate} from 'react-router-dom'
 import Header from '../Header'
 import { FaArrowRight } from "react-icons/fa";
 
@@ -17,10 +17,14 @@ import { GoDash } from "react-icons/go";
 import { FaRegCopyright } from "react-icons/fa6";
 import { FaArrowUp } from "react-icons/fa";import { IoCloseOutline } from "react-icons/io5";
 
+
+import Cookies from "js-cookie";
+
 import resimage from '../../../images/restaurantmainimage.jpg'
 import qrcodephoto from '../../../images/qrcodephoto.png'
 import menuphoto from '../../../images/menuphoto.png'
 import orders from '../../../images/orders.png'
+
 
 
 import './index.css'
@@ -130,6 +134,15 @@ const featuresList  = [
 const Home = () => {
 
     const [on, setOn] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = Cookies.get("t_user");
+        if (token) {
+            navigate("/restaurantDashboard");
+        }
+    }, []);
 
     const [showQrDetail, setShowQrDetail] = useState(false);
     const [showMenuDetail, setShowMenuDetail] = useState(false);

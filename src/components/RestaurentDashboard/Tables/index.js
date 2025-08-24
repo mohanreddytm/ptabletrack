@@ -11,8 +11,6 @@ import { MdDone } from "react-icons/md";
 
 import { FaTrash } from 'react-icons/fa'
 
-
-
 const statusOne = {
     INITIAL: "INITIAL",
     SUCCESS: "SUCCESS",
@@ -73,7 +71,7 @@ const Tables = () => {
     },[tablesData, tablesDataStatus])
 
     const generateQRCode = async (table) => {
-        if (qrCodes[table.id]) return; // Already generated
+        if (qrCodes[table.id]) return;
         
         try {
             const tableData = {
@@ -85,9 +83,11 @@ const Tables = () => {
                 timestamp: new Date().toISOString(),
                 type: 'table_qr'
             };
+
+            const trasnforUrl = `http://10.111.204.89:3000/customerDashboard/${tableData.tableId}/${tableData.restaurantId}`;
             
-            const qrData = JSON.stringify(tableData);
-            const url = await QRCode.toDataURL(qrData, {
+            // const qrData = JSON.stringify(tableData);
+            const url = await QRCode.toDataURL(trasnforUrl, {
                 width: 128,
                 margin: 2,
                 color: {
